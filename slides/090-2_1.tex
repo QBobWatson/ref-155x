@@ -505,6 +505,7 @@ Before we computed $AB = \mat{14 -10; 32 -28}$, so $AB$ is the matrix of $T\circ
 
 \vskip 5mm
 
+\begin{poll}
 \begin{bluebox}[Poll]{.8\textwidth}
   Do there exist \emph{nonzero} matrices $A$ and $B$ with $AB=0$?
 \end{bluebox}
@@ -515,6 +516,7 @@ Yes!  Here's an example:
 \[ \mat{1 0; 1 0}\mat{0 0; 1 1} 
 = \mat{\mat{1 0; 1 0}\vec{0 1} \mat{1 0;1 0}\vec{0 1}}
 = \mat{0 0; 0 0}. \]
+\end{poll}
 
 
 \end{pollframe}
@@ -525,6 +527,7 @@ Yes!  Here's an example:
 \begin{frame}
 \frametitle{The Row-Column Rule for Matrix Multiplication}
 
+\displayskips{3pt}
 \alert{Recall:} A row vector of length $n$ times a column vector of length $n$
 is a scalar:
 \[ \mat{a_1 \cdots, a_n}\vec{b_1 \vdots, b_n} = a_1b_1 + \cdots + a_nb_n. \]
@@ -546,9 +549,10 @@ It follows that
 \[ AB = 
 \mat[c]{ \matrow{r_1};
      \vdots ;
-     \matrow{r_m}} \mat{ | ,, |; c_1 \cdots, c_p; | ,, |}
+     \matrow{r_m}} 
+   \mat{ | ,, |; c_1 \cdots, c_p; | ,, |}
 = \mat{ r_1c_1 r_1c_2 \cdots, r_1c_p;
-        r_2c_1 r_2c_2 \cdots, r_2c_p;
+         r_2c_1 r_2c_2 \cdots, r_2c_p;
          \vdots, \vdots, , \vdots;
         r_mc_1 r_mc_2 \cdots, r_mc_p}
  \]
@@ -689,8 +693,8 @@ you a lot of work.
 \begin{itemize}
 \item $AB$ is usually not equal to $BA$.
   \webonlycmd{
-  \[ \mat{0 -1; 1 0}\mat{2 0; 0 1} = \mat{0 -1; 2 0} \qquad
-  \mat{2 0; 0 1}\mat{0 -1; 1 0} = \mat{0 -2; 1 0} \]
+  \[\hss \mat{0 -1; 1 0}\mat{2 0; 0 1} = \mat{0 -1; 2 0} \qquad
+  \mat{2 0; 0 1}\mat{0 -1; 1 0} = \mat{0 -2; 1 0} \hss\]
   }\pause
   In fact, $AB$ may be defined when $BA$ is not.
 

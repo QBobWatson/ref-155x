@@ -109,10 +109,9 @@
     [baseline=-.8ex,%
      decoration={snake, amplitude=.4mm,%
        segment length=1mm, post length=1mm}]%
-  \setbox0=\hbox{#1}%
-  \dimen0=\dp0\advance\dimen0 by 1.5mm%
   \node[anchor=south, inner ysep=0pt, outer sep=0pt] (arrow)%
-     {\if\relax\detokenize{#1}\relax\hphantom{mm}\else\raise\dimen0\hbox{#1}\fi};%
+     {\setbox0=\hbox{#1}\dimen0=\dp0\advance\dimen0 by 1.5mm%
+      \if\relax\detokenize{#1}\relax\hphantom{mm}\else\raise\dimen0\hbox{#1}\fi};%
   \squigglydraw
 \end{tikzpicture}%
 }

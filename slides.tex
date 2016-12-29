@@ -1,7 +1,7 @@
 
 % Set this before compiling anything at all.
 % Format is MM-DD.
-\def\lecturedate{11-28}
+\def\lecturedate{}
 
 %----------------------------------------------------------------------
 % Configure compilation parameters based on what file is being compiled
@@ -133,21 +133,23 @@
 %-- For polls
 %----------------------------------------------------------------------
 
-% Produces a poll frame, which is hidden in blank mode
-
-\ifx\slidesmode\blankmode
-\newenvironment{pollframe}{%
-  \begin{frame}<0| handout:0>%
-  }{%
-  \end{frame}%
-  }
-\else
+% Just makes a frame and sets the title.
 \newenvironment{pollframe}{%
   \begin{frame}%
   \frametitle{Poll}%
   }{%
   \end{frame}%
   }
+
+% Environment for poll material that should be hidden in blank mode
+\ifx\slidesmode\blankmode
+\newenvironment{poll}{%
+  \begin{uncoverenv}<0| handout:0>%
+  }{%
+  \end{uncoverenv}%
+  }
+\else
+\newenvironment{poll}{}{}
 \fi
 
 % Enumerate with letters A B C D etc.
@@ -387,7 +389,7 @@
 % \input{slides/155-review_ch2_3}
 % \input{slides/160-5_1}
 % \input{slides/170-5_2}
-\input{slides/180-5_3}
+% \input{slides/180-5_3}
 % \input{slides/190-pagerank}
 % \input{slides/200-5_5}
 % \input{slides/205-review_ch5}
@@ -399,6 +401,6 @@
 % \input{slides/255-review_final}
 
 % For autogen.py
-% \input{autogen}
+\input{autogen}
 
 \end{document}

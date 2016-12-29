@@ -263,7 +263,7 @@ $A$:
 = (-1)^n\lambda^n + a_{n-1}\lambda^{n-1} + a_{n-2}\lambda^{n-2} + \cdots +
 a_1\lambda + a_0. \]
 
-\ifx\slidesmode\blankmode\else{
+\begin{poll}
 \framesubtitle{Poll}
 \pause
 \begin{bluebox}[Poll]{.7\linewidth}
@@ -286,7 +286,7 @@ Otherwise it is \alert{A,} because any degree-$n$ polynomial has exactly $n$
 \emph{complex} roots, counted with multiplicity.
 \pause
 Stay tuned.
-}\fi
+\end{poll}
 
 \end{frame}
 
@@ -377,7 +377,7 @@ So $A$ does to the standard coordinates what $B$ does to the $\cB$-coordinates, 
     \point[seq-red, "$Bx$" {above,text=seq-red}] at (2,3);
     \point[seq-green, "$By$" {below,text=seq-green}] at (-4,-3);
     \coordinate (Y) at (-5,1);
-  \end{scope}[scale=.5]
+  \end{scope}
 
   \draw[->, shorten=1mm] (X) to[bend left, "$B$" yshift=2pt] (Y);
 
@@ -416,6 +416,7 @@ So $A$ does to the standard coordinates what $B$ does to the $\cB$-coordinates, 
 \begin{minipage}[c]{0.3\linewidth}
   \def\r{\textcolor{seq-red}}
   \def\g{\textcolor{seq-green}}
+  \hbox to \linewidth{%
   $\displaystyle
   \begin{aligned}[c]
     \textcolor{seq-orange}{v_1} &= \namedbox{v1}{\vec{2 1}} \\
@@ -425,7 +426,7 @@ So $A$ does to the standard coordinates what $B$ does to the $\cB$-coordinates, 
     [\g y]_\cB &= \vec{-2 -1} \\
     \g y &= \webonlycmd{-2v_1 - v_2} \\
     &\webonlycmd{\quad= \vec{-5 -3}}
-  \end{aligned}$
+  \end{aligned}$\hss}
 \end{minipage}\hss}
 \begin{tikzpicture}[remember picture, overlay]
   \draw[decoration={brace,amplitude=2mm}, decorate, thick]
@@ -466,6 +467,7 @@ So $A$ does to the standard coordinates what $B$ does to the $\cB$-coordinates, 
 \begin{minipage}[c]{0.3\linewidth}
   \def\r{\textcolor{seq-red}}
   \def\g{\textcolor{seq-green}}
+  \hbox to \linewidth{%
   $\displaystyle
   \begin{aligned}[c]
     \textcolor{seq-orange}{Av_1} &=\webonlycmd{2v_1 = \vec{4 2}} \\
@@ -475,7 +477,7 @@ So $A$ does to the standard coordinates what $B$ does to the $\cB$-coordinates, 
     B[\g y]_\cB &= \webonlycmd{\vec{-4 -3}} = [\g{Ay}]_\cB \\
     \g{Ay} &= \webonlycmd{-4v_1 - 3v_2} \\
     &\webonlycmd{\quad= \vec{-11 -7}}
-  \end{aligned}$
+  \end{aligned}$\hss}
 \end{minipage}\hss}\\[3mm]
 \hskip-3mm{\alert{Check:}}
 \hfill
