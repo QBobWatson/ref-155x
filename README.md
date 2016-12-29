@@ -5,11 +5,11 @@
 
 ### Downloading
 
-Make sure you have a recent version of TeXLive / MacTeX installed (2015+).  Earlier versions will not compile some of the figures.
+Make sure you have a recent version (2015+) of TeXLive / MacTeX installed.  Earlier versions will not compile some of the figures.
 
 If you're comfortable with git, just clone this repository.
 
-If not, you can always download the latest version [here](https://github.com/QBobWatson/ref-155x/archive/master.zip)
+If not, you can always download the latest version as a ZIP file [here](https://github.com/QBobWatson/ref-155x/archive/master.zip).
 
 ### Overview
 
@@ -20,7 +20,8 @@ The slides are written in [Beamer](http://ctan.org/pkg/beamer).  Figures are wri
 * `jdr-hwexam.sty`: Macros for quizzes, exams, etc.
 * `jdr-style.sty`: Configures fonts, theorem environments, etc. for some material (not slides).
 * `spalign.sty`: My [package](http://ctan.org/pkg/spalign) for quickly typesetting matrices.  (Should be included in TeXLive 2017+.)
-These are included automatically.
+
+These files are included automatically.
 
 Most of the macros specific to the slides are defined in `slides.tex`.  The code has some documentation, but it's easiest to just look through the slides to find examples of how things work.
 
@@ -31,7 +32,7 @@ This is a description of the included files.
 * `slides/*`: Slides content.
 * `announcements.tex`: Announcements get compiled into certain slides.
 * `compile.sh` (also `autogen.py`): Automation for compiling slides.
-* `daily/`: The `compile.sh` script puts it output here.
+* `daily/`: The `compile.sh` script puts its output here.
 * `slides-pdf/*`: Compiled versions of the current reference slides (`class` and `web` modes).
 * `figures/*`: Figures used in the materials.
 * `style/*`: Style files used for compiling the materials.
@@ -41,7 +42,7 @@ This is a description of the included files.
 
 The slides are written to be presented on a projector, but with most examples, proofs, etc. worked out on a blackboard.  Really it's best if you have *two* projectors, so you can present the current slide while referring to a previous slide.
 
-To facilitate this, slides have `webonly`-mode material, which is meant to be worked on a blackboard or written on the slide (using an iPad or something) during lecture, but does not appear on the in-class slides.  This material is handled differently by the other [compile modes](#compile-modes).
+To facilitate this, slides have `webonly`-mode material (implemented as a `\begin{webonly}...\end{webonly}` environment, and a command `\webonlycmd{...}`), which is meant to be worked on a blackboard or written on the slide (using an iPad or something) during lecture, but does not appear on the in-class slides.  This material is handled differently by the other [compile modes](#compile-modes).
 
 Many of the theorems do have proofs, mostly in `webonly` mode.  In my opinion, it is important for the students to understand some of the proofs, in order to construct the conceptual framework in their own mind.  However, it is probably not so important to do them during class, since the students won't follow them anyway.  My compromise is to mostly skip them during lecture, but keep them on the `web` mode slides, for reference.
 
