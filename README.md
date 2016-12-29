@@ -73,16 +73,16 @@ Here is the workflow for preparing a new lecture:
 2. Uncomment the `\input{slides/blah}` lines in `slides.tex` for the files containing material that you want to put in the lecture.  Comment out the rest of them--it takes a long time to parse a file even if Beamer doesn't render the slides contained in it.
 3. Put the command `\lecture{}{MM-DD}` at the beginning of the material for that day's lecture, in the `slides/blah.tex` file.  Put `\lecture{}{MM-DD+1}` at the end of the material (really only necessary if you stop in the middle of `slides/blah.tex`).  Note that one lecture can span several `slides/blah.tex` files.
 4. Make whatever changes you want to the LaTeX code in `slides/blah.tex`.  Compile `slides.tex` directly to see your changes--see [compile modes](#compile-modes) above.
-5. Create that day's announcements in `announcements.tex` (this is easy; see the example `announcements.tex`).  The day's announcements are prepended to the slides in `web` and `blank` mode.
+5. Create that day's announcements in `announcements.tex` (there are examples in `announcements.tex`).  The day's announcements are prepended to the slides in `web` and `blank` mode.
 
 ### Compiling a Lecture
 
 Compile the slides for the modes you're going to use.  For instance, if you want the `web` mode file, compile `slides-web.tex`; it will be output to `slides-web.pdf`.
 
-You'll usually need to compile each file *twice*.  This is due to TikZ pictures referring to each other; that uses the `.aux` file.
+You'll usually need to compile each file *twice*.  This is due to TikZ pictures referring to each other, which uses the `.aux` file.
 
 Copy `slides-web.pdf`, `slides-class.pdf`, etc. to wherever you need them. 
-* I put `slides-class.pdf` and `slides-mine.pdf` on Dropbox, then access them from the console.
+* I put `slides-class.pdf` and `slides-mine.pdf` on Dropbox, then access them from the console in the classroom.
 * I put `slides-blank.pdf` on my website before class, and `slides-web.pdf` on my website after class.
 
-Alternatively, if you have a UNIX-like system (like a Mac), you can just run `./compile.sh` from a terminal (in the same directory with `slides.tex`).  This will compile all four modes, and create the files `daily/MM-DD-slides-(mode).pdf`.
+Alternatively, if you have a UNIX-like system (like a Mac), you can just run `./compile.sh` from a terminal (in the same directory with `slides.tex`).  This will compile the `class`, `web`, `blank`, and `mine` modes, and create the files `daily/MM-DD-slides-(mode).pdf`.
