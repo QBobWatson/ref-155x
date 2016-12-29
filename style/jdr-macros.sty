@@ -1,0 +1,422 @@
+
+%----------------------------------------------------------------------
+%-- Identification
+%----------------------------------------------------------------------
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{\styledir jdr-macros}[2006/08/18
+  Joe Rabinoff's math macros]
+
+%----------------------------------------------------------------------
+%-- Prerequisite packages
+%----------------------------------------------------------------------
+
+\RequirePackage{amsmath}
+\RequirePackage{amstext}
+\RequirePackage{amssymb}
+\RequirePackage{stmaryrd}
+\RequirePackage{mathtools}
+
+%----------------------------------------------------------------------
+%-- Math fonts
+%----------------------------------------------------------------------
+
+% Most of these macros are about making it easier to access the four math fonts
+% that I use most often.
+
+\newcommand*\bb[1]{\ensuremath{{\mathbf{#1}}}}
+\newcommand*\mc[1]{\ensuremath{{\mathcal{#1}}}}
+\newcommand*\ms[1]{\ensuremath{{\mathscr{#1}}}}
+\newcommand*\mf[1]{\ensuremath{{\mathfrak{#1}}}}
+
+% Additional math fonts, if necessary
+\DeclareMathAlphabet\eulerscript{U}{eus}{m}{n}
+\newcommand*\eus[1]{\ensuremath{{\eulerscript#1}}}
+\DeclareMathAlphabet\eulerfraktur{U}{euf}{m}{n}
+\newcommand*\euf[1]{\ensuremath{{\eulerfraktur#1}}}
+
+% Short command letter defaults
+\newcommand*\A{\bb A}
+\newcommand*\C{\bb C}
+\newcommand*\F{\bb F}
+\newcommand*\G{\bb G}
+\newcommand*\N{\bb N}
+% I can't believe \P is the backwards-P paragraph symbol by default.
+\renewcommand*\P{\bb P}
+\newcommand*\Q{\bb Q}
+\newcommand*\R{\bb R}
+\newcommand*\Z{\bb Z}
+
+% Fonted letters
+
+% bold
+\newcommand*\ba{{\bb a}}
+\newcommand*\bbb{{\bb b}}
+\newcommand*\bc{{\bb c}}
+\newcommand*\bd{{\bb d}}
+\newcommand*\be{{\bb e}}
+\newcommand*\bbf{{\bb f}}
+\newcommand*\bg{{\bb g}}
+\newcommand*\bh{{\bb h}}
+\newcommand*\bi{{\bb i}}
+\newcommand*\bj{{\bb j}}
+\newcommand*\bk{{\bb k}}
+\newcommand*\bl{{\bb l}}
+\newcommand*\bm{{\bb m}}
+\newcommand*\bn{{\bb n}}
+\newcommand*\bo{{\bb o}}
+\newcommand*\bp{{\bb p}}
+\newcommand*\bq{{\bb q}}
+\newcommand*\br{{\bb r}}
+\newcommand*\bs{{\bb s}}
+\newcommand*\bt{{\bb t}}
+\newcommand*\bu{{\bb u}}
+\newcommand*\bv{{\bb v}}
+\newcommand*\bw{{\bb w}}
+\newcommand*\bx{{\bb x}}
+\newcommand*\by{{\bb y}}
+\newcommand*\bz{{\bb z}}
+
+\newcommand*\bA{{\bb A}}
+\newcommand*\bB{{\bb B}}
+\newcommand*\bC{{\bb C}}
+\newcommand*\bD{{\bb D}}
+\newcommand*\bE{{\bb E}}
+\newcommand*\bF{{\bb F}}
+\newcommand*\bG{{\bb G}}
+\newcommand*\bH{{\bb H}}
+\newcommand*\bI{{\bb I}}
+\newcommand*\bJ{{\bb J}}
+\newcommand*\bK{{\bb K}}
+\newcommand*\bL{{\bb L}}
+\newcommand*\bM{{\bb M}}
+\newcommand*\bN{{\bb N}}
+\newcommand*\bO{{\bb O}}
+\newcommand*\bP{{\bb P}}
+\newcommand*\bQ{{\bb Q}}
+\newcommand*\bR{{\bb R}}
+\newcommand*\bS{{\bb S}}
+\newcommand*\bT{{\bb T}}
+\newcommand*\bU{{\bb U}}
+\newcommand*\bV{{\bb V}}
+\newcommand*\bW{{\bb W}}
+\newcommand*\bX{{\bb X}}
+\newcommand*\bY{{\bb Y}}
+\newcommand*\bZ{{\bb Z}}
+
+% mathcal
+\newcommand*\cA{{\mc A}}
+\newcommand*\cB{{\mc B}}
+\newcommand*\cC{{\mc C}}
+\newcommand*\cD{{\mc D}}
+\newcommand*\cE{{\mc E}}
+\newcommand*\cF{{\mc F}}
+\newcommand*\cG{{\mc G}}
+\newcommand*\cH{{\mc H}}
+\newcommand*\cI{{\mc I}}
+\newcommand*\cJ{{\mc J}}
+\newcommand*\cK{{\mc K}}
+\newcommand*\cL{{\mc L}}
+\newcommand*\cM{{\mc M}}
+\newcommand*\cN{{\mc N}}
+\newcommand*\cO{{\mc O}}
+\newcommand*\cP{{\mc P}}
+\newcommand*\cQ{{\mc Q}}
+\newcommand*\cR{{\mc R}}
+\newcommand*\cS{{\mc S}}
+\newcommand*\cT{{\mc T}}
+\newcommand*\cU{{\mc U}}
+\newcommand*\cV{{\mc V}}
+\newcommand*\cW{{\mc W}}
+\newcommand*\cX{{\mc X}}
+\newcommand*\cY{{\mc Y}}
+\newcommand*\cZ{{\mc Z}}
+
+% mathscr
+\newcommand*\sA{{\ms A}}
+\newcommand*\sB{{\ms B}}
+\newcommand*\sC{{\ms C}}
+\newcommand*\sD{{\ms D}}
+\newcommand*\sE{{\ms E}}
+\newcommand*\sF{{\ms F}}
+\newcommand*\sG{{\ms G}}
+\newcommand*\sH{{\ms H}}
+\newcommand*\sI{{\ms I}}
+\newcommand*\sJ{{\ms J}}
+\newcommand*\sK{{\ms K}}
+\newcommand*\sL{{\ms L}}
+\newcommand*\sM{{\ms M}}
+\newcommand*\sN{{\ms N}}
+\newcommand*\sO{{\ms O}}
+\newcommand*\sP{{\ms P}}
+\newcommand*\sQ{{\ms Q}}
+\newcommand*\sR{{\ms R}}
+\newcommand*\sS{{\ms S}}
+\newcommand*\sT{{\ms T}}
+\newcommand*\sU{{\ms U}}
+\newcommand*\sV{{\ms V}}
+\newcommand*\sW{{\ms W}}
+\newcommand*\sX{{\ms X}}
+\newcommand*\sY{{\ms Y}}
+\newcommand*\sZ{{\ms Z}}
+
+% mathfrak
+\newcommand*\fa{{\mf a}}
+\newcommand*\fb{{\mf b}}
+\newcommand*\fc{{\mf c}}
+\newcommand*\fd{{\mf d}}
+\newcommand*\fe{{\mf e}}
+\newcommand*\ff{{\mf f}}
+\newcommand*\fg{{\mf g}}
+\newcommand*\fh{{\mf h}}
+\newcommand*\mfi{{\mf i}}
+\newcommand*\fj{{\mf j}}
+\newcommand*\fk{{\mf k}}
+\newcommand*\fl{{\mf l}}
+\newcommand*\fm{{\mf m}}
+\newcommand*\fn{{\mf n}}
+\newcommand*\fo{{\mf o}}
+\newcommand*\fp{{\mf p}}
+\newcommand*\fq{{\mf q}}
+\newcommand*\fr{{\mf r}}
+\newcommand*\fs{{\mf s}}
+\newcommand*\ft{{\mf t}}
+\newcommand*\fu{{\mf u}}
+\newcommand*\fv{{\mf v}}
+\newcommand*\fw{{\mf w}}
+\newcommand*\fx{{\mf x}}
+\newcommand*\fy{{\mf y}}
+\newcommand*\fz{{\mf z}}
+
+\newcommand*\fA{{\mf A}}
+\newcommand*\fB{{\mf B}}
+\newcommand*\fC{{\mf C}}
+\newcommand*\fD{{\mf D}}
+\newcommand*\fE{{\mf E}}
+\newcommand*\fF{{\mf F}}
+\newcommand*\fG{{\mf G}}
+\newcommand*\fH{{\mf H}}
+\newcommand*\fI{{\mf I}}
+\newcommand*\fJ{{\mf J}}
+\newcommand*\fK{{\mf K}}
+\newcommand*\fL{{\mf L}}
+\newcommand*\fM{{\mf M}}
+\newcommand*\fN{{\mf N}}
+\newcommand*\fO{{\mf O}}
+\newcommand*\fP{{\mf P}}
+\newcommand*\fQ{{\mf Q}}
+\newcommand*\fR{{\mf R}}
+\newcommand*\fS{{\mf S}}
+\newcommand*\fT{{\mf T}}
+\newcommand*\fU{{\mf U}}
+\newcommand*\fV{{\mf V}}
+\newcommand*\fW{{\mf W}}
+\newcommand*\fX{{\mf X}}
+\newcommand*\fY{{\mf Y}}
+\newcommand*\fZ{{\mf Z}}
+
+\newcommand*\MU{{\boldsymbol\mu}}
+
+%----------------------------------------------------------------------
+%-- Other macros
+%----------------------------------------------------------------------
+
+% Differential operators
+\let\underdot\d % Old \d is dot underneath
+\renewcommand*\d{{\operatorname{d}}}
+\newcommand*\del{\partial}
+\newcommand*\Del{\nabla}
+
+% Arrows
+\newcommand*\inject{\ensuremath{\hookrightarrow}}
+\newcommand*\surject{\ensuremath{\twoheadrightarrow}}
+\newcommand*\isom{\ensuremath{\overset{\sim}{\longrightarrow}}}
+\newcommand*\To{\longrightarrow}
+\newcommand*\oT{\longleftarrow}
+\newcommand*\ToT{\longleftrightarrow}
+
+% Enclosures
+\newcommand*\angles[1]{\ensuremath{\langle#1\rangle}}
+\newcommand*\ceil[1]{\lceil#1\rceil}
+\newcommand*\floor[1]{\lfloor#1\rfloor}
+% Power series brackets
+\newcommand*\ps[1]{{\llbracket#1\rrbracket}}
+\newcommand*\llparen{(\kern -.2em(}
+\newcommand*\rrparen{)\kern -.2em)}
+% Laurent series brackets
+\newcommand*\ls[1]{{\llparen#1\rrparen}}
+\newcommand*\legendre[2]{\left(\frac{#1}{#2}\right)}
+
+% Symbol math operators
+\newcommand*\dcup{\sqcup}
+\newcommand*\dsum{\oplus}
+\newcommand*\Dsum{\bigoplus}
+\newcommand*\tensor{\otimes}
+\newcommand*\Tensor{\bigotimes}
+\let\dlim\varinjlim
+\let\invlim\varprojlim
+\newcommand*\semidirect{\ltimes}
+\newcommand*\directsemi{\rtimes}
+\newcommand*\Vee{\bigvee}
+\newcommand*\Wedge{\bigwedge}
+\newcommand*\djunion{\sqcup}
+\newcommand*\Djunion{\bigsqcup}
+\newcommand*\normal{\lhd}
+\newcommand*\normaleq{\unlhd}
+\newcommand*\normalni{\rhd}
+\newcommand*\normalnieq{\unrhd}
+\newcommand*\symdiff{\bigtriangleup}
+\newcommand*\Norm{\operatorname{N}}
+
+% Misc
+% Spaced cdot, used for blank function arguments
+\newcommand*\scdot{\,\cdot\,}
+\newcommand*\pound{^\#}
+\newcommand*\inv{^{-1}}
+% I don't like the usual \phi or \epsilon
+\renewcommand*\phi{\varphi}
+\renewcommand*\epsilon{\varepsilon}
+\newcommand*\coloneq{\coloneqq}
+% Forget about height of previous character in superscript
+\newcommand*\pss[1]{{}^{#1}}
+\newcommand*\p{{}'}
+\newcommand*\pp{{}''}
+% Spaced text in a displayed equation
+\newcommand*\sptxt[1]{\quad\text{ #1 }\quad}
+\newcommand*\Sptxt[1]{\qquad\text{ #1 }\qquad}
+\newcommand\ignore[1]{}
+
+% Small matrices
+\newenvironment{smm}{\left[\begin{smallmatrix}}
+                    {\end{smallmatrix}\right]}
+\newenvironment{psmm}{\left(\begin{smallmatrix}}
+                     {\end{smallmatrix}\right)}
+\newcommand*\smallmat[4]%
+  {\ensuremath{\begin{smm}#1&#2\\#3&#4\end{smm}}}
+\newcommand*\ttmat[9]
+  {\ensuremath{\begin{smm} #1 & #2 & #3 \\ #4 & #5 & #6 \\
+                           #7 & #8 & #9 \end{smm}}}
+
+% Use wide decorations instead of the wimpy small ones
+\let\smtd\tilde
+\newcommand*\td[1]{\widetilde{#1}}
+\let\smhat\hat
+\renewcommand*\hat[1]{\widehat{#1}}
+\let\smbar\bar
+\renewcommand*\bar[1]{\overline{#1}}
+\newcommand*\ul[1]{\underline{#1}}
+
+%----------------------------------------------------------------------
+%-- Multi-letter math symbols
+%----------------------------------------------------------------------
+
+% Better(?) DeclareMathOperator
+\newcommand*{\mathtext}[1]{%
+  \expandafter\def\csname#1\endcsname{\operatorname{#1}}}
+% This version can be used in superscripts but can't be used like $\Tr A$
+% without parentheses like $\Tr(A)$
+\newcommand*{\mathtextb}[1]{%
+  \expandafter\def\csname#1\endcsname{{\operatorname{#1}}}}
+
+% Normal operators
+\mathtext{Adj}
+\mathtext{Ann}
+\mathtext{Aut}
+\mathtext{CaCl}
+\newcommand*\chr{\operatorname{char}}
+\mathtext{Cl}
+\mathtext{codim}
+\mathtext{coker}
+\mathtext{conv}
+\mathtext{depth}
+\mathtext{Der}
+\mathtext{diag}
+\mathtext{disc}
+\let\divsymb=\div
+\mathtext{div}
+\mathtext{Div}
+\mathtext{End}
+\mathtext{Ext}
+\newcommand*\EExt{\operatorname{{\sE}xt}}
+\mathtext{Frob}
+\mathtext{Gal}
+\mathtext{GL}
+\let\Hung\H % Old \H is Hungarian accent
+\renewcommand*\H{\operatorname{H}}
+\mathtext{height}
+\mathtext{Hom}
+\newcommand*\HHom{\operatorname{{\sH}\kern-.18emom}}
+\mathtext{Id}
+\renewcommand*\Im{\operatorname{Im}}
+\mathtext{im}
+\newcommand*\inn{\operatorname{in}}
+\mathtext{lcm}
+\mathtext{length}
+\mathtext{Jac}
+\mathtext{Lie}
+\mathtext{M}
+\mathtext{Max}
+\mathtext{Mor}
+\newcommand\oO{\operatorname{O}}
+\mathtext{ord}
+\mathtext{Pic}
+\mathtext{Prin}
+\mathtext{Proj}
+\newcommand*\PProj{\operatorname{\mathbf{Proj}}}
+\mathtext{rank}
+\renewcommand*\Re{\operatorname{Re}}
+\mathtext{red}
+\mathtext{relint}
+\mathtext{Res}
+\mathtext{sign}
+\mathtext{SL}
+\mathtext{SO}
+\newcommand\spn{\operatorname{span}}
+\mathtext{Spec}
+\newcommand*\SSpec{\operatorname{\mathbf{Spec}}}
+\mathtext{Spe}
+\mathtext{Spf}
+\mathtext{Spin}
+\mathtext{Sp}
+\mathtext{stab}
+\mathtext{supp}
+\mathtext{Supp}
+\mathtext{SU}
+\mathtext{Sym}
+\mathtext{Tor}
+\mathtext{Tr}
+\newcommand*\trdeg{\operatorname{tr.\kern-.1emdeg}}
+\mathtext{Trop}
+\mathtext{trop}
+\mathtext{U}
+\mathtext{val}
+
+% In a super or subscript
+\mathtextb{an}
+\mathtextb{sm}
+
+% Shortcut to make a generic figure
+%   \genericfig[where]{basename}{extension}{caption}
+% e.g.
+%   \genericfig[ht]{myfigure}{pspdftex}{My caption.}
+\newcommand\genericfig[4][ht]%
+  {\begin{figure}[#1]%
+   \begin{center}%
+   \input{#2.#3}%
+   \caption{#4}%
+   \label{fig:#2}%
+   \end{center}%
+   \end{figure}}
+
+%----------------------------------------------------------------------
+%-- spalign stuff
+%----------------------------------------------------------------------
+
+\let\vec=\spalignvector
+\let\mat=\spalignmat
+\let\amat=\spalignaugmat
+\let\hmat=\spalignaugmathalf
+\let\syseq=\spalignsys
+
+
+\endinput

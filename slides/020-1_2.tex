@@ -1,0 +1,742 @@
+
+% JDR: This is probably more than 50 minutes worth of material.  A natural break
+%   point is after "Inconsistent Matrices"; then do parametric form the next
+%   day.
+
+\titleframe{Section 1.2}{Row Reduction and Echelon Forms}
+
+\def\rowop#1#2{%
+  \hfill%
+  \hbox to 0.2\linewidth{\hss\longsquiggly[#1]}%
+  \hbox to 0.4\linewidth{\hss#2}%
+  }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Row Echelon Form}
+
+Let's come up with an \emph{algorithm} for turning an arbitrary matrix into a
+``solved'' matrix.
+\pause
+What do we mean by ``solved''?
+
+\pause
+
+\begin{bluebox}{.8\textwidth}
+  A matrix is in \textbf{row echelon form} if
+
+  \pause\smallskip
+  \begin{enumerate}
+  \item All zero rows are at the bottom.
+    \pause
+  \item Each leading nonzero entry of a row is to the \emph{right} of the
+    leading entry of the row above.
+    \pause
+  \item Below a leading entry of a row, all entries are \emph{zero}.
+  \end{enumerate}
+\end{bluebox}
+
+\begin{uncoverenv}<7->
+Picture:
+\[\mat{
+\color{red}\boxed\star,  \star,  \star,  \star,  \star ;
+0  \color{red}\boxed\star,  \star,  \star,  \star ;
+0  0  0  \color{red}\boxed\star, \star ;
+0 0 0 0 0}\qquad
+\begin{aligned}
+  \star &= \text{any number} \\
+  \color{red}\boxed\star &= \text{any nonzero number}
+\end{aligned}
+\]
+
+\pause[8]
+\begin{defn}
+  A \textbf{pivot} $\color{red}\boxed\star$ is the first nonzero entry of a row
+  of a matrix in row echelon form.
+\end{defn}
+\end{uncoverenv}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Reduced Row Echelon Form}
+
+\vskip-6mm\null
+\begin{bluebox}{.8\textwidth}
+  A matrix is in \textbf{reduced row echelon form} if it is in row echelon form,
+  and in addition,
+
+  \pause\smallskip
+  \begin{enumerate}
+    \setcounter{enumi}{3}
+  \item The pivot in each nonzero row is equal to $1$.
+    \pause
+    \item Each pivot is the only nonzero entry in its column.
+  \end{enumerate}
+\end{bluebox}
+
+\begin{uncoverenv}<4->
+Picture:
+\[\mat{
+\color{red}1   0   \star,   0   \star ;
+0   \color{red}1   \star , 0   \star ;
+0   0   0   \color{red}1   \star ;
+0 0 0 0 0
+} \qquad
+\begin{aligned}
+  \star &= \text{any number} \\
+  \color{red}1 &= \text{pivot}
+\end{aligned}\]
+
+\pause[5]\medskip
+\alert{Note:} Echelon forms do not care whether or not a column is augmented.
+Just ignore the vertical line.
+
+\pause\smallskip
+\begin{ques}
+  Can every matrix be put into reduced row echelon form only using row operations?
+\end{ques}
+
+\pause
+\alert{Answer:} Yes!  Stay tuned.
+\end{uncoverenv}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Reduced Row Echelon Form}
+\framesubtitle{Continued}
+
+\alert{Why is this the ``solved'' version of the matrix?}
+\pause
+\[\amat{
+1  0  0  1 ;
+0  1  0  -2 ;
+0  0  1  3
+}\]
+is in reduced row echelon form.  It translates into
+\webonlycmd{\[ \syseq{x = 1; y = -2; z = 3\rlap{,}} \]}\pause
+which is clearly the solution.
+
+\pause
+
+\vfill
+
+But what happens if there are fewer pivots than rows?
+\pause \ldots parametrized solution set (later).
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{pollframe}
+
+\begin{bluebox}[Poll]{.8\textwidth}
+  Which of the following matrices are in reduced row echelon form?
+  \[ \textrm{A.}~ \mat{1 0; 0 2} \qquad \textrm{B.}~ \mat{0 0 0;0 0 0} \]
+  \[ \textrm{C.}~ \vec{0 1 0 0} \qquad \textrm{D.}~ \mat{0 1 0 0} \qquad
+  \textrm{E.}~ \mat{0 1 8 0} \]
+  \[ \textrm{F.}~ \amat{1 17 0;0 0 1} \]
+\end{bluebox}
+
+\note{Matrix A is in row echelon form though.}
+
+\end{pollframe}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Reduced Row Echelon Form}
+
+\vskip-3mm
+\begin{thm}
+  Every matrix is row equivalent to one and only one matrix in reduced row
+  echelon form.
+\end{thm}
+
+\pause
+\bigskip
+We'll give an algorithm, called \textbf{row reduction}, which demonstrates that
+every matrix is row equivalent to \emph{at least one} matrix in reduced row
+echelon form.
+
+\pause
+\bigskip
+\alert{Note:} Like echelon forms, the row reduction algorithm does not care if a
+column is augmented: ignore the vertical line when row reducing.
+
+\pause\bigskip
+The uniqueness statement is interesting---%
+\pause
+it means that, nomatter \emph{how\/} you row reduce, you \emph{always\/} get the
+same matrix in reduced row echelon form.
+\pause
+(Assuming you only do the three legal row operations.)
+\pause
+(And you don't make any arithmetic errors.)
+
+\pause\bigskip
+Maybe you can figure out why it's true!
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Row Reduction Algorithm}
+
+\begin{itemize}[<+->]
+\item [Step 1a] Swap the 1st row with a lower one so a leftmost nonzero entry is
+  in 1st row (if necessary).
+\item [Step 1b] Scale 1st row so that its leading entry is equal to 1.
+\item [Step 1c] Use row replacement so all entries above and below this 1 are 0.
+\item [Step 2a] Cover the first row, swap the 2nd row with a lower one so that the leftmost nonzero (uncovered) entry is in 2nd row; uncover 1st row.
+\item [Step 2b] Scale 2nd row so that its leading entry is equal to 1.
+\item [Step 2c] Use row replacement so all entries above and below this 1 are 0.
+\item [Step 3a] Cover the first two rows, swap the 3rd row with a lower one so
+  that the leftmost nonzero (uncovered) entry is in 3rd row; uncover first two rows.
+\item [etc.]
+\end{itemize}
+
+\note{Do example concurrently, on the board.}
+
+\begin{eg}<1->\vskip-5mm
+  \[\amat{
+    0   -7   -4   2 ;
+    2   4   6   12 ;
+    3   1   -1   -2
+  }\]
+\end{eg}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Row Reduction}
+\framesubtitle{Example}
+
+\def\r{\color{red}}
+$\amat{
+\phantom-\namedbox{a11}{0}   -7   -4   2 ;
+\namedbox{a21}{2}   4   6   12 ;
+\namedbox{a31}{3}   1   -1   -2
+}$%
+\begin{webonly}%
+\begin{tikzpicture}[remember picture, overlay]
+  \node [draw,thick,rounded corners,blue!50,fit=(a11)] (x) {};
+  \node [blue!50, below=1.5mm of a31, anchor=north west, xshift=-1.3cm] (expl) 
+    {Step 1a: Row swap to make this nonzero.};
+  \draw[->, blue!50, rounded corners] 
+    let \p1=($(expl.north west) + (5mm,0)$) in
+      (\p1) |- (x.west);
+\end{tikzpicture}%
+\rowop{$R_1 \ToT R_2$}{$\amat{
+      \namedbox{b11}{\r2}   4   6   12 ;
+      \phantom-0   -7   -4   2 ;
+      \namedbox{b31}3   1   -1   -2
+    }$}%
+\begin{tikzpicture}[remember picture, overlay]
+  \node [draw,thick,rounded corners,blue!50,fit=(b11)] (y) {};
+  \node [blue!50, below=1.5mm of b31, anchor=north west, xshift=-1.3cm] (expl2) 
+    {Step 1b: Scale to make this $1$.};
+  \draw[->, blue!50, rounded corners] 
+    let \p1=($(expl2.north west) + (5mm,0)$) in
+      (\p1) |- (y.west);
+\end{tikzpicture}\\[5mm]%
+\rowop{$R_1 = R_1\divsymb 2$}{$\amat{
+      \r1   2   3   6 ;
+      \phantom-0   -7   -4   2 ;
+      \namedbox{c31}3 1 -1 -2
+    }$}%
+\begin{tikzpicture}[remember picture, overlay]
+  \node [draw,thick,rounded corners,blue!50,fit=(c31)] (z) {};
+  \node [blue!50, below=1.5mm of c31, anchor=north west, xshift=-1.3cm, align=left] (expl3) 
+    {Step 1c: Subtract a multiple of\\
+     ~the first row to clear this.};
+  \draw[->, blue!50, rounded corners] 
+    let \p1=($(expl3.north west) + (5mm,0)$) in
+      (\p1) |- (z.west);
+\end{tikzpicture}%
+\\[8mm]%
+\rowop{$R_3= R_3 - 3R_1$}{$\amat{
+    1   2   3   6 ;
+    0   -7   -4   2;
+    \r0 -5 -10 -20
+  }$}\\[3mm]%
+\leavevmode\rlap{\parbox{.4\linewidth}{\small\color{blue!50}
+    Optional: swap rows $2$ and $3$ to
+    make Step 2b easier later on.}}%
+\rowop{$R_2 \ToT R_3$}{$\amat{
+    1  2    3   6;
+    0 -5  -10 -20;
+    0 -7   -4   2;
+  }$}
+\end{webonly}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Row Reduction}
+\framesubtitle{Example, continued}
+\def\r{\color{red}}\def\g{\color{black!15}}
+
+$\amat{
+    \g1  \g2    \g3   \g6;
+    0 \namedbox{a22}{-5}  -10 -20;
+    \namedbox{a31}{0} -7   -4   2;
+  }$%
+\begin{webonly}
+\begin{tikzpicture}[remember picture, overlay]
+  \node [draw,thick,rounded corners,blue!50,fit=(a22)] (x) {};
+  \node [blue!50, below=1.5mm of a31, anchor=north west, xshift=-1cm, align=left] (expl) 
+    {Step 2a: This is already nonzero.\\
+     Step 2b: Scale to make this $1$.\\[1mm]
+     \hskip1em (There are no fractions because\\
+     \hskip1em of the optional step before.)};
+  \draw[->, blue!50, rounded corners] 
+    let \p1=($(expl.north west) + (5mm,0)$) in
+      (\p1) |- (x.west);
+\end{tikzpicture}%
+\rowop{$R_2 = R_2 \divsymb -5$}{$\amat{
+    1 \namedbox{b12}{\phantom-2} 3 6 ;
+    0 \r1 2 4 ;
+    \namedbox{b31}{0} \namedbox{b32}{-7} -4 2
+  }$}%
+\begin{tikzpicture}[remember picture, overlay]
+  \node [draw,thick,rounded corners,blue!50,fit=(b12)] (y) {};
+  \node [draw,thick,rounded corners,blue!50,fit=(b32)] (y') {};
+  \node [blue!50, below=1.5mm of b31, anchor=north west, xshift=-1cm, align=left] (expl2) 
+    {Step 2c: Add multiples of\\
+      ~the second row to clear these.};
+  \draw[->, blue!50, rounded corners] 
+    let \p1=($(expl2.north west) + (5mm,0)$) in
+      (\p1) |- (y.west);
+  \draw[->, blue!50, rounded corners] 
+    let \p1=($(expl2.north west) + (5mm,0)$) in
+      (\p1) |- (y'.west);
+\end{tikzpicture}%
+\\[8mm]%
+\rowop{$R_1 = R_1 - 2R_2$}{$\amat{
+    1 \r0 -1 -2;
+    0 1 2 4;
+    0 -7 -4 2}$}\\
+\rowop{$R_3 = R_3 + 7R_2$}{$\amat{
+    1 0 -1 -2;
+    0 1 2 4;
+    0 \r0 10 30}$}
+\end{webonly}
+
+\pause\bigskip
+\alert{Note:} Step~2 never messes up the first (nonzero) column of the matrix,
+because it looks like this:
+
+\[ \amat{
+  \phantom11 \star, \star, \star;
+  \namedbox{b21}{0} \star, \star, \namedbox{b24}{\star};
+  0 \star, \star, \star} \]
+\begin{tikzpicture}[remember picture, overlay]
+  \node [draw,thick,rounded corners,blue!50,fit=(b21) (b24)] (z) {};
+  \node [blue!50, left=8mm of b21, anchor=east, align=left] (expl3) 
+    {``Active'' row};
+  \draw[->, blue!50] (expl3.east) -- (z.west);
+\end{tikzpicture}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Row Reduction}
+\framesubtitle{Example, continued}
+\def\r{\color{red}}\def\g{\color{black!15}}
+
+$\amat{
+    \g1 \g0 \g-1 \g-2;
+    \g0 \g1 \g2  \g4;
+    \namedbox{a31}{0} 0 \namedbox{a33}{10} 30
+  }$%
+\begin{webonly}
+\begin{tikzpicture}[remember picture, overlay]
+  \node [draw,thick,rounded corners,blue!50,fit=(a33)] (x) {};
+  \node [blue!50, below=1.5mm of a31, anchor=north west, xshift=-1cm, align=left] (expl) 
+    {Step 3a: This is already nonzero.\\
+     Step 3b: Scale to make this $1$.};
+  \draw[->, blue!50, rounded corners] 
+    let \p1=($(expl.north west) + (5mm,0)$) in
+      (\p1) |- (x.west);
+\end{tikzpicture}%
+\rowop{$R_3 = R_3 \divsymb 10$}{$\amat{
+    1 0 \namedbox{b13}{-1} -2;
+    0 1 \namedbox{b23}{2}  4;
+    \namedbox{b31}{0} 0 \r1 3
+  }$}%
+\begin{tikzpicture}[remember picture, overlay]
+  \node [draw,thick,rounded corners,blue!50,fit=(b13) (b23)] (y) {};
+  \node [blue!50, below=1.5mm of b31, anchor=north west, xshift=-1cm, align=left] (expl) 
+    {Step 3c: Add multiples of\\
+      ~the third row to clear these.};
+  \draw[->, blue!50, rounded corners] 
+    let \p1=($(expl.north west) + (5mm,0)$) in
+      (\p1) |- (y.west);
+\end{tikzpicture}%
+\\[8mm]%
+\rowop{$R_1 = R_1 + R_3$}{$\amat{
+    1 0 \r0 1;
+    0 1 2 4;
+    0 0 1 3
+  }$}
+\\
+\rowop{$R_2 = R_2 - 2R_3$}{$\amat{
+    1 0 0 1;
+    0 1 \r0 -2;
+    0 0 1 3
+  }$}
+\end{webonly}
+
+\pause\medskip
+\alert{Note:} Step~3 never messes up the columns to the left.
+
+\pause\medskip
+\alert{Success!}  
+The reduced row echelon form is
+\[ \amat{
+  1 0 0 1;
+  0 1 0 -2;
+  0 0 1 3
+} \qquad\implies\qquad \spalignsysdelims\{.
+ \syseq{
+  x \+ \. \+ \. = 1 ;
+  \. \+ y \+ \. = -2;
+  \. \+ \. \+ z = 3
+} \]
+\pause
+\alert{Step 4:} profit?
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Row Reduction}
+\framesubtitle{Another example}
+
+The linear system
+
+\smallskip
+
+\hfill$\syseq{2x + 10y = -1; 3x + 15y = 2}$\hfill
+gives rise to the matrix\hfill
+\webonlycmd{$\amat{ 2 10 -1; 3 15 2}.$\hskip 0pt plus .3fil}\hfill\null
+
+\pause\smallskip
+\note[item]{Students say what the next step is.}
+\note[item]{Put the algorithm up on the second screen.}
+Let's row reduce it:
+
+\def\r{\color{red}}
+\begin{center}
+\begin{minipage}{.7\linewidth}
+$\amat{ 2 {10} {-1} ;3 {15} 2}$
+\begin{webonly}
+  \rowop{$R_1 = R_1\divsymb 2$}{$\amat{
+      \r1 5 {-\frac 12}; 3 {15} 2}$}\rlap{\qquad\textcolor{blue}{(Step 1b)}}\par
+  \rowop{$R_2 = R_2 - 3R_1$}{$\amat{
+      1 5 {-\frac 12} ; 
+      \r0 0 {\frac 72}}$}\rlap{\qquad\textcolor{blue}{(Step 1c)}}\par
+  \rowop{$R_2 = R_2 \times \frac 27$}{$\amat{
+      1 5 {-\frac 12} ;0 0 \r1}$}\rlap{\qquad\textcolor{blue}{(Step 2b)}}\par
+  \rowop{$R_1 = R_1 + \frac 12R_2$}{$\amat{
+      1 5 \r0 ;0 0 1}$}\rlap{\qquad\textcolor{blue}{(Step 2c)}}
+\end{webonly}%
+\end{minipage}\qquad\null%
+\end{center}
+
+\pause
+The row reduced matrix
+
+\medskip
+\hfill
+$\amat{1 5 0 ;0 0 1}$ \hfill
+\parbox{.35\linewidth}{\centering corresponds to the\\\emph{inconsistent} system}
+\hfill
+$\syseq{x + 5y = 0; \. \+ 0 = 1\rlap.}$
+\hfill\null
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Inconsistent Matrices}
+
+\vskip-3mm
+\begin{ques}
+  What does an augmented matrix in reduced row echelon form look like, if its
+  system of linear equations is inconsistent? 
+  \note{Ask what it means in terms of pivots}
+\end{ques}
+
+\pause\bigskip
+\alert{Answer:}
+\[\amat{
+1  0  \star,  \star,  \color{red}0 ;
+0  1  \star,  \star,  \color{red}0 ;
+0  0  0  0  \color{red}1 
+}\]
+
+\pause\bigskip
+\begin{bluebox}{.75\linewidth}
+  An augmented matrix corresponds to an inconsistent system of equations if and
+  only if \emph{the last \textup{(i.e., the augmented)} column is a pivot column.}
+\end{bluebox}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Another Example}
+
+The linear system
+
+\smallskip
+\hfill
+$\syseq{2x + y + 12z = 1; x + 2y + 9z = -1}$\hfill
+gives rise to the matrix\hfill
+$\amat{ 2 1 {12} 1 ;1 2 9 {-1}}.$\hfill\null
+
+\pause\smallskip
+Let's row reduce it:
+
+\def\r{\color{red}}
+\begin{center}
+\begin{minipage}{.8\linewidth}
+  $\amat{ 2 1 {12} 1 ;1 2 9 {-1}}$
+\begin{webonly}
+  \rowop{$R_1 \ToT R_2$}{$\amat{
+      \r1 2 9 {-1}; 2 1 {12} 1}$}\rlap{\qquad\textcolor{blue}{(Optional)}}\par
+  \rowop{$R_2 = R_2 - 2R_1$}{$\amat{
+      1 2 9 {-1} ; \r0 {-3} {-6} 3}$}\rlap{\qquad\textcolor{blue}{(Step 1c)}}\par
+  \rowop{$R_2 = R_2 \divsymb -3$}{$\amat{
+      1 2 9 {-1} ;0 \r1 2 {-1}}$}\rlap{\qquad\textcolor{blue}{(Step 2b)}}\par
+  \rowop{$R_1 = R_1 - 2R_2$}{$\amat{
+      1 \r0 5 1 ;0 1 2 {-1}}$}\rlap{\qquad\textcolor{blue}{(Step 2c)}}
+\end{webonly}%
+\end{minipage}\qquad\qquad\null
+\end{center}
+
+\pause
+The row reduced matrix
+\medskip
+
+\hfill $\amat{1 0 5 1 ;0 1 2 {-1}}$ \hfill
+\parbox{.35\linewidth}{\centering corresponds to the\\linear system}
+\hfill\spalignsysdelims\{.
+$\syseq{x + 5z = 1; y + 2z = -1}$
+\hfill\null
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Another Example}
+\framesubtitle{Continued}
+The system
+\[ \syseq{x + 5z = 1; y + 2z = -1} \]
+comes from a matrix in reduced row echelon form.
+\pause
+Are we done?  Is the system solved?
+
+\pause\medskip
+\alert{Yes!}  Rewrite:
+\[ \syseq{x = 1 - 5z; y = -1 - 2z} \]
+For any value of $z$, there is exactly one value of $x$ and $y$ that makes the
+equations true.  But $z$ can be \emph{anything we want\/}!
+
+\pause\medskip
+So we have found the solution set: it is all values $x,y,z$ where
+\[ \syseq{x = 1 - 5z; y = -1 - 2z; \llap(z = \. \+ z\rlap)}
+\qquad \text{for $z$ any real number.} \]
+\pause
+This is called the \textbf{parametric form} for the solution.
+
+\medskip
+\webonlycmd{For instance, $(1, -1, 0)$ and $(-4, -3, 1)$ are solutions.}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Free Variables}
+
+\vskip-3mm
+\begin{defn}
+  Consider a \emph{consistent} linear system of equations in the variables
+  $x_1,\ldots,x_n$.
+  Let $A$ be a row echelon form of the matrix for this system.
+
+  \pause\smallskip
+  We say that $x_i$ is a \textbf{free variable} if its
+  corresponding column in $A$ is \emph{not} a pivot column.
+\end{defn}
+
+\pause
+\begin{bluebox}[Important]{.8\textwidth}
+  \begin{enumerate}
+  \item You can choose \emph{any value} for the free variables in a (consistent)
+    linear system.
+  \item<4-> Free variables come from \emph{columns without pivots\/} in a matrix
+    in row echelon form.
+  \end{enumerate}
+\end{bluebox}
+
+\pause[5]\vskip-2mm
+In the previous example, $\color{seq-red}z$ was free because the reduced row echelon form
+matrix was
+\[ \amat{ 1 0 {\color{seq-red}5} 4 ; 0 1 {\color{seq-red}2} {-1}}. \]
+
+\pause
+In this matrix:
+\[\amat{
+1  \color<7->{seq-red}\star,  0  \color<7->{seq-blue}\star,  \star ;
+0  \color<7->{seq-red}0   1  \color<7->{seq-blue}\star,  \star
+}\]
+the free variables are
+\blankuntil{7}{$\color{seq-red}x_2$ and $\color{seq-blue}x_4$}.
+\pause[8]%
+(What about the last column?)
+\note{It doesn't correspond to a variable!}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{One More Example}
+
+\vskip-1mm
+The reduced row echelon form of the matrix for a linear system in
+$x_1,x_2,x_3,x_4$ is
+\[ \amat{
+    1 \color<3->{seq-red}0 0 \color<3->{seq-blue}3 2 ;
+    0 \color<3->{seq-red}0 1 \color<3->{seq-blue}4 -1
+  } \]
+\pause
+The free variables are
+\blankuntil{3}{$\color{seq-red}x_2$ and $\color{seq-blue}x_4$}:
+\pause
+they are the ones whose
+columns are \emph{not} pivot columns.
+
+\pause\medskip
+This translates into the system of equations
+\[ \spalignsysdelims\{.
+\syseq{x_1 \+ \. \+ \. + 3x_4 = 2;
+  \.  \+ \. \+ x_3 + x_4 = -1} 
+\pause\qquad\implies\qquad\spalignsysdelims..
+\framebox{$\syseq{x_1 = 2 - 3x_4; x_3 = -1 - 4x_4\llap.}$}\]
+\pause
+What happened to $x_2$?  What is it allowed to be?
+\pause
+Anything!  The general solution is
+\webonlycmd{
+\[ (x_1,\,x_2,\,x_3,\,x_4) = (2-3x_4,\,x_2,\,-1-4x_4,\,x_4) \]
+}%
+for any values of $x_2$ and $x_4$.
+\begin{webonly}
+  For instance, $(2,0,-1,0)$ is a solution ($x_2=x_4=0$), and
+  $(5,1,3,-1)$ is a solution ($x_2=1$, $x_4=-1$).
+\end{webonly}
+
+\pause
+\begin{bluebox}{.8\linewidth}
+  The boxed equation is called the \textbf{parametric form} of the general solution to
+  the system of equations.  It is obtained by moving all free variables to the
+  right-hand side of the $=$.
+\end{bluebox}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{pollframe}
+
+\vskip 1cm
+
+\begin{bluebox}[Poll]{.6\textwidth}
+  Is it possible for a system of linear equations to have exactly two solutions?
+\end{bluebox}
+
+
+\end{pollframe}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Summary}
+
+There are \emph{three possibilities} for the reduced row echelon form of the
+augmented matrix of a linear system.\pause
+
+\begin{enumerate}
+\item \alert{The last column is a pivot column.}\\
+  In this case, the system is \emph{inconsistent}.  
+  \pause
+  There are \emph{zero} solutions, i.e.\ the solution set is \emph{empty}.  
+  Picture:
+  \pause
+  \[ \amat{ 1 0 {\color{red}0}; 0 1 {\color{red}0}; 0 0 {\color{red}1}} \]
+
+\pause
+\item \alert{Every column except the last column is a pivot column.}\\
+  In this case, the system has a \emph{unique solution}.  Picture:
+  \[ \amat{
+      1  0  0  \star ;
+      0  1  0  \star ;
+      0  0  1  \star
+    } \]
+\note{Ask: what are $x,y,z$?}
+
+\pause
+\item \alert{The last column is not a pivot column, and some other column isn't either.}\\
+  In this case, the system has \emph{infinitely many} solutions, corresponding
+  to the infinitely many possible values of the free variable(s).  Picture:
+  \[\amat{
+      1  \color{seq-red}\star,  0  \color{seq-blue}\star,  \star ;
+      0  \color{seq-red}0   1  \color{seq-blue}\star, \star
+    }\]
+
+\end{enumerate}
+
+\end{frame}
+
+
+%%% Local Variables:
+%%% TeX-master: "../slides"
+%%% End:

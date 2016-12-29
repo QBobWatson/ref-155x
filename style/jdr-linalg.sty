@@ -1,0 +1,119 @@
+
+%----------------------------------------------------------------------
+%-- Identification
+%----------------------------------------------------------------------
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{\styledir jdr-linalg}[2016/08/18
+  Macros for linear algebra]
+
+%----------------------------------------------------------------------
+%-- Prerequisite packages
+%----------------------------------------------------------------------
+
+\RequirePackage{\styledir spalign}
+\RequirePackage{\styledir jdr-tikz,\styledir jdr-macros}
+% \usetikzlibrary{ipe} won't work with relative dirs
+\input{\styledir tikzlibraryipe.code}
+
+\spalignsysdelims..
+
+\RequirePackage{pgffor}
+
+%----------------------------------------------------------------------
+%-- TikZ styles
+%----------------------------------------------------------------------
+
+\tikzset{
+    vector/.style={thick, -{Stealth[length=1.5mm]}},
+    thick vector/.style={very thick, -Stealth},
+    % math matrix: make a TikZ matrix look somewhat like
+    % a \begin{pmatrix}...\end{pmatrix}.  Usually pmatrix gives better spacing,
+    % but TikZ matrices keep track of where all the nodes are.
+    math matrix/.style={matrix of math nodes, inner sep=0pt, outer sep=0pt,
+      nodes={font=\small,inner sep=2pt},
+      left delimiter=(, right delimiter=)}
+}
+
+% vdots with correct vertical spacing for TikZ matrices
+\def\spvdots{\vphantom{\vbox{\hbox{(}\kern0pt}}\smash{\vdots}}
+
+
+%----------------------------------------------------------------------
+%-- Math operators
+%----------------------------------------------------------------------
+
+\DeclareMathOperator{\Span}{Span}
+\DeclareMathOperator{\range}{range}
+\DeclareMathOperator{\domain}{domain}
+\DeclareMathOperator{\Col}{Col}
+\DeclareMathOperator{\Row}{Row}
+\DeclareMathOperator{\Nul}{Nul}
+\DeclareMathOperator{\vol}{vol}
+\DeclareMathOperator{\dist}{dist}
+\DeclareMathOperator{\proj}{proj}
+
+
+%----------------------------------------------------------------------
+%-- Misc macros
+%----------------------------------------------------------------------
+
+\def\defeq{\overset{\rm def}=}
+\def\matrow#1{\text{---}\,#1\,\text{---}}
+\def\smallveciii#1#2#3{\vcenter{\offinterlineskip%
+  \hbox{\hss$\scriptscriptstyle\mathstrut#1$\hss}%
+  \hbox{\hss$\scriptscriptstyle\mathstrut#2$\hss}%
+  \hbox{\hss$\scriptscriptstyle\mathstrut#3$\hss}\kern0pt}}
+
+%----------------------------------------------------------------------
+%-- Construct matrix entries programmatically by looping
+%----------------------------------------------------------------------
+
+% Usage:
+%   \loopmat{3}{4}{\append{a_{\i\j}}}
+% creates a 3x4 matrix whose (i,j) entry is a_{ij}.
+
+% The reason this is somewhat difficult is the \mat{} command is not expandable
+% -- so the argument must be constructed fully in advance.
+
+\newtoks\loopmattoks
+
+\makeatletter
+
+% Append tokens to \loopmattoks
+\def\loopmat@append#1{%
+  \xdef\settok{%
+    \global\loopmattoks={\the\loopmattoks#1}}%
+  \settok%
+  }
+
+% Append tokens to \loopmattoks without expanding
+\def\loopmat@appendnoexp#1{%
+  \begingroup%
+  \toks255={#1}%
+  \xdef\settok{%
+    \loopmattoks={\the\loopmattoks\the\toks255}}%
+  \endgroup%
+  \settok%
+  }
+
+\def\@loopmat#1#2#3{
+  \bgroup
+  \let\append=\loopmat@append
+  \let\appendnoexp=\loopmat@appendnoexp
+  \loopmattoks={}
+  \foreach \i in {1,...,#1} {
+    \foreach \j in {1,...,#2} {
+      #3
+      \ifnum\j<#2\append,\fi
+    }
+    \ifnum\i<#1\append;\fi
+  }
+  \egroup
+}
+\def\loopmat#1#2#3{\@loopmat{#1}{#2}{#3}
+  \expandafter\mat\expandafter{\the\loopmattoks}}
+\makeatother
+
+\endinput
+

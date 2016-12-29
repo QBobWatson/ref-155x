@@ -1,0 +1,563 @@
+
+% JDR: This should take a bit less than one lecture as written.
+
+\usetikzlibrary{matrix}
+
+\titleframe{Section 2.9}{Dimension and Rank}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Coefficients of Basis Vectors}
+
+\alert{Recall:} a \textbf{basis} of a subspace $V$ is a set of vectors that
+\emph{spans} $V$ and is \emph{linearly independent}.
+
+\pause
+\begin{oneoffthm}{\namedbox{lemma}{Lemma}}
+  \begin{tikzpicture}[remember picture, overlay]
+    \path (lemma.north east) ++(1,0)
+      node[anchor=west, blue!50, font=\small\upshape] (expl)
+        {like a theorem, but less important};
+    \draw[->, shorten >=1pt, blue!50]
+      (expl.west) to[out=180,in=0] (lemma.east);
+  \end{tikzpicture}%
+  \pause
+  If $\cB = \{v_1,v_2,\ldots,v_m\}$ is a basis for a subspace $V$, then any
+  vector $x$ in $V$ can be written as a linear combination
+  \[ x = c_1v_1 + c_2v_2 + \cdots + c_mv_m \]
+  for \emph{unique} coefficients $c_1,c_2,\ldots,c_m$.
+\end{oneoffthm}
+
+\begin{webonly}
+We know $x$ is a linear combination of the $v_i$ because they span $V$.
+Suppose that we can write $x$ as a linear combination with different
+coefficients:
+\[\begin{split}
+  x &= c_1v_1 + c_2v_2 + \cdots + c_mv_m \\
+  x &= c_1'v_1 + c_2'v_2 + \cdots + c_m'v_m
+\end{split}\]
+Subtracting:
+\[ 0 = x-x = (c_1-c_1')v_1 + (c_2-c_2')v_2 + \cdots + (c_m-c_m')v_m \]
+Since $v_1,v_2,\ldots,v_m$ are linearly independent, they only have the trivial
+linear dependence relation.
+That means each $c_i-c_i'=0$, or $c_i=c_i'$.
+\end{webonly}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Bases as Coordinate Systems}
+
+The unit coordinate vectors $e_1,e_2,\ldots,e_n$ form a basis
+for $\R^n$.  Any vector is a unique linear combination of the $e_i$:
+\[ v = \vec{\color<2->{seq1}3 \color<2->{seq2}5 \color<2->{seq3}{-2}}
+= 3\vec{1 0 0} + 5\vec{0 1 0} - 2\vec{0 0 1}
+= \textcolor<2->{seq1}{3}e_1 + \textcolor<2->{seq2}{5}e_2
+\textcolor<2->{seq3}{{}- 2}e_3. \]
+
+\pause
+\alert{Observe:}
+the \emph{coordinates} of $v$ are exactly the \emph{coefficients} of
+$e_1,e_2,e_3$.
+
+\pause\medskip
+We can go backwards: given any basis $\cB$, we interpret the coefficients of a linear
+combination as ``coordinates'' with respect to $\cB$.
+
+
+\pause
+\begin{defn}
+  Let $\cB = \{v_1,v_2,\ldots,v_m\}$ be a basis of a subspace $V$.  Any vector
+  $x$ in $V$ can be written uniquely as a linear combination
+  $x = c_1v_1 + c_2v_2 + \cdots + c_mv_m$.
+  The coefficients $c_1,c_2,\ldots,c_m$ are the
+  \textbf{coordinates of $x$ with respect to $\cB$}.  The
+  \textbf{$\cB$-coordinate vector of $x$} is the vector
+  \[ [x]_\cB = \vec{c_1 c_2 \vdots, c_m} \quad \text{in } \R^m. \]
+
+\end{defn}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Bases as Coordinate Systems}
+\framesubtitle{Example 1}
+
+Let $v_1 = \vec{1 0 1},\,v_2 = \vec{1 1 1},\quad\cB=\{v_1,v_2\},
+\quad V=\Span\{v_1,v_2\}$.
+
+\pause\medskip
+\alert{Verify} that $\cB$ is a basis:\\
+\begin{webonly}
+\emph{Span:}
+by definition $V = \Span\{v_1,v_2\}$.\\
+\emph{Linearly independent:}
+because they are not multiples of each other.
+\end{webonly}
+
+\pause\medskip
+\alert{Question:} If $[x]_\cB = {5\choose 2}$, then what is $x$? 
+\abovedisplayskip=2pt\belowdisplayskip=2pt
+\webonlycmd{
+\[ [x]_\cB = \vec{5 2} \sptxt{means} x = 5v_1 + 2v_2 
+= 5\vec{1 0 1} + 2\vec{1 1 1} = \vec{7 2 7}. \]}
+
+\pause
+\alert{Question:} Find the $\cB$-coordinates of $x = \vec{5 3 5}$.\\
+\begin{webonly}
+We have to solve the vector equation $x = c_1v_1 + c_2v_2$ in the unknowns
+$c_1,c_2$.
+\[ \amat{1 1 5; 0 1 3; 1 1 5}
+\;\longsquiggly\;
+\amat{1 1 5; 0 1 3; 0 0 0}
+\;\longsquiggly\;
+\amat{1 0 2; 0 1 3; 0 0 0}
+\]
+So $c_1 = 2$ and $c_2 = 3$, so $x = 2v_1 + 3v_2$ and $[x]_\cB = {2\choose 3}$.
+\end{webonly}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Bases as Coordinate Systems}
+\framesubtitle{Example 2}
+
+Let $v_1 = \vec{2 3 2},\,v_2=\vec[r]{-1 1 1},\,v_3=\vec{2 8 6},\quad
+V = \Span\{v_1,v_2,v_3\}$.
+
+\pause\medskip
+\alert{Question:} Find a basis for $V$.\\
+\begin{webonly}
+$V$ is the column span of the matrix 
+\abovedisplayskip=3pt\belowdisplayskip=3pt
+\[ A = \mat[r]{2 -1 2; 3 1 8; 2 1 6}
+\;\longsquiggly[row reduce]\;
+\mat{1 0 2; 0 1 2; 0 0 0}. \]
+A basis for the column span is
+formed by the pivot columns: $\cB = \{v_1,v_2\}$.
+\end{webonly}
+
+\pause\medskip
+\alert{Question:} Find the $\cB$-coordinates of $x = \vec{4 11 8}$.\\
+\begin{webonly}
+We have to solve $x = c_1v_1 + c_2v_2$.
+\[  \amat{2 -1 4; 3 1 11; 2 1 8}
+  \;\longsquiggly[row reduce]\;
+  \amat{1 0 3; 0 1 2; 0 0 0}
+\]
+So $x = 3v_1 + 2v_2$ and $[x]_\cB = {3\choose 2}$.
+\end{webonly}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Bases as Coordinate Systems}
+\framesubtitle{Summary}
+
+\vskip-7mm\null
+\begin{bluebox}{.9\linewidth}
+  If $\cB = \{v_1,v_2,\ldots,v_m\}$ is a basis for a subspace $V$ and $x$ is in
+  $V$, then\\[\abovedisplayskip]
+  \null\hfill\namedbox{obox}{
+  $[x]_\cB = \vec{c_1 c_2 \vdots, c_m} \sptxt{means}
+  x = c_1v_1 + c_2v_2 + \cdots + c_mv_m.$}\hfill\null\\[\belowdisplayskip]
+  \begin{tikzpicture}[remember picture, overlay]
+    \node[orangebox, fit=(obox)] {};
+  \end{tikzpicture}%
+  \displayskips{3pt}%
+  \uncover<2->{%
+  Finding the $\cB$-coordinates for $x$ means solving the vector
+  equation
+  \[ x = c_1v_1 + c_2v_2 + \cdots + c_mv_m \]
+  in the unknowns $c_1,c_2,\ldots,c_m$.
+  }%
+  \uncover<3->{%
+  This (usually) means row reducing the
+  augmented matrix
+  \belowdisplayskip=0pt
+  \[ \amat[c]{| | ,, | |; v_1 v_2 \cdots, v_m, x; | | ,, | |}. \]
+  }
+\end{bluebox}
+
+\pause[4]
+\alert{Question:} What happens if you try to find the $\cB$-coordinates of $x$
+\emph{not} in $V$?\\
+\webonlycmd{You end up with an inconsistent system:
+$V$ is the span of $v_1,v_2,\ldots,v_m$, and if $x$ is not in the span, then
+$x = c_1v_1 + c_2v_2 + \cdots + c_mv_m$ has no solution.}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Bases as Coordinate Systems}
+\framesubtitle{Picture}
+
+\begin{minipage}[c]{.5\linewidth}\raggedright
+  Let
+  \[ v_1 = \vec[r]{2 -1 1} \quad v_2 = \vec[r]{1 0 -1} \]
+  These form a basis $\cB$ for the plane
+  \[ V = \Span\{v_1,v_2\} \]
+  in $\R^3$.
+\end{minipage}\hfill
+\begin{tikzpicture}[myxyz, scale=.75, baseline, thin border nodes]
+  \useasboundingbox[resetxy] (-3,-3) rectangle (3,2.3);
+  
+  \def\v{(2,-1,1)}
+  \def\w{(1,0,-1)}
+  
+  \node[coordinate] (X) at \v {};
+  \node[coordinate] (Y) at \w {};
+  
+  \begin{scope}[x=(X), y=(Y), transformxy]
+    \fill[seq4!10, nearly opaque] (-1,-1) rectangle (1,1);
+    \draw[step=.5cm, seq4!30, very thin] (-1,-1) grid (1,1);
+  \end{scope}
+
+  \begin{scope}[x=($.5*(X)$), y=($.5*(Y)$), every label/.append style={fill=none}]
+    \point<2->[seq1, "$u_1$" seq1] at (1,1);
+    \point<2->[seq2, "$u_2$" seq2] at (-1,.5);
+    \point<2->[seq3, "$u_3$" seq3] at (1.5,-.5);
+    \point<2->[seq5, "$u_4$" {seq5, right}] at (0,1.5);
+  \end{scope}
+
+  \draw[vector] (0,0,0) to["$v_1$"] ($.5*(X)$);
+  \draw[vector] (0,0,0) to["$v_2$"'] ($.5*(Y)$);
+  
+  \node[x=(X),y=(Y),seq-violet] at (0,-1.2) {$V$};
+
+  \point at (0,0,0);
+\end{tikzpicture}
+
+\pause
+\alert{Question:} Estimate the $\cB$-coordinates of these vectors:
+\[
+[\textcolor{seq1}{u_1}]_\cB
+= \webonlycmd{\vec{1 1}}\qquad
+[\textcolor{seq2}{u_2}]_\cB
+= \webonlycmd{\vec[r]{-1 \frac 12}}\qquad
+[\textcolor{seq3}{u_3}]_\cB
+= \webonlycmd{\vec[r]{\frac 32 -\frac 12}}\qquad
+[\textcolor{seq5}{u_4}]_\cB
+= \webonlycmd{\vec{0 \frac 32}}
+\]
+
+\pause\vskip-3mm
+\begin{rem}
+  Many of you want to think of a plane in $\R^3$ as ``being'' $\R^2$.  Choosing
+  a basis $\cB$ and using $\cB$-coordinates is one way to make sense of that.
+  But remember that the coordinates are the coefficients of a
+  linear combination of the basis vectors.
+\end{rem}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{The Rank Theorem}
+
+\alert{Recall:} 
+\begin{itemize}
+\item The \textbf{dimension} of a subspace $V$ is the number of vectors in a
+  basis for $V$.
+  \pause
+\item A basis for the column space of a matrix $A$ is given by the
+  \pause
+  pivot columns.
+  \pause
+\item A basis for the null space of $A$ is given by the
+  \pause
+  vectors attached to the free variables in the parametric vector form.
+\end{itemize}
+
+\pause
+\begin{defn}
+  The \textbf{rank} of a matrix $A$, written $\rank A$, is the dimension of the
+  column space $\Col A$.
+\end{defn}
+
+\pause\smallskip
+\alert{Observe:}
+\bgroup
+\abovedisplayskip=0pt
+\[\begin{split}
+  \rank A = \dim\Col A &=
+  \uncover<8->{\text{the number of columns with pivots}} \\
+  \uncover<9->{
+    \dim\Nul A &= \uncover<10->{\text{the number of free variables}} \\}
+  \uncover<11->{&= \text{the number of columns without pivots.}
+  }
+\end{split}\]
+\egroup
+
+\pause[12]
+\begin{oneoffthm}{Rank Theorem}
+  If $A$ is an $m\times n$ matrix, then
+  \[ \rank A + \dim\Nul A = \pause
+  n = \text{the number of columns of $A$}. \]
+\end{oneoffthm}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{The Rank Theorem}
+\framesubtitle{Example}
+
+\begin{center}
+\vskip-4mm
+\begin{tikzpicture}[mat/.style={ % "every matrix" doesn't work?
+    math matrix, column sep={2em,between origins}, nodes=left}]
+  \matrix[mat] (A) {
+    \phantom{-}1 \&  \phantom{-}2 \& 0 \& -1 \\
+   -2 \& -3 \& 4 \&  5 \\
+    \phantom{-}2 \&  \phantom{-}4 \& 0 \& -2 \\
+  };
+  \matrix[mat, right=2cm of A] (Arref) {
+    1 \& 0 \& -8 \& -7 \\
+    0 \& 1 \&  4 \&  3 \\
+    0 \& 0 \&  \phantom{-}0 \&  \phantom{-}0 \\
+  };
+  \draw[decorate, ->,
+      decoration={snake, amplitude=.4mm, segment length=1mm, post length=.5mm}]
+      ($(A.east) + (5mm,0)$) -- node[auto] {rref} ($(Arref.west) - (5mm,0)$);
+  \node[left=.3cm of A] {$A = $};
+
+  \begin{scope}[every node/.style={draw,rounded corners,
+      inner xsep=3mm, inner ysep=2.5mm}]
+    % For positioning
+    \node<1>[white,fit=(A-1-1.center) (A-3-1.center)] (basis1) {};
+    \node<1>[white,fit=(A-1-2.center) (A-3-2.center)] (basis2) {};
+    \node<2->[seq-orange,fit=(A-1-1.center) (A-3-1.center)] (basis1) {};
+    \node<2->[seq-orange,fit=(A-1-2.center) (A-3-2.center)] (basis2) {};
+    \node<3->[seq-green,fit=(Arref-1-3.center) (Arref-3-3.center)] (free1) {};
+    \node<3->[seq-green,fit=(Arref-1-4.center) (Arref-3-4.center)] (free2) {};
+  \end{scope}
+
+  % For positioning
+  \path<1> ($(basis1.south)!.5!(basis2.south)$)
+    ++(0,-.6cm) node[font=\small, white] {basis of $\Col A$};
+  \path<2-> ($(basis1.south)!.5!(basis2.south)$)
+    ++(0,-.6cm) node[font=\small, seq-orange] (label1) {basis of $\Col A$};
+  \draw<2->[->,seq-orange] (label1.north) to[out=90,in=-90] (basis1.south);
+  \draw<2->[->,seq-orange] (label1.north) to[out=90,in=-90] (basis2.south);
+
+  \useasboundingbox (5,0);
+  \path<3-> ($(free1.south)!.5!(free2.south)$)
+    ++(0,-.6cm) node[font=\small, seq-green] (label2) {free variables};
+  \draw<3->[->,seq-green] (label2.north) to[out=90,in=-90] (free1.south);
+  \draw<3->[->,seq-green] (label2.north) to[out=90,in=-90] (free2.south);
+
+\end{tikzpicture}
+\end{center}
+\vskip-.2cm
+
+\begin{webonly}
+\displayskips{3pt}
+A basis for $\Col A$ is
+\[ \left\{ \vec[r]{1 -2 2},\; \vec[r]{2 -3 4} \right\}, \]
+so $\rank A = \dim\Col A = 2$.
+
+\medskip
+Since there are two free variables $x_3,x_4$, the parametric vector form for the
+solutions to $Ax=0$ is
+\[ x = x_3\vec[r]{8 -4 1 0} + x_4\vec[r]{7 -3 0 1}
+\;\longsquiggly[basis for $\Nul A$]\;
+\left\{ \vec[r]{8 -4 1 0},\; \vec[r]{7 -3 0 1} \right\}.
+\]
+Thus $\dim\Nul A = 2$.
+
+\medskip
+The Rank Theorem says $2+2=4$.
+\end{webonly}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{pollframe}
+
+\begin{bluebox}[Poll]{.8\linewidth}
+  Let $A$ and $B$ be $3\times 3$ matrices.  Suppose that $\rank(A)=2$ and
+  $\rank(B)=2$.  Is it possible that $AB = 0$?  Why or why not?
+\end{bluebox}
+
+\note{Uncover the next few as hints.}
+
+\pause\medskip
+If $AB = 0$, then $ABx = 0$ for every $x$ in $\R^3$.
+
+\pause\medskip
+This means $A(Bx) = 0$, so $Bx$ is in $\Nul A$.
+
+\pause\medskip
+This is true for every $x$, so $\Col B$ is contained in $\Nul A$.
+
+\pause\medskip
+But $\dim\Nul A = 1$ and $\dim\Col B = 2$, and a $1$-dimensional space can't
+contain a $2$-dimensional space.
+
+\pause\medskip
+Hence it can't happen.
+
+\pause\medskip
+\hfill
+\begin{tikzpicture}[scale=.5, baseline, myxyz]
+  \path[clip, resetxy] (-4,-2) rectangle (4,2);
+  \useasboundingbox[resetxy] (-3,-3) rectangle (3,3);
+
+  \draw[seq4] (-4,-4,-4) -- (0,0,0);
+   \begin{scope}[transformxy]
+    \fill[white, semitransparent] (-1.5,-1.5) rectangle (1.5,1.5);
+    \draw[step=1cm, grid lines] (-1.5,-1.5) grid (1.5,1.5);
+  \end{scope}
+
+  \draw[seq4] (4,4,4) -- (0,0,0);
+  \node[resetxy,seq4] at (1.5,1.5) {$\Nul A$};
+  \point at (0,0,0);
+\end{tikzpicture}
+\hskip-5mm\parbox{.2\linewidth}{\centering does not contain}\quad\quad
+\begin{tikzpicture}[scale=.5, baseline, myxyz]
+  \useasboundingbox[resetxy] (-3,-3) rectangle (3,3);
+  
+  \def\v{(2,-1,1)}
+  \def\w{(1,0,-1)}
+  
+  \node[coordinate] (X) at \v {};
+  \node[coordinate] (Y) at \w {};
+  
+  \begin{scope}[x=(X), y=(Y), transformxy]
+    \fill[seq4!30, nearly opaque] (-1,-1) rectangle (1,1);
+    \draw[step=.5cm, seq4!50, very thin] (-1,-1) grid (1,1);
+  \end{scope}
+
+  \node[x=(X),y=(Y),seq4] at (.2,-1.4) {$\Col B$};
+  \point at (0,0,0);
+\end{tikzpicture}
+\hfill\null
+
+\end{pollframe}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{The Basis Theorem}
+
+\vskip-3mm
+\begin{oneoffthm}{Basis Theorem}
+  Let $V$ be a subspace of dimension $m$.  Then:
+  \begin{itemize}
+    \pause
+  \item Any $m$ linearly independent vectors in $V$ form a basis for $V$.
+    \pause
+  \item Any $m$ vectors that span $V$ form a basis for $V$.
+  \end{itemize}
+\end{oneoffthm}
+
+\pause\bigskip
+\begin{bluebox}[Upshot]{.7\linewidth}
+  If you \emph{already} know that $\dim V = m$, and you have $m$ vectors
+  $\cB = \{v_1,v_2,\ldots,v_m\}$ in $V$, then you only have to check \emph{one} of
+  \smallskip
+  \begin{enumerate}
+  \item<5-> $\cB$ is linearly independent, \emph{or}
+  \item<6-> $\cB$ spans $V$
+  \end{enumerate}
+  \smallskip
+  \uncover<7->
+  {in order for $\cB$ to be a basis.}
+\end{bluebox}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{The Invertible Matrix Theorem}
+\framesubtitle{Addenda}
+
+\vskip-3mm
+\begin{oneoffthm}{The Invertible Matrix Theorem}
+  Let $A$ be an $n\times n$ matrix, and let $T\colon\R^n\to\R^n$ be the
+  linear transformation $T(x) = Ax$.  The following statements are equivalent.\\
+  \begin{enumerate}
+  \item $A$ is invertible.
+  \end{enumerate}
+  \pause
+  \rlap{
+  \begin{tikzpicture}
+    \node[scale=.7, anchor=west] (L) {\begin{minipage}{\linewidth}
+      \begin{enumerate}
+      \setcounter{enumi}{1}
+      \item $T$ is invertible.
+      \item $A$ is row equivalent to $I_n$.
+      \item $A$ has $n$ pivots.
+      \item $Ax=0$ has only the trivial solution.
+      \item The columns of $A$ are linearly independent.
+      \item $T$ is one-to-one.
+      \end{enumerate}
+      \end{minipage}};
+    \node[scale=.7, right=-2.5cm of L] {
+      \begin{minipage}{\linewidth}
+      \begin{enumerate}
+      \setcounter{enumi}{7}
+      \item $Ax = b$ is consistent for all $b$ in $\R^n$.
+      \item The columns of $A$ span $\R^n$.
+      \item $T$ is onto.
+      \item $A$ has a left inverse (there exists $B$ such that $BA = I_n$).
+      \item $A$ has a right inverse (there exists $B$ such that $AB = I_n$).
+      \item $A^T$ is invertible.
+      \end{enumerate}
+    \end{minipage}};
+  \useasboundingbox (-1mm,0);
+  \end{tikzpicture}}\par\vskip-1mm
+  \begin{enumerate}
+    \setcounter{enumi}{13}
+    \pause
+  \item The columns of $A$ form a basis for $\R^n$.
+    \pause
+  \item $\Col A = \R^n$.
+    \pause
+  \item $\dim\Col A = n$.
+    \pause
+  \item $\rank A = n$.
+    \pause
+  \item $\Nul A = \{0\}$.
+    \pause
+  \item $\dim\Nul A = 0$.
+  \end{enumerate}
+\end{oneoffthm}
+
+\pause
+These are equivalent to the previous conditions by the Rank Theorem and the
+Basis Theorem.
+
+\end{frame}
+
+
+%%% Local Variables:
+%%% TeX-master: "../slides"
+%%% End:

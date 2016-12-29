@@ -1,0 +1,672 @@
+
+% JDR: This is more than 50 minutes.  But 5.2 is less than 50 minutes.
+
+\usetikzlibrary{shadows,shapes}
+
+\titleframe{Chapter 5}{Eigenvalues and Eigenvectors}
+\titleframe{Section 5.1}{Eigenvectors and Eigenvalues}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{A Biology Question}
+\framesubtitle{Motivation}
+
+In a population of rabbits:
+\begin{enumerate}
+\item half of the newborn rabbits survive their first year;
+  \pause
+\item of those, half survive their second year;
+  \pause
+\item their maximum life span is three years;
+  \pause
+\item rabbits have $0, 6, 8$ baby rabbits in their three years, respectively.
+\end{enumerate}
+\pause
+If you know the population one year, what is the population the next year?
+\pause
+\[\begin{split}
+  f_n &= \text{first-year rabbits in year $n$} \\
+  s_n &= \text{second-year rabbits in year $n$} \\
+  t_n &= \text{third-year rabbits in year $n$} 
+\end{split}\]
+\pause
+The rules say:
+\[ \mat{0 6 8; \frac 12 0 0; 0 \frac 12 0}\vec{f_n s_n t_n} 
+= \vec{f_{n+1} s_{n+1} t_{n+1}}. \]
+\pause
+Let $A = \mat{0 6 8; \frac 12 0 0; 0 \frac 12 0}$ and
+$v_n = \vec{f_n s_n t_n}$.  Then\,
+\namedbox{diffeq}{$Av_n = v_{n+1}$.}
+\pause
+\begin{tikzpicture}[remember picture, overlay]
+  \node[orangebox, fit=(diffeq)] (diffeqbox) {};
+  \node[right=6mm of diffeq, blue!50] (expl) {\textbf{difference equation}};
+  \draw[->, shorten >=1pt, blue!50] (expl) -- (diffeqbox);
+\end{tikzpicture}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{A Biology Question}
+\framesubtitle{Continued}
+
+If you know $v_0$, what is $v_{10}$?
+\pause
+\[ v_{10} = Av_9 = AAv_8 = \cdots = A^{10}v_0. \]
+\pause
+This makes it easy to compute examples by computer:
+\hbox to \linewidth{\hss
+\begin{minipage}[t]{0.6\linewidth}
+  \[\begin{array}{ccc}
+    v_0 & v_{10} & v_{11} \\\hline\noalign{\vskip .5ex}
+    \vec{3 7 9} & \vec{30189 7761 1844} & \vec{61316 15095 3881} \\\noalign{\vskip .5ex}
+    \uncover<4->{\vec{1 2 3} & \vec{9459 2434  577} & \vec{19222 4729 1217}}
+    \\\noalign{\vskip .5ex}
+    \uncover<5->{\vec{4 7 8} & \vec{28856 7405 1765} & \vec{58550 14428 3703}}
+  \end{array}\]
+\end{minipage}
+\begin{minipage}[t]{0.45\linewidth}
+  \pause[6] What do you notice about these numbers?  \pause
+  \begin{enumerate}
+  \item Eventually, each segment of the population doubles every year:
+    $Av_n = v_{n+1} = 2v_n$.
+    \pause
+  \item The ratios get close to $(16:4:1)$:
+    \[ v_n = \text{(scalar)}\cdot\vec{16 4 1}. \]
+
+  \end{enumerate}
+\end{minipage}
+\hss}
+
+\pause
+\alert{Translation:} $2$ is an eigenvalue, and $\vec{16 4 1}$ is an eigenvector!
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Eigenvectors and Eigenvalues}
+
+\vskip 4mm
+\begin{center}
+\begin{tikzpicture}[remember picture, baseline=(eiginner.base)]
+\pgfdeclarelayer{border1}
+\pgfdeclarelayer{border2}
+\pgfdeclarelayer{border3}
+\pgfsetlayers{border3,border2,border1,main}
+\node[node is bbox, font=\normalsize] (eiginner) at (0,0) {%
+\begin{minipage}{.9\linewidth}
+\begin{defn}
+  Let $A$ be an $n\times n$ matrix.\\
+  \textcolor{red}{Eigenvalues and eigenvectors are only for square matrices.}
+  \begin{enumerate}
+  \item An \textbf{eigenvector} of $A$ is a \emph<2->{nonzero} vector $v$ in
+    $\R^n$ such that $Av = \lambda v$, for some $\lambda$ in $\R$.
+    \pause[3]
+    In other words, $Av$ is a multiple of $v$.
+    \pause
+  \item An \textbf{eigenvalue} of $A$ is a number $\lambda$ in $\R$ such that the
+    equation $Av=\lambda v$ has a \emph<5->{nontrivial} solution.
+  \end{enumerate}
+  \pause\pause
+  If $Av = \lambda v$ for $v\neq 0$, we say $\lambda$ is the
+  \textbf{eigenvalue for $v$}, and $v$ is an \textbf{eigenvector for $\lambda$}.
+\end{defn}
+\end{minipage}};
+\useasboundingbox (eiginner.south west) rectangle (eiginner.north east);
+\node[fit=(eiginner), node is bbox] (eig) {};
+\begin{pgfonlayer}{border1}
+  \node<8->[fit=(eig), draw, seq-red, fill=white, thick, rounded corners,
+         inner sep=.5em, xshift=-.1cm, yshift=-.15cm] (border1) {};
+\end{pgfonlayer}
+\begin{pgfonlayer}{border2}
+  \node<9->[fit=(border1), draw, seq-orange, fill=seq-orange, thick, decorate,
+         decoration=zigzag, inner sep=.5em] (border2) {};
+\end{pgfonlayer}
+\begin{pgfonlayer}{border3}
+  \node<10->[fit=(border2), draw, seq-red, fill=seq-red, thick, decorate,
+         decoration={bumps,amplitude=-2}, inner sep=.5em,
+         drop shadow={shadow xshift=1ex, shadow yshift=-1ex}] (border3) {};
+\end{pgfonlayer}
+\end{tikzpicture}
+\end{center}
+
+\vskip 1cm
+\uncover<7->{
+\alert{Note:} Eigenvectors are by definition nonzero.  Eigenvalues may be
+equal to zero.}
+%
+\note{Sing the eigenvector song: ``an eigenvector is a $v$ where $A$ times $v$
+  is $\lambda v$'' (tune of \textit{Twinkle Twinkle Little Star})}
+
+\vfill
+\begin{center}
+\begin{tikzpicture}[remember picture]
+  \node<11->[bluebox, text width=.7\textwidth, font=\normalsize] (bluebox) at (0,0)
+  {This is the most important definition in the course.};
+  \draw<11->[->, thick, rounded corners, overlay, shorten >=1mm]
+    let \p0=($(current page.west) + (.3cm,0)$) in
+    (bluebox.west)
+      -- (bluebox.west -| \p0)
+      |- (border3.west);
+\end{tikzpicture}
+\end{center}
+\vfill
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Verifying Eigenvectors}
+
+\vskip-3mm
+\begin{eg}\vskip-3mm
+  \[ A = \mat{0 6 8; \frac 12 0 0; 0 \frac 12 0} 
+  \qquad v = \vec{16 4 1} \]
+  \pause
+  Multiply:
+  \[ Av = \webonlycmd{\mat{0 6 8; \frac 12 0 0; 0 \frac 12 0}\vec{16 4 1}
+    = \vec{32 8 2} = 2v} \]
+  \pause
+  Hence $v$ is an eigenvector of $A$, with eigenvalue $\lambda = \blankuntil{4}{2}$.
+\end{eg}
+
+\pause[5]
+\begin{eg}\vskip-3mm
+  \[ A = \mat{2 2; -4 8} \qquad v = \vec{1 1} \]
+  \pause
+  Multiply:
+  \[ Av = \webonlycmd{\mat{2 2; -4 8}\vec{1 1} = \vec{4 4} = 4v} \]
+  \pause
+  Hence $v$ is an eigenvector of $A$, with eigenvalue
+  $\lambda = \blankuntil{8}{4}$.
+\end{eg}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{pollframe}
+
+\vskip-7mm\null
+\begin{bluebox}[Poll]{.8\linewidth}
+  Which of the vectors
+  \[ \text{A. } \vec{1 1} \quad
+  \text{B. } \vec{1 -1} \quad
+  \text{C. } \vec{-1 1} \quad
+  \text{D. } \vec{2 1} \quad
+  \text{E. } \vec{0 0}
+  \]
+  are eigenvectors of the matrix
+  $\mat{1 1; 1 1}$?\\[3pt]
+  What are the eigenvalues?
+\end{bluebox}
+\pause\small
+\[\begin{split}
+  \uncover<2->{\mat{1 1; 1 1}\vec{1 1} &=
+  \hbox to 7cm{$2\vec{1 1}$\hfill eigenvector with eigenvalue $2$}} \\
+  \uncover<3->{\mat{1 1; 1 1}\vec{1 -1} &=
+  \hbox to 7cm{$0\vec{1 -1}$\hfill eigenvector with eigenvalue $0$}} \\
+  \uncover<4->{\mat{1 1; 1 1}\vec{-1 1} &=
+  \hbox to 7cm{$0\vec{-1 1}$\hfill eigenvector with eigenvalue $0$}} \\
+  \uncover<5->{\mat{1 1; 1 1}\vec{2 1} &=
+  \hbox to 7cm{$\vec{3 3}$\hfill not an eigenvector}} \\
+  \uncover<6->{\vec{0 0} &\phantom{{}={}}
+  \hbox to 7cm{\hfill is never an eigenvector}} \\
+\end{split}\]
+
+\end{pollframe}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Verifying Eigenvalues}
+
+\alert{Question:} Is $\lambda = 3$ an eigenvalue of $A = \mat{2 -4; -1 -1}$?
+
+\setbox0=\hbox{\phantom{In other words, }}
+
+\pause\medskip
+In other words, does $Av=3v$ have a nontrivial solution?\\\pause
+\usebox0\llap\ldots does $Av-3v=0$ have a nontrivial solution?\\\pause
+\usebox0\llap\ldots does $(A-3I)v=0$ have a nontrivial solution?\\\pause
+We know how to answer that!
+\pause
+Row reduction!
+
+\pause\medskip
+\[ A - 3I = \webonlycmd{\mat{2 -4; -1 -1} - 3\mat{1 0; 0 1}
+= \mat{-1 -4; -1 -4}} \]
+\begin{webonly}%
+  Row reduce:
+  \[ \mat{-1 -4; -1 -4} \longsquiggly \mat{1 4; 0 0} \]
+  Parametric form:
+  $x = -4y$;
+  parametric vector form:
+  $\vec{x y} = y\vec{-4 1}$.
+\par\smallskip
+Does there exist an eigenvector with eigenvalue $\lambda = 3$?
+Yes!  Any nonzero multiple of $\vec{-4 1}$. Check:
+\[ \mat{2 -4; -1 -1}\vec{-4 1} = \vec{-12 3} = 3\vec{-4 1}. \bigcheck[\quad] \]
+\end{webonly}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Eigenspaces}
+
+\vskip-3mm
+\begin{defn}
+  Let $A$ be an $n\times n$ matrix and let $\lambda$ be an eigenvalue of $A$.
+  The \textbf{$\lambda$-eigenspace} of $A$ is the set of all eigenvectors of $A$
+  with eigenvalue $\lambda$, plus the zero vector:
+  \[\begin{split} \text{$\lambda$-eigenspace}
+    &= \bigl\{ v\text{ in }\R^n\mid Av = \lambda v \bigr\} \\
+    &\uncover<2->{= \bigl\{ v\text{ in }\R^n\mid (A-\lambda I)v = 0 \bigr\}} \\
+    &\uncover<3->{= \Nul\bigl( A-\lambda I \bigr).}
+  \end{split}\]
+\end{defn}
+
+\pause[4]%
+Since the $\lambda$-eigenspace is a null space, it is a \emph{subspace} of $\R^n$.
+
+\pause\medskip
+How do you find a basis for the $\lambda$-eigenspace?
+\pause
+Parametric vector form!
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Eigenspaces}
+\framesubtitle{Example}
+
+Find a basis for the \namedbox{l}{$2$}-eigenspace of 
+\[ A = \mat{4 -1 6; 2 1 6; 2 -1 8}. \]
+\pause
+\begin{tikzpicture}[remember picture, overlay]
+  \path (l.south west) ++(-.5cm,-.3cm)
+    node[anchor=north east, blue!50, inner sep=1pt] (expl) {$\lambda$};
+  \draw[->, blue!50, shorten >=1pt] (expl.east) to[out=0,in=-90] (l.south);
+\end{tikzpicture}
+\begin{webonly}
+  \[\begin{split} A - 2I = \mat{2 -1 6; 2 -1 6; 2 -1 6}
+    &\;\longsquiggly[\parbox{\widthof{parametric vector}}{\centering row reduce}]\;
+    \mat{1 -\frac12 3; 0 0 0; 0 0 0} \\
+    &\;\longsquiggly[\parbox{\widthof{parametric vector}}{\centering parametric\\form}]\;
+    \;x = \frac 12 y - 3z \\
+    &\;\longsquiggly[\parbox{\widthof{parametric vector}}
+    {\centering parametric vector\\form}]\;
+    \vec{x y z} = y\vec{\frac 12 1 0} + z\vec{-3 0 1} \\
+    &\;\longsquiggly[\parbox{\widthof{parametric vector}}{\centering basis}]\;
+    \left\{ \vec{\frac 12 1 0},\;\vec{-3 0 1} \right\}
+  \end{split}\]
+
+\end{webonly}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Eigenspaces}
+\framesubtitle{Picture}
+
+A basis for the $2$-eigenspace of $\mat{4 -1 6; 2 1 6; 2 -1 8}$ is 
+$\left\{ \textcolor<3->{seq-red}{\vec{\frac 12 1 0}},\;
+  \textcolor<3->{seq-green}{\vec{-3 0 1}} \right\}$.
+\pause
+What does this look like?
+\pause
+\begin{center}
+\begin{tikzpicture}[myxyz, scale=.6, thin border nodes=2pt]
+  \path[clip, resetxy] (-8,-3.5) rectangle (8,3.5);
+
+  \def\v{(.5,1,0)}
+  \def\w{(-3,0,1)}
+
+  \node[coordinate] (X) at \v {};
+  \node[coordinate] (Y) at \w {};
+  \node[coordinate] (Z) at ($-.5*(X) - .5*(Y)$) {};
+  \node[coordinate] (Z') at ($.9*(X) + .25*(Y)$) {};
+
+  \begin{scope}[x=(X), y=(Y), transformxy]
+    \fill[seq4!10, nearly opaque] (-2,-2) rectangle (2,2);
+    \draw[step=.5cm, seq4!30, very thin] (-2,-2) grid (2,2);
+  \end{scope}
+
+  \draw[vector,seq-red] (0,0,0) -- (X);
+  \draw[vector,seq-green] (0,0,0) -- (Y);
+
+  \draw<5->[vector,seq-blue] (0,0,0) -- ($2*(Z)$) node[above] {$Av$};
+  \draw<4->[vector,seq-orange] (0,0,0) -- (Z) node[above] {$v$};
+
+  \draw<5->[vector,seq-blue] (0,0,0) -- ($2*(Z')$) node[above] {$Av$};
+  \draw<4->[vector,seq-orange] (0,0,0) -- (Z') node[above] {$v$};
+
+  \point at (0,0,0);
+\end{tikzpicture}
+\end{center}
+\pause
+For any $\textcolor{seq-orange}v$ in the $2$-eigenspace, 
+\pause
+$\textcolor{seq-blue}{Av} = 2\textcolor{seq-orange}v$
+by definition.
+\pause
+So $A$ acts by \emph{scaling by $2$} on its $2$-eigenspace.
+\pause
+This is how eigenvalues and eigenvectors make matrices easier to understand.
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Eigenspaces}
+\framesubtitle{Geometry}
+
+\begin{bluebox}[Eigenvectors, geometrically]{.8\linewidth}
+  An eigenvector of a matrix $A$ is a nonzero vector $v$ such that:
+  \smallskip
+  \begin{itemize}
+  \item<2-> $Av$ is a multiple of $v$, which means
+  \item<3-> $Av$ is collinear with $v$, which means
+  \item<4-> $Av$ and $v$ are \emph{on the same line}.
+  \end{itemize}
+\end{bluebox}
+
+\pause[5]\smallskip
+\begin{center}
+\begin{tikzpicture}[thin border nodes, baseline]
+  \draw[grid lines] (-2,-2) rectangle (2,2);
+  \clip (-2,-2) rectangle (2,2);
+  \coordinate (v) at (1/2,1/3);
+  \draw[seq-red!70] ($-5*(v)$) -- ($5*(v)$);
+  \point[seq-red, "$v$"] at (v);
+  \point[seq-red, "$Av$"] at ($2.5*(v)$);
+  \coordinate (w) at (-1/3,1);
+  \draw[seq-blue!70] ($-5*(w)$) -- ($5*(w)$);
+  \point[seq-blue, "$w$" above right] (w) at (w);
+  \point[seq-blue, "$Aw$"] at (-1.2, 1);
+  \point at (0,0);
+\end{tikzpicture}\qquad
+\begin{minipage}[c]{.3\linewidth}
+  $\color{seq-red}v$ is an eigenvector\\[5mm]
+  $\color{seq-blue}w$ is not an eigenvector
+\end{minipage}
+\end{center}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}<handout:4,6,7,8,10,12>
+\frametitle{Eigenspaces}
+\framesubtitle{Geometry; example}
+
+Let $T\colon\R^2\to\R^2$ be reflection over the line $L$ defined by $y=-x$, and
+let $A$ be the matrix for $T$.
+
+\pause\medskip
+\alert{Question:} What are the eigenvalues and eigenspaces of $A$?  No
+computations!
+
+\bigskip\quad
+\begin{tikzpicture}[thin border nodes, scale=1.2, baseline]
+  \draw[grid lines] (-2,-2) grid (2,2);
+  \draw[very thin, seq-violet, dashed] (-2,2) to["$L$" near end] (2,-2);
+  \draw[<->, seq-violet!70] (1.3,-1.05) to[bend left] (1.05,-1.3);
+
+  \begin{scope}[arrows={|->}, shorten=2pt]
+
+  \begin{uncoverenv}<all:7>
+  \draw[seq1!50, -, shorten=0pt] (0,2) -- (0,-2);
+  \point[seq1, "$u$" {left,text=seq1}] (a) at (0,-1);
+  \point[seq1, "$Au$" {above right, text=seq1}] (Ta) at (1,0);
+  \draw (a) -- (Ta);
+  \end{uncoverenv}
+
+  \begin{uncoverenv}<all:8>
+  \draw[seq6!50, -, shorten=0pt] (2/3,2) -- (-2/3,-2);
+  \point[seq6, "$z$" {right, text=seq6}] (a) at (.5,1.5);
+  \point[seq6, "$Az$" {below right, text=seq6}] (Ta) at (-1.5,-.5);
+  \draw (a) -- (Ta);
+  \end{uncoverenv}
+
+  \begin{uncoverenv}<all:3-4>
+  \draw[seq2!50, -, shorten=0pt] (2,2) -- (-2,-2);
+  \point[seq2, "$v$" {above left, text=seq2}] (b) at (1,1);
+  \point[seq2, "$Av$" {text=seq2, below right}] (Tb) at (-1,-1);
+  \draw (b) -- (Tb);
+  \end{uncoverenv}
+
+  \begin{uncoverenv}<all:5-6>
+  \draw[seq3!50, -, shorten=0pt] (-2,2) -- (2,-2);
+  \point[seq3, "$w$" {text=seq3,inner sep=3pt, anchor=270}] (c) at (-1,1);
+  \point[seq3, "$Aw$" {text=seq3,inner sep=3pt, anchor=180}] (c) at (-1,1);
+  \draw (c) to[out=190, in=260, looseness=40] (c);
+  \end{uncoverenv}
+
+  \end{scope}
+
+  \draw<all:10> [seq-violet, thick] (-2,2) -- (2,-2);
+  \draw<all:12>   [seq-orange, thick] (-2,-2) -- (2,2);
+
+  \point (o) at (0,0);
+\end{tikzpicture}
+\quad
+\hbox to 0cm{
+\begin{minipage}[c]{.5\linewidth}
+  \uncover<all:2->{Does anyone see any eigenvectors\\
+    (vectors that don't move off their line)?}
+
+  \medskip
+  \begin{overlayarea}{\linewidth}{3cm}
+  \only<all:3-4>{
+    $\color{seq2}v$ is an eigenvector with eigenvalue \blankuntil{4}{$-1$}.}
+  \only<all:5-6>{
+    $\color{seq3}w$ is an eigenvector with eigenvalue \blankuntil{6}{$1$}.}
+  \only<all:7>{
+    $\color{seq1}u$ is \emph{not} an eigenvector.}
+  \only<all:8>{
+    Neither is $\color{seq6}z$.}
+  \only<all:9-10>{
+    The $1$-eigenspace is \blankuntil{10}{$\color{seq-violet}L$}\\
+  \only<all:10>{\quad(all the vectors $x$ where $Ax=x$).}}
+  \only<all:11-12>{
+    The ($-1$)-eigenspace is \blankuntil{12}{\color{seq-orange}the line $y=x$}\strut\\
+  \only<all:12>{\quad(all the vectors $x$ where $Ax=-x$).}}
+  \end{overlayarea}
+\end{minipage}\hss}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Eigenspaces}
+\framesubtitle{Summary}
+
+\vfill
+
+\begin{bluebox}{.8\linewidth}
+  Let $A$ be an $n\times n$ matrix and let $\lambda$ be a number.
+  \pause\smallskip
+  \begin{enumerate}
+  \item $\lambda$ is an eigenvalue of $A$ if and only if
+    $(A-\lambda I)x = 0$ has a nontrivial solution, if and only if
+    $\Nul(A-\lambda I)\neq\{0\}$.
+    \pause
+  \item In this case, finding a basis for the $\lambda$-eigenspace of $A$
+    means finding a basis for $\Nul(A-\lambda I)$ as usual, i.e.\ by finding the
+    parametric vector form for the general solution to
+    $(A-\lambda I)x = 0$.
+    \pause
+  \item The eigenvectors with eigenvalue $\lambda$ are the nonzero elements of
+    $\Nul(A-\lambda I)$, i.e.\ the nontrivial solutions to $(A-\lambda I)x = 0$.
+  \end{enumerate}
+  
+\end{bluebox}
+
+\vfill
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{The Eigenvalues of a Triangular Matrix are the Diagonal Entries}
+
+We've seen that finding eigenvectors for a given eigenvalue is a row reduction
+problem.
+
+\pause\medskip
+Finding all of the eigenvalues of a matrix \emph{is not a row reduction problem!\/}
+\pause
+We'll see how to do it in general next time.
+\pause
+For now:
+
+\bigskip
+\alert{Fact:} The eigenvalues of a triangular matrix are the diagonal entries.
+
+\bigskip
+\begin{webonly}
+\alert{Why?} $\Nul(A-\lambda I)\neq\{0\}$ if and only if $A-\lambda I$ is not
+invertible, if and only if $\det(A-\lambda I)= 0$.
+\[ \mat{3 4 1 2; 0 -1 -2 7; 0 0 8 12; 0 0 0 -3} - \lambda I_4 =
+\mat{3-\lambda, 4 1 2; 0 -1-\lambda, -2 7;
+  0 0 8-\lambda, 12; 0 0 0 -3-\lambda}. \]
+The determinant is
+$(3-\lambda)(-1-\lambda)(8-\lambda)(-3-\lambda)$,
+which is zero exactly when
+$\lambda=3,-1,8,$ or $-3$.
+\end{webonly}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{A Matrix is Invertible if and only if Zero is not an Eigenvalue}
+
+\alert{Fact:} $A$ is invertible if and only if $0$ is not an eigenvalue of $A$.
+
+\bigskip
+\begin{webonly}
+\alert{Why?}\\[-6mm]
+\[\begin{split}
+\text{$0$ is an eigenvalue of $A$} 
+&\iff
+\text{$Ax=0x$ has a nontrivial solution} \\
+&\iff\text{$Ax=0$ has a nontrivial solution} \\
+&\namedbox{iff}{{}\iff{}}\text{$A$ is not invertible.}
+\end{split}\]
+\begin{tikzpicture}[remember picture, overlay]
+  \path (iff.south west) ++(-.5cm,-.3cm)
+    node[anchor=north east, blue!50, inner sep=1pt] (expl) {invertible matrix theorem};
+  \draw[->, blue!50, shorten >=1pt] (expl.mid east) to[out=0,in=-90] (iff.south);  
+\end{tikzpicture}
+\end{webonly}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Eigenvectors with Distinct Eigenvalues are Linearly Independent}
+
+\alert{Fact:} If $v_1,v_2,\ldots,v_k$ are eigenvectors of $A$ with \emph{distinct}
+eigenvalues $\lambda_1,\ldots,\lambda_k$, then $\{v_1,v_2,\ldots,v_k\}$ is
+linearly independent.
+
+\pause\bigskip
+\alert{Why?}
+If $k=2$, this says $v_2$ can't lie on the line through $v_1$.\\[1mm]
+\pause
+But the line through $v_1$ is contained in the $\lambda_1$-eigenspace,
+and $v_2$ does not have eigenvalue $\lambda_1$.
+
+\pause\bigskip
+\alert{In general:} see Lay, Theorem~2 in~\S5.1 (or work it out for yourself;
+it's not too hard).
+
+\pause\bigskip
+\alert{Consequence:}
+An $n\times n$ matrix has at most \blankuntil{6}{$n$} distinct eigenvalues.
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Difference Equations}
+\framesubtitle{Preview}
+
+Let $A$ be an $n\times n$ matrix.  Suppose we want to solve
+$Av_n = v_{n+1}$ for all $n$.
+\pause
+In other words, we want vectors $v_0,v_1,v_2,\ldots$, such that
+\[ Av_0 = v_1 \qquad Av_1 = v_2 \qquad Av_2 = v_3 \qquad \ldots \]
+\pause
+We saw before that $v_n = A^nv_0$.
+\pause
+But it is inefficient to multiply by $A$ each time.
+
+\pause\medskip
+If $v_0$ is an \emph{eigenvector} with eigenvalue $\lambda$, then
+\[ v_1 = Av_0 = \lambda v_0
+\pause
+\qquad v_2 = Av_1 = \lambda v_1 = \lambda^2v_0
+\pause
+\qquad v_3 = Av_2 = \lambda v_2 = \lambda^3v_0.
+\]
+\pause
+In general, $v_n = \lambda^n v_0$. 
+\pause
+This is \emph{much easier} to compute.
+
+\pause\medskip
+\begin{eg}\vskip -.3cm
+  \[ A = \mat{0 6 8; \frac 12 0 0; 0 \frac 12 0} \qquad
+  v_0 = \vec{16 4 1} \qquad
+  Av_0 = 2v_0. \]
+  \pause
+  So if you start with $16$ baby rabbits, $4$ first-year rabbits, and $1$
+  second-year rabbit, then the population will exactly double every year.
+  \pause
+  In year $n$, you will have $2^n\cdot 16$ baby rabbits, $2^n\cdot 4$ first-year
+  rabbits, and $2^n$ second-year rabbits.
+\end{eg}
+
+\end{frame}
+
+
+%%% Local Variables:
+%%% TeX-master: "../slides"
+%%% End:

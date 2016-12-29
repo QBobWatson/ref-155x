@@ -1,0 +1,888 @@
+
+% JDR: These are the topics I thought my students found most confusing from
+%   chapters 2 and 3, and the ones they asked me to cover.  This is much more 
+%   than 50 minutes worth of slides; the students can review the rest online.
+
+\usetikzlibrary{matrix,ipe}
+
+\titleframe{Review for Midterm 2}{Selected Topics}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Matrix Multiplication}
+
+\alert{Method 1:}
+Let $A$ be an $m\times n$ matrix and let $B$ be an
+$n\times p$ matrix with columns $v_1,v_2\ldots,v_p$:
+\[ B = \mat{| | ,, |; v_1 v_2 \cdots, v_p; | | ,, |}. \]
+The \textbf{product} $AB$ is the $m\times p$ matrix with columns
+$Av_1,Av_2,\ldots,Av_p$: 
+\[ AB \overset{\rm def}=
+\mat{| | ,, |; Av_1 Av_2 \cdots, Av_p; | | ,, |}. \]
+
+\pause
+\alert{Method 2:}
+The $ij$ entry of $C = AB$ is the $i$th row of $A$ times the $j$th column of $B$:
+\[ c_{ij} = (AB)_{ij} = a_{i1}b_{1j} + a_{i2}b_{2j} + \cdots + a_{in}b_{nj}. \]
+\[
+\begin{tikzpicture}[baseline]
+  \matrix[math matrix]  (aij)
+    {
+      a_{11} \& \cdots \& a_{1k} \& \cdots \& a_{1n} \\
+      \spvdots \&        \& \spvdots \&        \& \spvdots \\
+      a_{i1} \& \cdots \& a_{ik} \& \cdots \& a_{in} \\
+      \spvdots \&        \& \spvdots \&        \& \spvdots \\
+      a_{m1} \& \cdots \& a_{mk} \& \cdots \& a_{mn} \\
+    };
+  \node[fit=(aij-3-1) (aij-3-5), inner sep=0pt,
+      draw=green!70!black, thick, rounded corners] (row) {};
+  \node[text=green!70!black, rotate=90, anchor=north, yshift=1.1mm, font=\small]
+      at (row.east) {$i$th row};
+\end{tikzpicture}\cdot
+\begin{tikzpicture}[baseline]
+  \matrix[math matrix]  (bij)
+    {
+      b_{11} \& \cdots \& b_{1j} \& \cdots \& b_{1p} \\
+      \spvdots \&        \& \spvdots \&        \& \spvdots \\
+      b_{k1} \& \cdots \& b_{kj} \& \cdots \& b_{kp} \\
+      \spvdots \&        \& \spvdots \&        \& \spvdots \\
+      b_{n1} \& \cdots \& b_{nj} \& \cdots \& b_{np} \\
+    };
+  \node[fit=(bij-1-3) (bij-5-3), inner sep=0pt,
+      draw=blue!50, thick, rounded corners,
+      label={[text=blue!50]below:\small$j$th column}] {};
+\end{tikzpicture}=
+\begin{tikzpicture}[baseline]
+  \matrix[math matrix,
+      label=below:$\textcolor{green!70!black}i\textcolor{blue!50}j$ entry]
+        (cij)
+    {
+      c_{11} \& \cdots \& c_{1j} \& \cdots \& c_{1p} \\
+      \spvdots \&        \& \spvdots \&        \& \spvdots \\
+      c_{i1} \& \cdots \& c_{ij} \& \cdots \& c_{ip} \\
+      \spvdots \&        \& \spvdots \&        \& \spvdots \\
+      c_{m1} \& \cdots \& c_{mj} \& \cdots \& c_{mp} \\
+    };
+  \draw[thick, green!70!black]
+    (cij-3-3.center) circle[radius=1.3ex];
+  \draw[thick, blue!50]
+    (cij-3-3.center) circle[radius=1.3ex+\pgflinewidth];
+\end{tikzpicture}
+\]
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Matrix Multiplication/Inversion and Linear Transformations}
+
+Let $T\colon\R^n\to\R^m$ and $U\colon\R^p\to\R^n$ be linear transformations with
+matrices $A$ and $B$.  The \textbf{composition} is the linear transformation
+\[ T\circ U\colon\R^p\to\R^m \sptxt{defined by} T\circ U(x) = T(U(x)). \]
+\begin{center}
+\begin{tikzpicture}[scale=.3, every label/.append style={font=\small, text=black}]
+  \draw[help lines] (-3,-3) grid (3,3)
+    (0,-4) node[black] {$\R^p$}
+    (2,1)  node[point, "$x$" left] (x) {};
+  \draw[help lines,xshift=12cm] (-3,-3) grid (3,3)
+    (0,-4) node[black] {$\R^n$}
+    (-1,-2) node[point, "$U(x)$" above] (Ux) {};
+  \draw[help lines,xshift=24cm] (-3,-3) grid (3,3)
+    (0,-4) node[black] {$\R^m$}
+    (-2,2) node[point, "$T\circ U(x)$" below right] (TUx) {};
+  \draw[|->, shorten=1.5pt, out=0, in=180]
+    (x) to node[below,midway] {$U$} (Ux);
+  \draw[|->, shorten=1.5pt, out=0, in=180]
+    (Ux) to node[below,midway] {$T$} (TUx);
+  \draw[shorten=1.5pt, out=0, in=180]
+    (x) to node[above=2pt,midway,fill=white] {$T\circ U$} (TUx);
+\end{tikzpicture}
+\end{center}
+
+\pause
+\alert{Fact:} The matrix for $T\circ U$ is $AB$.
+
+\pause\bigskip
+Now let $T\colon\R^n\to\R^n$ be an \emph{invertible} linear transformation.
+\pause
+This means there is a linear transformation $T\inv\colon\R^n\to\R^n$ such that
+$T\circ T\inv(x) = x$ for all $x$ in $\R^n$.
+\pause
+Equivalently, it means $T$ is one-to-one and onto.
+
+\pause\medskip
+\alert{Fact:} If $A$ is the matrix for $T$, then $A\inv$ is the matrix for
+$T\inv$.
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Matrix Multiplication/Inversion and Linear Transformations}
+\framesubtitle{Example}
+
+Let $T\colon\R^2\to\R^2$ scale the $x$-axis by $2$, and let $U\colon\R^2\to\R^2$
+be counterclockwise rotation by $90^\circ$.
+
+\medskip
+\begin{webonly}
+Their matrices are:
+\[ A = \mat{2 0; 0 1} \qquad B = \mat{0 -1; 1 0}. \]
+The composition $T\circ U$ is:
+first rotate counterclockwise by $90^\circ$, then scale the $x$-axis by $2$.
+The matrix for $T\circ U$ is
+\[ AB = \mat{2 0; 0 1}\mat{0 -1; 1 0} = \mat{0 -2; 1 0}.  \]
+
+\bigskip
+The inverse of $U$ rotates \emph{clockwise} by $90^\circ$.
+The matrix for $U\inv$ is
+\[ B\inv = \mat{0 1; -1 0}. \]
+\end{webonly}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Matrix Inverses}
+
+The \textbf{inverse} of an $n\times n$ matrix $A$ is a matrix $A\inv$ such that
+$AA\inv = I_n$
+\pause
+(equivalently, $A\inv A=I_n$).
+
+\pause\bigskip
+\alert{$2\times 2$ case:}\vskip -.3cm
+\[ A = \mat{a b; c d} \quad\implies\quad A\inv = \frac1{ad-bc}\mat{d -b; -c a}. \]
+
+\pause\bigskip
+\alert{$n\times n$ case:}
+Row reduce the augmented matrix $(\,A\mid I_n\,)$.
+\pause
+If you get $(\,I_n\mid B\,)$, then $B = A\inv$.
+\pause
+Otherwise, $A$ is not invertible.
+
+\pause\bigskip
+\alert{Solving linear systems by ``dividing by $A$'':}
+If $A$ is invertible, then
+\[ Ax=b \iff x = A\inv b. \]
+
+\pause\smallskip
+\begin{bluebox}[Important]{.7\linewidth}
+  If $A$ is invertible, then $Ax=b$ has exactly one solution for any $b$, namely,
+  $x = A\inv b$.
+\end{bluebox}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Solving Linear Systems by Inverting Matrices}
+\framesubtitle{Example}
+
+\begin{bluebox}[Important]{.7\linewidth}
+  If $A$ is invertible, then $Ax=b$ has exactly one solution for any $b$, namely,
+  $x = A\inv b$.
+\end{bluebox}
+
+\pause\medskip
+\begin{eg}\smallskip
+  Solve $\mat{2 1; 1 3} x = \vec{b_1 b_2}$.
+
+  \medskip
+  \begin{webonly}
+  \alert{Answer:}\vskip-.3cm
+  \[ x = \mat{2 1; 1 3}\inv\vec{b_1 b_2}
+  = \frac 1{2\cdot 3-1\cdot 1}\mat{3 -1; -1 2}\vec{b_1 b_2}
+  = \frac 15\vec{3b_1-b_2 -b_1+2b_2}
+ \]
+ \end{webonly}
+
+\end{eg}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Elementary Matrices}
+
+\vskip-3mm
+\begin{defn}
+  An \textbf{elementary matrix} is a square matrix $E$ which differs from $I_n$
+  by one row operation.
+\end{defn}
+
+\pause
+There are three kinds:
+\begin{center}
+\begin{tikzpicture}[on grid, node distance=3 and 3]
+  \def\r{}
+  \node<3->["scaling\\($R_2=2R_2$)" align=center]
+    (scale) {$\mat{1 0 0; 0 \r2 0; 0 0 1}$};
+  \node<3>[ right=of scale, white]
+    (add)   {$\mat{1 0 0; \r2 1 0; 0 0 1}$};
+  \node<4->["row replacement\\($R_2=R_2+2R_1$)" align=center, right=of scale]
+    (add)   {$\mat{1 0 0; \r2 1 0; 0 0 1}$};
+  \node<3-4>[right=of add, white]
+    (swap)  {$\mat{\r0 \r1 \r0; \r1 \r0 \r0; 0 0 1}$};
+  \node<5->["swap\\($R_1\ToT R_2$)" align=center, right=of add]
+    (swap)  {$\mat{\r0 \r1 \r0; \r1 \r0 \r0; 0 0 1}$};
+\end{tikzpicture}
+\end{center}
+
+\pause[6]
+\alert{Fact:} if $E$ is the elementary matrix for a row operation, then $EA$
+differs from $A$ by the same row operation.
+\pause
+\[ A = \mat{1 0 0; 2 3 4} \;\longsquiggly\; 
+B = \mat{1 0 0; 0 3 4} \]
+You get $B$ by
+\pause
+subtracting $2\times$ the first row of $A$ from the second row.
+\pause
+\[ B = EA \sptxt{where} E = \pause
+\mat{1 0; -2 1} \quad\left(
+  \parbox{3.5cm}{\centering
+    subtract $2\times$ the first row of $I_2$ from the second row}\right). \]
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{The Inverse of an Elementary Matrix}
+
+\alert{Fact:} the inverse of an elementary matrix $E$ is the elementary matrix
+obtained by doing the opposite row operation to $I_n$.
+
+\pause\bigskip
+\hfill
+\begin{tikzpicture}[on grid, node distance=3 and 3]
+  \node["$R_2 = R_2\times 2$"]
+    (scale) {$\mat{1 0 0; 0 2 0; 0 0 1}^{\smash{\rlap{$-1$}}}$};
+  \node["$R_2 = R_2\divsymb 2$", right=of scale]
+    (unscale) {$\mat{1 0 0; 0 1/2 0; 0 0 1}$};
+  \node at ($(scale)!.5!(unscale)$) {$=$};
+\end{tikzpicture}
+\quad\pause
+\begin{tikzpicture}[on grid, node distance=3 and 3]
+  \node["$R_2 = R_2 + 2R_1$"]
+    (add) {$\mat{1 0 0; 2 1 0; 0 0 1}^{\smash{\rlap{$-1$}}}$};
+  \node["$R_2 = R_2 - 2R_1$", right=of add]
+    (subtract) {$\mat{1 0 0; -2 1 0; 0 0 1}$};
+  \node at ($(add)!.5!(subtract)$) {$=$};
+\end{tikzpicture}
+\hfill\null\\
+\pause
+\hfill\begin{tikzpicture}[on grid, node distance=3 and 3]
+  \node["$R_1 \ToT R_2$"]
+    (swap) {$\mat{0 1 0; 1 0 0; 0 0 1}^{\smash{\rlap{$-1$}}}$};
+  \node["$R_1 \ToT R_2$", right=of swap]
+    (unswap) {$\mat{0 1 0; 1 0 0; 0 0 1}$};
+  \node at ($(swap)!.5!(unswap)$) {$=$};
+\end{tikzpicture}
+\hfill\null
+
+\pause
+If $A$ is invertible, then there are a sequence of row operations taking $A$ to
+$I_n$:
+\[ E_r E_{r-1} \cdots E_2 E_1 A = I_n. \]
+\pause
+Taking inverses (note the order!):
+\[ A = E_1\inv E_2\inv \cdots E_r\inv I_n = \pause
+E_1\inv E_2\inv \cdots E_r\inv. \]
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{The Invertible Matrix Theorem}
+\framesubtitle{For reference}
+
+\vskip-.2cm
+\begin{oneoffthm}{The Invertible Matrix Theorem}
+  Let $A$ be a square $n\times n$ matrix, and let $T\colon\R^n\to\R^n$ be the
+  linear transformation $T(x) = Ax$.  The following statements are equivalent.\\
+  \begin{enumerate}
+  \item $A$ is invertible.
+  \end{enumerate}
+  \hskip1mm\begin{tikzpicture}[trim right=1cm]
+    \node[scale=.75, anchor=west] (L) {\begin{minipage}{.6\linewidth}
+      \begin{enumerate}
+      \setcounter{enumi}{1}
+      \item $T$ is invertible.
+      \item $A$ is row equivalent to $I_n$.
+      \item $A$ has $n$ pivots.
+      \item $Ax=0$ has only the trivial solution.
+      \item The columns of $A$ are linearly independent.
+      \item $T$ is one-to-one.
+      \item $Ax = b$ is consistent for all $b$ in $\R^n$.
+      \item The columns of $A$ span $\R^n$.
+      \item $T$ is onto.
+      \end{enumerate}
+      \end{minipage}};
+    \node[scale=.75, right=0mm of L] {
+      \begin{minipage}{.8\linewidth}
+      \begin{enumerate}
+      \setcounter{enumi}{10}
+      \item $A$ has a left inverse (there exists $B$ such that $BA = I_n$).
+      \item $A$ has a right inverse (there exists $B$ such that $AB = I_n$).
+      \item $A^T$ is invertible.
+      \item The columns of $A$ form a basis for $\R^n$.
+      \item $\Col A = \R^n$.
+      \item $\dim\Col A = n$.
+      \item $\rank A = n$.
+      \item $\Nul A = \{0\}$.
+      \item $\dim\Nul A = 0$.
+      \end{enumerate}
+    \end{minipage}};
+  \end{tikzpicture}
+\end{oneoffthm}
+
+\pause\bigskip\bigskip
+\centering\alert{\Huge Learn it!}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Subspaces}
+
+\vskip-3mm
+\begin{defn}
+  A \textbf{subspace} of $\R^n$ is a subset $V$ of $\R^n$ satisfying:
+  \begin{enumerate}
+  \item The zero vector is in $V$.
+    \hfill \textcolor{blue}{``not empty''}
+  \item If $u$ and $v$ are in $V$, then $u+v$ is also in $V$.
+    \hfill \textcolor{blue}{``closed under addition''}
+  \item If $u$ is in $V$ and $c$ is in $\R$, then $cu$ is in $V$.
+    \hfill \textcolor{blue}{``closed under $\times$ scalars''}
+  \end{enumerate}
+\end{defn}
+
+\pause\bigskip
+\alert{Examples:}
+\begin{itemize}
+\item Any $\Span\{v_1,v_2,\ldots,v_m\}$.
+  \pause
+\item The \emph{column space} of a matrix: 
+  $\Col A = \Span\{\text{columns of $A$}\}$.
+  \pause
+\item The \emph{null space} of a matrix:
+  $\Nul A = \bigl\{ x\mid Ax = 0 \bigr\}$.
+  \pause
+\item $\R^n$ and $\{0\}$
+\end{itemize}
+
+\pause\medskip
+\begin{bluebox}{.9\linewidth}
+  If $V$ can be written in any of the above ways, then it is automatically a
+  subspace: you're done!
+\end{bluebox}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Subspaces}
+\framesubtitle{Example}
+
+\vskip-3mm
+\begin{eg}
+  Is $V = \left\{ \vec{x y z} \text{ in }\R^3\bigm\vert x+y=0 \right\}$ a
+  subspace?
+  \begin{webonly}
+  \begin{enumerate}
+  \item Since $0 + 0 = 0$, the zero vector is in $V$.
+  \item Let $\vec{x y z}$ and $\vec{x' y' z'}$ be arbitrary vectors in $V$.  
+    \begin{itemize}
+    \item This means $x+y=0$ and $x'+y'=0$.
+    \item We have to check if
+      $\vec{x y z} + \vec{x' y' z'} = \vec{x+x' y+y' z+z'}$ is in $V$.
+    \item This means $(x+x') + (y+y') = 0$.  
+    \end{itemize}
+    Indeed:
+    \[ (x+x') + (y+y') = (x+y) + (x'+y') = 0+0 = 0, \]
+    so condition (2) holds.
+  \end{enumerate}
+  \end{webonly}
+\end{eg}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Subspaces}
+\framesubtitle{Example, continued}
+
+\vskip-3mm
+\begin{eg}
+  Is $V = \left\{ \vec{x y z} \text{ in }\R^3\bigm\vert x+y=0 \right\}$ a subspace?
+  \vskip1mm
+  \begin{webonly}
+  \begin{enumerate}\setcounter{enumi}{2}
+  \item Let $\vec{x y z}$ be in $V$ and let $c$ be a scalar.
+    \begin{itemize}
+    \item This means $x+y = 0$.
+    \item We have to check if $c\vec{x y z} = \vec{cx cy cz}$ is in $V$.
+    \item This means $cx + cy = 0$.
+    \end{itemize}
+    Indeed:
+    \[ cx + cy = c(x+y) = c\cdot 0 = 0. \]
+    So condition (3) holds.
+  \end{enumerate}
+  \end{webonly}
+  \pause\medskip
+  Since conditions~(1), (2), and~(3) hold, $V$ is a subspace.
+\end{eg}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Subspaces}
+\framesubtitle{Example}
+
+\vskip-3mm
+\begin{eg}
+  Is $V = \left\{ \vec{x y z} \text{ in }\R^3\bigm\vert \sin(x)=0 \right\}$ a subspace?
+  \vskip1mm
+  \begin{webonly}
+  \begin{enumerate}
+  \item Since $\sin(0) = 0$, the zero vector is in $V$.
+    \setcounter{enumi}{2}
+  \item Let $\vec{x y z}$ be in $V$ and let $c$ be a scalar.  
+    \begin{itemize}
+    \item This means $\sin(x)=0$.
+    \item We have to check if
+      $c\vec{x y z} = \vec{cx cy cz}$ is in $V$.
+    \item This means $\sin(cx) = 0$.
+    \end{itemize}
+    This is not true in general: take
+    $x = \pi$ and $c = \frac 12$.
+    Then $\sin(cx) = \sin(\pi/2) = 1$.
+    So $\vec{\pi, 0 0}$ is in $V$ but $\displaystyle\frac 12\vec{\pi, 0 0}$ is not.
+  \end{enumerate}
+  \end{webonly}
+
+  \pause\medskip
+  Since condition~(3) fails, $V$ is not a subspace.
+\end{eg}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Basis of a Subspace}
+
+\vskip -.3cm
+\begin{defn}
+  Let $V$ be a subspace of $\R^n$.  A \textbf{basis} of $V$ is a set of vectors
+  $\{v_1,v_2,\ldots,v_m\}$ in $\R^n$ such that:
+  \begin{enumerate}
+  \item $V = \Span\{v_1,v_2,\ldots,v_m\}$, and
+  \item $\{v_1,v_2,\ldots,v_m\}$ is linearly independent.
+  \end{enumerate}
+  \pause
+  The number of vectors in a basis is the \textbf{dimension} of $V$, and is
+  written $\dim V$.
+\end{defn}
+
+\pause
+\begin{bluebox}{.9\linewidth}
+  To check that $\cB$ is a basis for $V$, you have to check two things:
+
+  \smallskip
+  \begin{enumerate}
+    \pause
+  \item $\cB$ spans $V$.
+    \pause
+  \item $\cB$ is linearly independent.
+  \end{enumerate}
+  \pause\smallskip
+  This is what it means to justify the statement ``$\cB$ is a basis for $V$.''
+\end{bluebox}
+
+\begin{uncoverenv}<7->\vskip -3mm
+\begin{oneoffthm}{Basis Theorem}
+  Let $V$ be a subspace of dimension $m$.  Then:
+  \begin{itemize}
+    \pause[8]
+  \item Any $m$ linearly independent vectors in $V$ form a basis for $V$.
+    \pause
+  \item Any $m$ vectors that span $V$ form a basis for $V$.
+  \end{itemize}
+\end{oneoffthm}
+\pause
+So if you \emph{already know the dimension} of $V$, you only have to check \emph{one}.
+\end{uncoverenv}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Basis of a Subspace}
+\framesubtitle{Example}
+
+Verify that $\left\{ \vec{1 -1 0},\;\vec{0 0 1} \right\}$ is a basis for 
+$V = \left\{ \vec{x y z} \text{ in }\R^3\bigm\vert x+y=0 \right\}$.
+
+\begin{webonly}
+\begin{enumerate}\setcounter{enumi}{-1}
+\item \alert{In $V$:} both are in $V$ because $1 + (-1) = 0$ and $0 + 0 = 0$.
+
+\item \alert{Span:}
+  If $\vec{x y z}$ is in $V$, then $y = -x$, so we can write it as
+  \[ \vec{x y z} = \vec{x -x z} = x\vec{1 -1 0} + z\vec{0 0 1}. \]
+
+\item \alert{Linearly independent:}
+  \[ x\vec{1 -1 0} + y\vec{0 0 1} = 0
+  \implies \vec{x -x y} = \vec{0 0 0}
+  \implies x = y = 0. \]
+\end{enumerate}
+\end{webonly}
+
+\pause
+If we knew a priori that $\dim V = 2$, then we would only have to check~\alert 0,
+then~\alert 1 \emph{or} \alert 2.
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Bases of $\Col A$ and $\Nul A$}
+
+\vskip-3mm
+\[ A = \mat[r]{\namedbox{col1top}{1} \namedbox{col2top}{2} 0 -1; -2 -3 4 5;
+  \namedbox{col1bot}{2} \namedbox{col2bot}{4} 0 -2}
+\quad\longsquiggly[rref]\quad
+\mat[r]{1 0 -8 -7; 0 1 4 3; \namedbox{rcol1}{0} \namedbox{rcol2}{0} 0 0} \]
+\begin{tikzpicture}[remember picture, overlay]
+  \path ($(rcol1)!.5!(rcol2)$) ++(0,-1cm)
+    node[blue!50, font=\small] (rref) {pivot columns in rref};
+  \draw[->,blue!50, shorten >=1pt] (rref.north) to[out=90,in=-90] (rcol1.south);
+  \draw[->,blue!50, shorten >=1pt] (rref.north) to[out=90,in=-90] (rcol2.south);
+\end{tikzpicture}
+\begin{tikzpicture}[remember picture, overlay]
+  \path let \p1=($(col1bot)!.5!(col2bot)$) in (\p1 |- rref.base)
+    node[blue!50, font=\small,anchor=base] (orig) {pivot columns $=$ basis};
+  \node[fit=(col1top) (col1bot), draw=orange, rounded corners] (col1) {};
+  \node[fit=(col2top) (col2bot), draw=orange, rounded corners] (col2) {};
+  \draw[->,blue!50, shorten >=1pt] (orig.north) to[out=90,in=-90] (col1.south);
+  \draw[->,blue!50, shorten >=1pt] (orig.north) to[out=90,in=-90] (col2.south);
+  \draw[->,
+      decoration={snake, amplitude=.4mm, segment length=1mm, post length=.5mm},
+      decorate]
+    (rref.west) -- (orig.east);
+\end{tikzpicture}
+
+\vskip 1cm
+\begin{webonly}
+So a basis for $\Col A$ is 
+$\left\{ \vec[r]{1 -2 2},\,\vec[r]{2 -3 4} \right\}$.
+A vector in $\Col A:$ $\vec[r]{1 -2 2}$.
+
+\bigskip
+Parametric vector form for solutions to $Ax=0$:
+\[x = x_3\vec{8 -4 1 0} + x_4\vec{7 -3 0 1}
+\;\longsquiggly[\parbox{\widthof{basis of}}{
+  \centering basis of\\$\Nul A$\strut}]\;
+\left\{ \vec{8 -4 1 0},\,\vec{7 -3 0 1} \right\}
+\]
+A vector in $\Nul A$: any solution to $Ax=0$, e.g., 
+$x = \vec{8 -4 1 0}$.
+\end{webonly}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Rank Theorem}
+
+\vskip-3mm
+\begin{oneoffthm}{Rank Theorem}
+  If $A$ is an $m\times n$ matrix, then
+  \[ \rank A + \dim\Nul A = 
+  n = \text{the number of columns of $A$}. \]
+\end{oneoffthm}
+
+\begin{center}
+\vskip-.2cm
+\begin{tikzpicture}[mat/.style={ % "every matrix" doesn't work?
+    math matrix, column sep={2em,between origins}, nodes=left}]
+  \matrix[mat] (A) {
+    \phantom{-}1 \&  \phantom{-}2 \& 0 \& -1 \\
+   -2 \& -3 \& 4 \&  5 \\
+    \phantom{-}2 \&  \phantom{-}4 \& 0 \& -2 \\
+  };
+  \matrix[mat, right=2cm of A] (Arref) {
+    1 \& 0 \& -8 \& -7 \\
+    0 \& 1 \&  4 \&  3 \\
+    0 \& 0 \&  \phantom{-}0 \&  \phantom{-}0 \\
+  };
+  \draw[decorate, ->,
+      decoration={snake, amplitude=.4mm, segment length=1mm, post length=.5mm}]
+      ($(A.east) + (5mm,0)$) -- node[auto] {rref} ($(Arref.west) - (5mm,0)$);
+  \node[left=.3cm of A] {$A = $};
+
+  \begin{scope}[every node/.style={draw,rounded corners,
+      inner xsep=3mm, inner ysep=2.5mm}]
+    % For positioning
+    \node<1>[white,fit=(A-1-1.center) (A-3-1.center)] (basis1) {};
+    \node<1>[white,fit=(A-1-2.center) (A-3-2.center)] (basis2) {};
+    \node<2->[seq-orange,fit=(A-1-1.center) (A-3-1.center)] (basis1) {};
+    \node<2->[seq-orange,fit=(A-1-2.center) (A-3-2.center)] (basis2) {};
+    \node<3->[seq-green,fit=(Arref-1-3.center) (Arref-3-3.center)] (free1) {};
+    \node<3->[seq-green,fit=(Arref-1-4.center) (Arref-3-4.center)] (free2) {};
+  \end{scope}
+
+  % For positioning
+  \path<1> ($(basis1.south)!.5!(basis2.south)$)
+    ++(0,-.6cm) node[font=\small, white] {basis of $\Col A$};
+  \path<2-> ($(basis1.south)!.5!(basis2.south)$)
+    ++(0,-.6cm) node[font=\small, seq-orange] (label1) {basis of $\Col A$};
+  \draw<2->[->,seq-orange] (label1.north) to[out=90,in=-90] (basis1.south);
+  \draw<2->[->,seq-orange] (label1.north) to[out=90,in=-90] (basis2.south);
+
+  \useasboundingbox (5,0);
+  \path<3-> ($(free1.south)!.5!(free2.south)$)
+    ++(0,-.6cm) node[font=\small, seq-green] (label2) {free variables};
+  \draw<3->[->,seq-green] (label2.north) to[out=90,in=-90] (free1.south);
+  \draw<3->[->,seq-green] (label2.north) to[out=90,in=-90] (free2.south);
+
+\end{tikzpicture}
+\end{center}
+\pause[4]
+In this case, $\rank A = 2$ and $\dim\Nul A = 2$, and $2+2=4$, which is the
+number of columns of $A$.
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Determinants}
+\framesubtitle{Ways to compute them}
+
+\vskip -3mm
+\begin{enumerate}
+\item Special formulas for $2\times 2$ and $3\times 3$ matrices.
+  \pause
+\item For [upper or lower] triangular matrices:
+  \[ \det A = \text{(product of diagonal entries)}. \]
+  \vskip -.5cm
+  \pause
+\item Cofactor expansion along any row or column:
+  \[\begin{split}
+    \det A &= \sum_{j=1}^n a_{ij} C_{ij} \text{ for any fixed } i \\
+    \det A &= \sum_{i=1}^n a_{ij} C_{ij} \text{ for any fixed } j
+  \end{split}\]
+  \pause
+  Start here for matrices with a row or column with lots of zeros.
+  \pause
+\item By row reduction without scaling:
+  \[ \det(A) = (-1)^{\text{\#swaps}}
+  \bigl( \text{product of diagonal entries in REF} \bigr) \]
+  \pause
+  This is fastest for big and complicated matrices.
+  \pause
+\item Cofactor expansion and any other of the above.  
+  (The cofactor formula is recursive.)
+\end{enumerate}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Determinants}
+\framesubtitle{Defining properties}
+
+\vskip-3mm
+\begin{defn}
+  The \textbf{determinant} is a function
+  \[ \det\colon \{\text{square matrices}\} \To \R \]
+  with the following \textbf{defining properties}:
+  \begin{enumerate}
+  \item $\det(I_n) = 1$
+  \item If we do a row replacement on a matrix (add a multiple of one row to
+    another), the determinant does not change.
+  \item If we swap two rows of a matrix, the determinant scales by $-1$.
+  \item If we scale a row of a matrix by $k$, the determinant scales by $k$.
+  \end{enumerate}
+\end{defn}
+
+\pause\bigskip
+When computing a determinant via row reduction, try to only use 
+\emph{row replacement} and \emph{row swaps}.
+\pause
+Then you never have to worry about scaling by the inverse.
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Determinants}
+\framesubtitle{Magical properties}
+
+\vskip -3mm
+\begin{enumerate}
+\item There is one and only one function
+  $\det\colon\{\text{square matrices}\}\to\R$ satisfying the defining
+  properties~(1)--(4).
+\pause\smallskip
+\item $A$ is invertible if and only if $\det(A) \neq 0$.
+\pause\smallskip
+\item If we row reduce $A$ without row scaling, then
+  \[ \det(A) = (-1)^{\text{\#swaps}}
+  \bigl( \text{product of diagonal entries in REF} \bigr). \]
+\pause\null\vskip -.7cm\null
+\item The determinant can be computed using any of the $2n$ cofactor expansions.
+\pause\smallskip
+\item $\color{seq-orange}\det(AB) = \det(A)\det(B)$ \quad and \quad
+  $\color{seq-orange}\det(A\inv) = \det(A)\inv$.
+\pause\smallskip
+\item $\color{seq-orange}\det(A) = \det(A^T)$.
+\pause\smallskip
+\item $|\det(A)|$ is the volume of the parallelepiped defined by the columns of
+  $A$.
+\pause\smallskip
+\item If $A$ is an $n\times n$ matrix with transformation $T(x)=Ax$, and $S$ is a
+  subset of $\R^n$, then the volume of $T(S)$ is $|\det(A)|$ times the volume of
+  $S$.  (Even for curvy shapes $S$.)
+\pause\smallskip
+\item The determinant is multi-linear.
+\end{enumerate}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\def\curvy{(-37.3333, 2.6667)
+     .. controls (-37.3333, -5.3333) and (-26.6667, -10.6667) .. (-16, -24)
+     .. controls (-5.3333, -37.3333) and (5.3333, -58.6667) .. (18.6667, -48)
+     .. controls (32, -37.3333) and (48, 5.3333) .. (45.3333, 18.6667)
+     .. controls (42.6667, 32) and (21.3333, 16) .. (8, 13.3333)
+     .. controls (-5.3333, 10.6667) and (-10.6667, 21.3333) .. (-18.6667, 21.3333)
+     .. controls (-26.6667, 21.3333) and (-37.3333, 10.6667) .. cycle}
+
+\begin{frame}
+\frametitle{Determinants and Linear Transformations}
+
+Why is \alert{Property 8} true?
+\pause
+For instance, if $S$ is the unit cube, then $T(S)$ is the parallelepiped defined
+by the columns of $A$, since the columns of $A$ are
+$T(e_1),T(e_2),\ldots,T(e_n)$.
+\pause
+In this case, Property~8 is the same as Property~7.
+\pause
+
+\begin{center}
+\begin{tikzpicture}[scale=.7, thin border nodes]
+  \draw[help lines, black!25] (-2,-2) grid (2,2);
+  \draw[vector] (0,0) to["$e_1$\strut"'] (1,0);
+  \draw[vector] (0,0) to["$e_2$"] (0,1);
+  \filldraw[fill=seq-orange, fill opacity=.2, very thin]
+    (0,0) -- (1,0) -- (1,1) -- (0,1) -- cycle;
+  \node at (.5,.5) {$S$};
+  \node[fill=white] at (0,-1) {$\vol(S)=1$};
+  \point at (0,0);
+
+  \draw[->, thick] (2.1,.5) to[bend left, "$T$" above=1mm]  
+     node[align=center, below=2mm] {$A = \mat{1 1; -1 1}$\\[1mm]$\det(A)=2$}
+     (10-2.1,.5);
+
+  \begin{scope}[xshift=10cm]
+    \draw[help lines, black!25] (-2,-2) grid (2,2);
+    \draw[vector] (0,0) to["$T(e_1)$"'] (1,-1);
+    \draw[vector] (0,0) to["$T(e_2)$"] (1,1);
+    \filldraw[fill=seq-orange, fill opacity=.2, very thin]
+      (0,0) -- (1,-1) -- (2,0) -- (1,1) -- cycle;
+    \node at (1,0) {$T(S)$};
+    \node[fill=white,anchor=center] at (0,-1.5) {$\vol(T(S)) = 2$};
+    \point at (0,0);
+  \end{scope}
+\end{tikzpicture}
+\end{center}
+
+\pause
+For curvy shapes, you break $S$ up into a bunch of tiny cubes.  Each one is
+scaled by $|\det(A)|$; then you use \emph{calculus} to reduce to the previous
+situation! 
+\begin{center}
+\begin{tikzpicture}[scale=.7, thin border nodes]
+  \draw[help lines, black!25] (-2,-2) rectangle (2,2);
+  \begin{scope}[ipe import, fill=seq-orange, fill opacity=.2, thin,
+      x=.7bp, y=.7bp]
+    \expandafter\filldraw\curvy;
+    \expandafter\clip\curvy;
+    \draw[very thin, step=4] (-60,-60) grid (60,60);
+  \end{scope}
+
+  \node at (0,.7) {$S$};
+  \point at (0,0);
+
+  \draw[->, thick] (2.1,0) to[bend left, "$T$" above=1mm] 
+    node[below=5mm] {$\vol(T(S)) = 2\vol(S)$}
+    (10-2.1,0);
+
+  \begin{scope}[xshift=10cm]
+    \draw[help lines, black!25] (-2,-2) rectangle (2,2);
+    \begin{scope}[ipe import, cm={1,-1,1,1,(0,0)}, x=.7bp, y=.7bp,
+        fill=seq-orange, fill opacity=.2, thin]
+      \expandafter\filldraw\curvy;
+      \expandafter\clip\curvy;
+      \draw[very thin, step=4] (-60,-60) grid (60,60);
+    \end{scope}
+
+    \node at (.8,.5) {$T(S)$};
+    \point at (0,0);
+  \end{scope}
+
+\end{tikzpicture}
+\end{center}
+
+\end{frame}
+
+
+%%% Local Variables:
+%%% TeX-master: "../slides"
+%%% End:

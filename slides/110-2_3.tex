@@ -1,0 +1,280 @@
+
+% JDR: This should be about 1/3 of one lecture.  It's meant to be done in the
+%   same class period as section 2.2.
+
+\titleframe{Section 2.3}{Characterization of Invertible Matrices}
+
+\usetikzlibrary{decorations.pathreplacing}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Invertible Transformations}
+
+\vskip-3mm
+\begin{defn}
+  A transformation $T\colon\R^n\to\R^n$ is \textbf{invertible} if there exists
+  another transformation $U\colon\R^n\to\R^n$ such that 
+  \[ T\circ U(x) = x \sptxt{and} U\circ T(x) = x \]
+  for all $x$ in $\R^n$.
+  \pause
+  In this case we say $U$ is the \textbf{inverse} of $T$, and we write 
+  $U = T\inv$.
+\end{defn}
+
+\pause\smallskip
+In other words, $T(U(x)) = x$, so $T$ ``undoes'' $U$, and likewise $U$
+``undoes'' $T$.
+
+\pause\smallskip
+\begin{bluebox}[Fact]{.5\linewidth}
+  A transformation $T$ is invertible if and only if it is both one-to-one and
+  onto.
+\end{bluebox}
+
+\begin{webonly}
+If $T$ is one-to-one and onto, this means
+for every $y$ in $\R^n$, there is a unique $x$ in $\R^n$ such that $T(x) = y$.
+Then $T\inv(y) = x$.
+\end{webonly}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Invertible Transformations}
+\framesubtitle{Examples}
+
+\vskip-2mm
+  Let $T = $ counterclockwise rotation in the plane by $45^\circ$.  What is $T\inv$?
+  
+  \def\theo{\includegraphics[width=2cm]{figures/theo2.jpg}}%
+\hfill\begin{tikzpicture}
+  \begin{scope}
+    \clip (0,0) circle[radius=1cm];
+    \node (theo1) at (0,0) {\theo};
+  \end{scope}
+  \draw[->,opacity=.3] (-1.2,0) -- (1.2,0);
+  \draw[->,opacity=.3] (0,-1.2) -- (0,1.2);
+
+  \begin{scope}[xshift=4cm]
+  \begin{scope}
+    \clip (0,0) circle[radius=1cm];
+    \node[rotate=45] (theo2) at (0,0) {\theo};
+  \end{scope}
+  \draw[->,opacity=.3] (-1.2,0) -- (1.2,0);
+  \draw[->,opacity=.3] (0,-1.2) -- (0,1.2);
+  \end{scope}
+
+  \draw[->] (theo1.20) to["$T$", out=20, in=160] (theo2.115);
+
+  \begin{scope}[xshift=8cm]
+  \begin{scope}
+    \clip (0,0) circle[radius=1cm];
+    \node<2-> (theo3) at (0,0) {\theo};
+  \end{scope}
+  \draw<2->[->,opacity=.3] (-1.2,0) -- (1.2,0);
+  \draw<2->[->,opacity=.3] (0,-1.2) -- (0,1.2);
+  \end{scope}
+
+  \draw<2->[->] (theo2.-25) to["$T\inv$", out=20, in=160] (theo3.160);
+  \useasboundingbox (9.2,0);
+\end{tikzpicture}\hfill\null\\[1mm]
+\pause
+$T\inv$ is \emph{clockwise} rotation by $45^\circ$.
+
+\pause\medskip
+  Let $T = $ shrinking by a factor of $2/3$ in the plane.  What is $T\inv$?
+
+  \def\theo{\includegraphics[width=2cm]{figures/theo6.jpg}}%
+\hfill\begin{tikzpicture}
+  \begin{scope}
+    \node (theo1) at (0,0) {\theo};
+  \end{scope}
+  \draw[->,opacity=.3] (-1.2,0) -- (1.2,0);
+  \draw[->,opacity=.3] (0,-1.2) -- (0,1.2);
+
+  \begin{scope}[xshift=4cm]
+  \begin{scope}
+    \node[scale=2/3] at (0,0) {\theo};
+    \node[minimum size={2cm+.3333em}] (theo2) at (0,0) {};
+  \end{scope}
+  \draw[->,opacity=.3] (-1.2,0) -- (1.2,0);
+  \draw[->,opacity=.3] (0,-1.2) -- (0,1.2);
+  \end{scope}
+
+  \draw[->] (theo1.20) to["$T$", out=20, in=160] (theo2.160);
+
+  \begin{scope}[xshift=8cm]
+  \begin{scope}
+    \node<4-> (theo3) at (0,0) {\theo};
+  \end{scope}
+  \draw<4->[->,opacity=.3] (-1.2,0) -- (1.2,0);
+  \draw<4->[->,opacity=.3] (0,-1.2) -- (0,1.2);
+  \end{scope}
+
+  \draw<4->[->] (theo2.20) to["$T\inv$", out=20, in=160] (theo3.160);
+  \useasboundingbox (9.2,0);
+\end{tikzpicture}\hfill\null\\[1mm]
+\pause
+$T\inv$ is \emph{stretching} by $3/2$.
+
+\pause\medskip
+Let $T = $ projection onto the $x$-axis.  What is $T\inv$?
+\pause
+It is not invertible: you can't undo it.
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Invertible Linear Transformations}
+
+If $T\colon\R^n\to\R^n$ is an invertible \emph{linear} transformation with
+matrix $A$, then what is the matrix for $T\inv$?
+
+\medskip
+\begin{webonly}
+Let $B$ be the matrix for $T\inv$.
+We know $T\circ T\inv$ has matrix $AB$, so for all $x$,
+\[ ABx = T\circ T\inv(x) = x. \]
+Hence $AB = I_n$, so $B = A\inv$.
+\end{webonly}
+
+\pause\vskip 1cm
+\begin{bluebox}[Fact]{.85\linewidth}
+  If $T$ is an invertible linear transformation with matrix $A$, then\\[1mm]
+  $T\inv$ is an invertible linear transformation with matrix $A\inv$.
+\end{bluebox}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Invertible Linear Transformations}
+\framesubtitle{Examples}
+
+\displayskips{4pt}
+Let $T = $ counterclockwise rotation in the plane by $45^\circ$.  Its matrix is
+\webonlycmd{
+\[ A = \mat{\cos(45^\circ) -\sin(45^\circ) ; \sin(45^\circ) \cos(45^\circ)}
+= \frac 1{\sqrt 2}\mat{1 -1; 1 1}. \]}%
+Then $T\inv = $ counterclockwise rotation by $-45^\circ$.  Its matrix is
+\webonlycmd{
+\[ B = \mat{\cos(-45^\circ) -\sin(-45^\circ) ; \sin(-45^\circ) \cos(-45^\circ)}
+= \frac 1{\sqrt 2}\mat{1 1; -1 1}. \]}%
+\rlap{\alert{Check:}}\hfill
+\webonlycmd{
+$\displaystyle AB = \frac 12\mat{1 -1; 1 1}\mat{1 1; -1 1} = 
+\mat{1 0 ; 0 1} \bigcheck[\quad]$}
+\hfill\null
+
+\pause\medskip
+Let $T = $ shrinking by a factor of $2/3$ in the plane.  Its matrix is
+\webonlycmd{
+\[ A = \mat{2/3 0; 0 2/3} \]}%
+Then $T\inv = $ stretching by $3/2$.  Its matrix is
+\webonlycmd{
+\[ B = \mat{3/2 0; 0 3/2} \]}%
+\rlap{\alert{Check:}}\hfill
+\webonlycmd{
+$\displaystyle AB = \mat{2/3 0; 0 2/3}\mat{3/2 0; 0 3/2} = \mat{1 0; 0 1}
+ \bigcheck[\quad]$}
+\hfill\null
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{The Invertible Matrix Theorem}
+\framesubtitle{A.K.A.\ The Really Big Theorem of Math~1553}
+
+\vskip-3mm
+\begin{oneoffthm}{The Invertible Matrix Theorem}
+  Let $A$ be an $n\times n$ matrix, and let $T\colon\R^n\to\R^n$ be the
+  linear transformation $T(x) = Ax$.  The following statements are equivalent.
+  \begin{enumerate}
+  \item \namedbox{first}{$A$} is invertible.
+    \pause
+  \item $T$ is invertible.
+    \pause
+  \item $A$ is row equivalent to $I_n$.
+    \pause
+  \item $A$ has $n$ pivots.
+    \pause
+  \item $Ax=0$ has only the trivial solution.
+    \pause
+  \item The columns of $A$ are linearly independent.
+    \pause
+  \item $T$ is one-to-one.
+    \pause
+  \item $Ax = b$ is consistent for all $b$ in $\R^n$.
+    \pause
+  \item The columns of $A$ span $\R^n$.
+    \pause
+  \item $T$ is onto.
+    \pause
+  \item $A$ has a left inverse (there exists $B$ such that $BA = I_n$).
+    \pause
+  \item $A$ has a right inverse (there exists $B$ such that $AB = I_n$).
+    \pause
+  \item \namedbox{last}{$A^T$} is invertible.
+  \end{enumerate}
+  \pause
+  \begin{tikzpicture}[remember picture, overlay]
+    \draw[decorate,decoration={brace, amplitude=3mm}, thick, red]
+      let \p1=($(current page.east) + (-2cm,0)$) in
+        (first.north -| \p1) -- (last.south -| \p1)
+        node[rotate=-90, midway, anchor=south, yshift=.2cm]
+          {you really have to know these};
+  \end{tikzpicture}
+\end{oneoffthm}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{The Invertible Matrix Theorem}
+\framesubtitle{Summary}
+
+There are two kinds of \textcolor{red}{\emph{square}} matrices:
+\pause
+\begin{enumerate}
+\item invertible (non-singular), and
+\pause
+\item non-invertible (singular).
+\end{enumerate}
+
+\pause\bigskip
+For invertible matrices, all statements of the Invertible Matrix Theorem are true.
+
+\pause\bigskip
+For non-invertible matrices, all statements of the Invertible Matrix Theorem are
+false.
+
+\pause\bigskip
+\alert{Strong recommendation:} 
+If you want to understand invertible matrices, go through all of the conditions
+of the IMT and try to figure out on your own (or at least with help from the
+book) why they're all equivalent.
+
+\pause\bigskip
+You know enough at this point to be able to reduce all of the statements to
+assertions about the pivots of a square matrix.
+
+\end{frame}
+
+
+%%% Local Variables:
+%%% TeX-master: "../slides"
+%%% End:

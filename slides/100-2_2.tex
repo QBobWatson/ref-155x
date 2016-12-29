@@ -1,0 +1,454 @@
+
+% JDR: This should be about 2/3 of one lecture.  It's meant to be done in the
+%   same class period as section 2.3.
+
+\titleframe{Section 2.2}{The Inverse of a Matrix}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{The Definition of Inverse}
+
+\alert{Recall:} The multiplicative inverse (or reciprocal) of a nonzero number
+$a$ is
+\pause
+the number $b$ such that $ab = 1$.
+\pause
+We define the inverse of a matrix in almost the same way.
+\pause
+
+\begin{defn}
+  Let $A$ be an $n\times n$ square matrix.  We say $A$ is \textbf{invertible}
+  (or \textbf{nonsingular}) if there is a matrix $B$ of the same size, such that
+  \[ AB = I_n \sptxt{and} BA = \namedbox{identity}{I_n}. \]
+  \begin{tikzpicture}[remember picture, overlay]
+    \path (identity.east) ++(1cm,-1.3cm)
+      node[anchor=south west, blue!50, inner sep=0pt] (expl)
+        {\begin{minipage}{2.6cm}\centering
+            identity matrix\\[.5mm]
+            $\mat{1 0 \cdots, 0; 0 1 \cdots, 0;
+              \vdots, \vdots, \ddots, \vdots;0 0 \cdots, 1}$
+          \end{minipage}};
+    \draw[->, blue!50, shorten >=1mm]
+      (expl.west) to[out=180, in=0] (identity.east);
+  \end{tikzpicture}%
+  \pause
+  In this case, $B$ is the \textbf{inverse} of $A$, and is written $A\inv$.
+\end{defn}
+
+\note{Why require $AB = I$ and $BA = I$?}%
+
+\pause
+\begin{eg}
+  \vskip -.7cm
+  \[ A = \mat{2 1; 1 1} \qquad B = \mat{1 -1; -1 2}. \]
+  \begin{webonly}%
+  I claim $B = A\inv$.  Check:
+  \[\begin{aligned}[c]
+    AB &= \mat{2 1; 1 1}\mat{1 -1; -1 2} = \mat{1 0; 0 1} \\
+    BA &= \mat{1 -1; -1 2}\mat{2 1; 1 1} = \mat{1 0; 0 1}. 
+  \end{aligned} \bigcheck[\quad]\]
+  \end{webonly}
+\end{eg}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{The $2\times 2$ case}
+
+Let $A = \mat{a b; c d}$.  The \textbf{determinant} of $A$ is the number
+\vskip -.2cm
+\[ \namedbox{det2}{\det(A) = \det\mat{a b; c d} = ad-bc.} \]
+\tikz[remember picture, overlay] \node[orangebox, fit=(det2)] {};%
+\vskip -.2cm
+\pause
+
+\alert{Facts:} 
+\begin{enumerate}
+\item If $\det(A)\neq 0$, then $A$ is invertible and\hskip 2mm
+\namedbox{inv2}
+{$\displaystyle A\inv = \frac 1{\det(A)}\mat{d -b; -c a}$.}
+\tikz[remember picture, overlay] \node[orangebox, fit=(inv2)] {};%
+\pause
+\item If $\det(A) = 0$, then $A$ is not invertible.
+\end{enumerate}
+
+\pause\smallskip
+Why \alert{1}?
+\webonlycmd{
+\[ \mat{a b; c d}\mat{d -b; -c a} = \mat{ad-bc 0; 0 ad-bc}
+= \mat{d -b; -c a}\mat{a b; c d} \]
+So we get the identity by dividing by $ad-bc$.}
+
+\pause\smallskip
+\begin{eg}\vskip-6mm
+\[ \det\mat{1 2; 3 4} = \webonlycmd{1\cdot 4-2\cdot 3 = -2} \qquad\pause
+\mat{1 2; 3 4}\inv = \webonlycmd{-\frac 12\mat{4 -2; -3 1}.} \]
+\end{eg}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Solving Linear Systems via Inverses}
+\framesubtitle{Solving $Ax=b$ by ``dividing by $A$''}
+
+\vskip-3mm
+\begin{thm}
+  If $A$ is invertible, then $Ax=b$ has exactly one solution for every $b$, namely:
+  \[ x = A\inv b. \]
+\end{thm}
+
+\pause
+\alert{Why?}  Divide by $A$!
+\vskip -2.5mm
+\begin{webonly}
+\[\vcenter{ \hbox{$Ax = b \;\longsquiggly\;
+   A\inv(Ax) = A\inv b \;\longsquiggly\;
+   (A\inv A)x = A\inv b$}
+ \hbox{\qquad$\longsquiggly\;
+   \namedbox{In}{I_n x}
+   = A\inv b \;\longsquiggly\;
+   x = A\inv b.$}} \]
+\begin{tikzpicture}[remember picture, overlay]
+  \path (In.south) ++(-1cm,-2.5mm) node[anchor=east,blue!50,inner sep=1pt]
+     (expl2) {$I_nx=x$ for every $x$};
+  \node [draw,circle,thick,blue!50,fit=(In),inner sep=.5pt] (In2) {};
+  \draw [->, blue!50, shorten >=1pt] (expl2.east) to[out=0,in=-135] (In2);
+\end{tikzpicture}
+\end{webonly}
+
+\pause\smallskip
+\begin{eg}
+  Solve the system
+  \spalignsysdelims..
+  \[ \syseq{2x + 3y + 2z = \namedbox{ent1}1;
+    x \+ \. + 3z = \namedbox{ent2}1;
+    2x + 2y + 3z = \namedbox{ent3}1} 
+  \sptxt{using}
+  \mat{2 3 2; 1 0 3; 2 2 3}\inv = \mat[r]{-6 -5 9; 3 2 -4; 2 2 -3}. \]
+\end{eg}
+
+\alert{Answer:}\;\nobreak
+\begin{webonly}
+\hbox to 0cm{$\vec{x y z}
+  = \mat{2 3 2; 1 0 3; 2 2 3}\inv\kern-1pt\namedbox{bvec}{\vec{1 1 1}}
+  = \mat[r]{-6 -5 9; 3 2 -4; 2 2 -3}\vec{1 1 1}
+  = \vec{-2 1 1}.$\hss}
+\begin{tikzpicture}[remember picture, overlay, blue!50]
+  \path (ent1) ++(8mm,7mm)
+     node[anchor=south west, inner sep=1pt,
+          text width=1.9cm, align=center]
+     (expl3) {could be any other vector};
+  \node[fit=(ent1) (ent2) (ent3), inner sep=2pt,
+        draw, thick, rounded corners=2pt] (circle b) {};
+  \node[fit=(bvec), inner xsep=0pt,
+        draw, thick, rounded corners=2pt] (circle b') {};
+  \draw[->, shorten=1pt] (expl3.west) to[in=north, out=west] (circle b);
+  \draw[->, shorten=1pt] (expl3.220) to[in=north, out=south] (circle b');
+\end{tikzpicture}
+\end{webonly}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Some Facts}
+
+Say $A$ and $B$ are invertible $n\times n$ matrices.
+\begin{enumerate}
+\item $A\inv$ is invertible and its inverse is
+  $(A\inv)\inv = \blankuntil{2}A$.\pause
+
+\pause
+\item $AB$ is invertible and its inverse is
+  $(AB)\inv = \pause
+  \namedbox{wrong} {A\inv B\inv} \quad \uncover<5->{B\inv A\inv.}$
+  \tikz[remember picture, overlay] 
+    \node<5->[cross out, draw, thick, red, opacity=.5, fit=(wrong)] {};
+
+  \pause[5]\medskip
+  \alert{Why?}
+  \webonlycmd{$(B\inv A\inv)AB = B\inv(A\inv A)B = B\inv I_n B = B\inv B = I_n$.}
+
+\pause
+\item $A^T$ is invertible and $(A^T)\inv = (A\inv)^T$.
+
+  \medskip
+  \alert{Why?}
+  \webonlycmd{$A^T(A\inv)^T = (A\inv A)^T = I_n^T = I_n$.}
+
+\end{enumerate}
+
+\ifx\slidesmode\blankmode\else{
+\pause\vskip -.3cm\null
+\begin{bluebox}[Poll]{.9\linewidth}
+  If $A,B,C$ are invertible $n\times n$ matrices, what is the inverse of $ABC$?
+  \[
+  \text{i.}\; A\inv B\inv C\inv \quad
+  \text{ii.}\; B\inv A\inv C\inv \quad
+  \text{iii.}\; C\inv B\inv A\inv \quad
+  \text{iv.}\; C\inv A\inv B\inv
+  \]
+\end{bluebox}
+
+\pause
+It's (iii):
+\abovedisplayshortskip=0pt
+\abovedisplayskip=0pt
+\[
+\begin{split}
+  (ABC)(C\inv B\inv A\inv) &= AB(C C\inv)B\inv A\inv = A(BB\inv)A\inv \\
+  &= AA\inv = I_n.
+\end{split}
+\]
+\pause
+\alert{In general,} a product of invertible matrices is invertible, and the
+inverse is the product of the inverses, in the \emph{reverse order}.
+}\fi
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Computing $A\inv$}
+
+Let $A$ be an $n\times n$ matrix.  Here's how to compute $A\inv$.
+\begin{enumerate}
+\item<2-> Row reduce the augmented matrix $(\,A\mid I_n\,)$.
+\item<3-> If the result has the form $(\,I_n\mid B\,)$, then $A$ is invertible and
+  $B=A\inv$.
+\item<4-> Otherwise, $A$ is not invertible.
+\end{enumerate}
+
+\vskip 1cm
+\begin{uncoverenv}<1->
+\begin{eg}
+\vskip-5mm
+  \[ A = \mat[r]{1 0 4; 0 1 2; 0 -3 -4} \]
+\end{eg}
+\end{uncoverenv}
+\note{Do the example on the board concurrently (next slide).}
+
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\def\rowop#1#2{%
+  \hfill%
+  \hbox to 0.2\linewidth{\hss\longsquiggly[#1]}%
+  \hbox to 0.4\linewidth{\hss#2}%
+  }
+
+\begin{frame}
+\frametitle{Computing $A\inv$}
+\framesubtitle{Example}
+
+\begin{webonly}\def\r{\color{red}}%
+\medskip
+$\hmat{1 0 4 1 0 0; 0  1 2 0 1 0; 0 -3 -4 0 0 1}$
+\rowop{$R_3 = R_3 + 3R_2$}
+{$\hmat{1 0 4 1 0 0; 0 1 2 0 1 0; 0 \r0 \r2 0 \r3 1}$}\\
+\leavevmode\rowop{$\begin{aligned}R_1&=R_1-2R_3\\R_2&=R_2-R_3\end{aligned}$}
+{$\hmat{1 0 \r0 1 \r-6 \r-2;
+    0 1 \r0 0 \r-2 \r-1;
+    0 0 2 0 3 1}$}\\[1.5mm]
+\leavevmode\rowop{$R_3 = R_3\divsymb 2$}{
+  $\hmat{1 0 0 1 -6 -2;
+    0 1 0 0 -2 -1;
+    0 0 \r1 0 \r3/2 \r1/2}$}
+
+\medskip
+So
+$\mat[r]{1 0 4; 0 1 2; 0 -3 -4}\inv =
+\mat[r]{1 -6 -2; 0 -2 -1; 0 3/2 1/2}.$
+\end{webonly}
+
+\pause\bigskip\leavevmode
+\rlap{\alert{Check:}}\hfill
+\webonlycmd{
+$\displaystyle 
+\mat[r]{1 0 4; 0 1 2; 0 -3 -4}\mat[r]{1 -6 -2; 0 -2 -1; 0 3/2 1/2}
+= \mat{1 0 0; 0 1 0; 0 0 1} \bigcheck[\quad]$}\hfill\null
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Why Does This Work?}
+
+\alert{First answer:} We can think of the algorithm as simultaneously solving
+the equations
+\[\def\g{\color{light gray}}\begin{split}
+Ax_1 &= \def\o{\textcolor{blue}} \o{e_1}: \qquad
+\hmat{1 0 4 \o1 \g0 \g0; 0 1 2 \o0 \g1 \g0; 0 -3 -4 \o0 \g0 \g1} \\
+Ax_2 &= \def\o{\textcolor{red}} \o{e_2}: \qquad
+\hmat{1 0 4 \g1 \o0 \g0; 0 1 2 \g0 \o1 \g0; 0 -3 -4 \g0 \o0 \g1} \\
+Ax_3 &= \def\o{\textcolor{green!70!black}} \o{e_3}: \qquad
+\hmat{1 0 4 \g1 \g0 \o0; 0 1 2 \g0 \g1 \o0; 0 -3 -4 \g0 \g0 \o1} \\
+\end{split}\]
+\pause
+Now note $A\inv e_i = A\inv(Ax_i) = x_i$, and $x_i$ is the $i$th column in the
+augmented part.
+\pause
+Also $A\inv e_i$ is the $i$th column of $A\inv$.
+
+\pause\bigskip
+\alert{Second answer:} Elementary matrices.
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Elementary Matrices}
+
+\vskip-3mm
+\begin{defn}
+  An \textbf{elementary matrix} is a square matrix $E$ which differs from $I_n$
+  by one row operation.
+\end{defn}
+
+\pause
+There are three kinds, corresponding to the three elementary row operations:
+\begin{webonly}
+\begin{center}
+\begin{tikzpicture}[on grid, node distance=3 and 3]
+  \def\r{\color{red}}
+  \node["scaling\\($R_2=2R_2$)" align=center]
+    (scale) {$\mat{1 0 0; 0 \r2 0; 0 0 1}$};
+  \node["row replacement\\($R_2=R_2+2R_1$)" align=center, right=of scale]
+    (add)   {$\mat{1 0 0; \r2 1 0; 0 0 1}$};
+  \node["swap\\($R_1\ToT R_2$)" align=center, right=of add]
+    (swap)  {$\mat{\r0 \r1 \r0; \r1 \r0 \r0; 0 0 1}$};
+\end{tikzpicture}
+\end{center}
+\end{webonly}
+
+\pause
+\alert{Fact:} if $E$ is the elementary matrix for a row operation, then $EA$
+differs from $A$ by the same row operation.
+
+\pause\smallskip
+\alert{Example:}\abovedisplayskip=1pt
+\[\begin{split} \textcolor{seq-red}{\mat[r]{1 0 0; 2 1 0; 0 0 1}}
+  \textcolor{seq-blue}{\mat{1 0 4; 0 1 2; 0 -3 -4}}
+  =& \textcolor{seq-green}{\mat[r]{1 0 4; 2 1 10; 0 -3 -4}} \\
+  \textcolor{seq-blue}{\mat{1 0 4; 0 1 2; 0 -3 -4}}
+  \;\textcolor{seq-red}{\longsquiggly[$R_2 = R_2+2R_1$]}\;&
+  \textcolor{seq-green}{\mat[r]{1 0 4; 2 1 10; 0 -3 -4}}
+\end{split}\]
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Elementary Matrices}
+\framesubtitle{Continued}
+
+\alert{Fact:} if $E$ is the elementary matrix for a row operation, then $EA$
+differs from $A$ by the same row operation.
+
+\pause\smallskip
+\begin{bluebox}[Consequence]{.82\linewidth}
+  Elementary matrices are invertible, and
+  the inverse is the elementary matrix which un-does the row
+  operation.
+\end{bluebox}
+
+\bigskip
+\begin{webonly}
+\hfill
+\begin{tikzpicture}[on grid, node distance=3 and 3]
+  \node["$R_2 = R_2\times 2$"]
+    (scale) {$\mat{1 0 0; 0 2 0; 0 0 1}^{\smash{\rlap{$-1$}}}$};
+  \node["$R_2 = R_2\divsymb 2$", right=of scale]
+    (unscale) {$\mat{1 0 0; 0 1/2 0; 0 0 1}$};
+  \node at ($(scale)!.5!(unscale)$) {$=$};
+\end{tikzpicture}
+\quad
+\begin{tikzpicture}[on grid, node distance=3 and 3]
+  \node["$R_2 = R_2 + 2R_1$"]
+    (add) {$\mat{1 0 0; 2 1 0; 0 0 1}^{\smash{\rlap{$-1$}}}$};
+  \node["$R_2 = R_2 - 2R_1$", right=of add]
+    (subtract) {$\mat{1 0 0; -2 1 0; 0 0 1}$};
+  \node at ($(add)!.5!(subtract)$) {$=$};
+\end{tikzpicture}
+\hfill\null\\
+\hfill\begin{tikzpicture}[on grid, node distance=3 and 3]
+  \node["$R_1 \ToT R_2$"]
+    (swap) {$\mat{0 1 0; 1 0 0; 0 0 1}^{\smash{\rlap{$-1$}}}$};
+  \node["$R_1 \ToT R_2$", right=of swap]
+    (unswap) {$\mat{0 1 0; 1 0 0; 0 0 1}$};
+  \node at ($(swap)!.5!(unswap)$) {$=$};
+\end{tikzpicture}
+\hfill\null
+\end{webonly}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Why Does The Inversion Algorithm Work?}
+\framesubtitle{Second answer}
+
+\vskip-3mm
+\begin{thm}
+  An $n\times n$ matrix $A$ is invertible if and only if it is row equivalent to
+  $I_n$.
+  \pause
+  In this case, the sequence of row operations taking $A$ to $I_n$ also takes
+  $I_n$ to $A\inv$.
+\end{thm}
+
+\pause\medskip
+\alert{Why?}
+Say the row operations taking $A$ to $I_n$ have elementary matrices
+$E_1,E_2,\ldots,E_k$.
+\begin{webonly}%
+So
+\[\begin{split}
+  \namedbox{order}{E_kE_{k-1}\cdots E_2E_1} A &= I_n \\
+\implies E_kE_{k-1}\cdots E_2E_1 AA\inv &= A\inv \\
+\implies E_kE_{k-1}\cdots E_2E_1 I_n &= A\inv.
+\end{split} \]
+\begin{uncoverenv}<5->%
+\begin{tikzpicture}[remember picture, overlay, blue!50]
+  \path (order.base west) ++(-1cm,0) 
+    node[anchor=base east] (note) {note the order!};
+  \draw[->, shorten >=1mm] (note.east) -- ++(1cm,0);
+\end{tikzpicture}%
+\end{uncoverenv}%
+\end{webonly}%
+\pause
+This means if you do these same row operations to $A$ and to $I_n$, you'll end
+up with $I_n$ and $A\inv$.  
+\pause
+This is what you do when you row reduce the augmented matrix:
+\[ \hmat{A I_n} \;\longsquiggly\;\hmat{I_n A\inv} \]
+
+\end{frame}
+
+
+%%% Local Variables:
+%%% TeX-master: "../slides"
+%%% End:

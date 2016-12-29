@@ -1,0 +1,677 @@
+
+\titleframe{Chapter 3}{Determinants}
+\titleframe{Section 3.1}{Introduction to Determinants}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Orientation}
+
+\alert{Recall:} This course is about learning to:
+
+\begin{itemize}
+\item \textcolor<2->{gray}{Solve the matrix equation $Ax = b$}\\
+  \pause
+  We've said most of what we'll say about this topic now.
+  \pause
+\item Solve the matrix equation $Ax = \lambda x$ (eigenvalue problem)\\
+  \pause
+  We are now aiming at this.
+  \pause
+\item \textcolor{gray}{Almost solve the equation $Ax = b$}\\
+  \pause
+  This will happen later.
+\end{itemize}
+
+\pause\bigskip
+The next topic is \emph{determinants}.  
+
+\pause\bigskip
+Dan Margalit has written some notes
+which, in my opinion, explain the topic in a much better way than Lay does.
+\pause
+(Both cover the same material.)
+
+\pause\medskip
+Prof.\ Margalit's notes are the primary reference for Chapter~3.
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{The Idea of Determinants}
+
+Let $A$ be an $n\times n$ matrix.
+\pause
+\textcolor{red}{Determinants are only for square matrices.}
+
+\pause\medskip
+The columns $v_1,v_2,\ldots,v_n$ give you $n$ vectors in $\R^n$.
+\pause
+These determine a \textbf{parallelepiped} $P$.
+
+\begin{center}
+\begin{tikzpicture}[thin border nodes]
+  \filldraw[fill=seq-orange, fill opacity=.2, very thin]
+    (0,0) -- (1,2) -- (3,3) -- (2,1) -- cycle;
+  \draw[vector] (0,0) -- node[auto]{$v_1$} (1,2);
+  \draw[vector] (0,0) -- node[auto,swap]{$v_2$} (2,1);
+  \node at (1.5,1.5) {$P$};
+
+  \begin{scope}[xshift=5cm, yshift=.2cm, scale=1.8, myxyz]
+    \filldraw[fill=seq-orange, opacity=.2, very thin]
+      (0,0,0) -- (0,-1,0) -- (.3,-1,1) -- (.3,0,1) -- cycle;
+    \filldraw[fill=seq-orange, opacity=.2, very thin]
+      (0,0,0) -- (0,-1,0) -- (1,-.8,0) -- (1,.2,0) -- cycle;
+    \filldraw[fill=seq-orange, opacity=.2, shift={(0,-1,0)}, very thin]
+      (0,0,0) -- (1,.2,0) -- (1.3,.2,1) -- (.3,0,1) -- cycle;
+    \filldraw[fill=seq-orange, fill opacity=.2, very thin]
+      (0,0,0) -- (1,.2,0) -- (1.3,.2,1) -- (.3,0,1) -- cycle;
+    \filldraw[fill=seq-orange, fill opacity=.2, shift={(1,.2,0)}, very thin]
+      (0,0,0) -- (0,-1,0) -- (.3,-1,1) -- (.3,0,1) -- cycle;
+    \filldraw[fill=seq-orange, fill opacity=.2, shift={(.3,0,1)}, very thin]
+      (0,0,0) -- (0,-1,0) -- (1,-.8,0) -- (1,.2,0) -- cycle;
+    \draw[vector] (0,0,0) -- node[auto,swap] {$v_1$} (1,.2,0);
+    \draw[vector, opacity=.4] (0,0,0) -- node[auto,swap] {$v_2$} (0,-1,0);
+    \draw[vector] (0,0,0) -- node[auto] {$v_3$} (.3,0,1);
+    \node at (1.2,0,1.2) {$P$};
+  \end{scope}
+
+\end{tikzpicture}
+\end{center}
+
+\pause\medskip
+\alert{Observation:} the volume of $P$ is zero $\iff$ 
+\pause
+the columns are \emph{linearly dependent} ($P$ is ``flat'') $\iff$
+\pause
+the matrix $A$ is not invertible.
+
+\pause\bigskip
+The \textbf{determinant} of $A$ will be a number $\det(A)$ whose absolute value
+is the volume of $P$.
+\pause
+In particular, $\det(A)\neq 0\iff$ $A$ is invertible.
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Determinants of $2\times 2$ Matrices}
+\framesubtitle{Revisited}
+
+We already have a formula in the $2\times 2$ case:
+\[ \def\r{\textcolor{seq-red}} \def\g{\textcolor{seq-green}}
+\det\mat{\r a \g b; \g c \r d} = \r{a}\r{d} - \g{b}\g{c}. \]
+\pause
+What does this have to do with volumes?
+\pause
+
+\vskip-.5cm
+\begin{webonly}
+\begin{center}
+\begin{tikzpicture}[scale=.5, picture align top, thin border nodes]
+  \draw[help lines, black!25] (-1,-1) grid (4,4);
+  \filldraw[fill=seq-orange, fill opacity=.2, very thin]
+    (0,0) -- (2,0) -- (3,3) -- (1,3) -- cycle;
+  \draw[vector] (0,0) -- node[auto,swap] {$v_1$} (2,0);
+  \draw[vector] (0,0) -- node[auto] {$v_2$} (1,3);
+  \draw[|<->|, very thin] (1,3.5) -- node[auto, scale=.7] {base} (3,3.5);
+  \draw[|<->|, very thin] (3.5,0) --
+    node[scale=.7, rotate=-90, above] {height} (3.5,3);
+  \point at (0,0);
+\end{tikzpicture}\quad
+\begin{minipage}[t]{0.6\linewidth}
+  \[ v_1 = \vec{2 0} \qquad v_2 = \vec{1 3} \]
+  The area of the parallelogram is
+  \[ \text{base}\times\text{height} = 2\cdot 3
+  = \left\vert\det\mat{2 1; 0 3}\right\vert. \]
+\end{minipage}
+\end{center}
+\end{webonly}
+
+The area of the parallelogram is always $|ad-bc|$.
+\pause
+If $v_1$ is not on the $x$-axis: it's a fun geometry problem!
+
+\pause\medskip
+\alert{Note:} this shows $\det(A)\neq 0\iff$ $A$ is invertible in this case.
+\pause
+(The volume is zero if and only if the columns are collinear.)
+
+\pause\medskip
+\alert{Question:} What does the sign of the determinant mean?
+\note{If you swap the vectors, you multiply by $-1$.}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Determinants of $3\times 3$ Matrices}
+Here's the formula:
+\[ \det\mat{a_{11} a_{12} a_{13}; a_{21} a_{22} a_{23}; a_{31} a_{32} a_{33}}
+= \begin{aligned}
+&\textcolor<5->{seq-green}{
+  a_{11}a_{22}a_{33} + a_{12}a_{23}a_{31} + a_{13}a_{21}a_{32}} \\
+&\quad
+\textcolor<5->{seq-blue}{
+  -a_{13}a_{22}a_{31} - a_{11}a_{23}a_{32} - a_{12}a_{21}a_{33}}
+\end{aligned} \]
+
+\pause
+How on earth do you remember this?
+\pause
+Draw a bigger matrix, repeating the first two columns to the right:
+\pause
+\[\spaligndelims\vert\vert
++ \loopmat35{
+  \pgfmathtruncatemacro{\jj}{mod(\j-1, 3) + 1}
+  \appendnoexp\namedbox\append{{a-\i-\j}{a_{\i\jj}}}
+}
+  - \loopmat35{
+  \pgfmathtruncatemacro{\jj}{mod(\j-1, 3) + 1}
+  \appendnoexp\namedbox\append{{b-\i-\j}{a_{\i\jj}}}
+} \]
+\pause
+Then add the products of the downward diagonals, and subtract the product of the
+upward diagonals.
+\begin{tikzpicture}[remember picture, overlay,
+    very thick, opacity=.75]
+  \draw[seq-green] (a-1-1.north west) -- (a-3-3.south east);
+  \draw[seq-green] (a-1-2.north west) -- (a-3-4.south east);
+  \draw[seq-green] (a-1-3.north west) -- (a-3-5.south east);
+  \draw[seq-blue]  (b-1-3.north east) -- (b-3-1.south west);
+  \draw[seq-blue]  (b-1-4.north east) -- (b-3-2.south west);
+  \draw[seq-blue]  (b-1-5.north east) -- (b-3-3.south west);
+\end{tikzpicture}
+\pause
+For example,
+\[\hss \det\mat[r]{5 1 0; -1 3 2; 4 0 -1} =
+\begin{webonly}
+\spaligndelims\vert\vert
+\def\pm{\phantom-}
+\mat[r]{
+  \namedbox{c-1-1}{\pm5} \namedbox{c-1-2}{\pm1} \namedbox{c-1-3}{\pm0}
+  \namedbox{c-1-4}{\pm5} \namedbox{c-1-5}{\pm1}; -1 \pm3 \pm2 -1 \pm3;
+  \namedbox{c-3-1}{\pm4} \namedbox{c-3-2}{\pm0} \namedbox{c-3-3}{-1}
+  \namedbox{c-3-4}{\pm4} \namedbox{c-3-5}{\pm0}}
+= \textcolor{seq-green}{-15+8+0} \textcolor{seq-blue}{{}-0-0-1}
+= -8
+\end{webonly}
+ \hss\]
+\begin{webonly}
+\begin{tikzpicture}[remember picture, overlay,
+    very thick, opacity=.75]
+  \draw[seq-green] (c-1-1.north west) -- (c-3-3.south east);
+  \draw[seq-green] (c-1-2.north west) -- (c-3-4.south east);
+  \draw[seq-green] (c-1-3.north west) -- (c-3-5.south east);
+  \draw[seq-blue]  (c-1-3.north east) -- (c-3-1.south west);
+  \draw[seq-blue]  (c-1-4.north east) -- (c-3-2.south west);
+  \draw[seq-blue]  (c-1-5.north east) -- (c-3-3.south west);
+\end{tikzpicture}
+\end{webonly}
+
+\pause\medskip
+What does this have to do with volumes?
+\pause
+Next time.
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{A Formula for the Determinant}
+
+\vskip-1mm
+When $n\geq 4$, the determinant isn't just a sum of products of diagonals.
+\pause
+The formula is \emph{recursive}: you compute a larger determinant in terms of
+smaller ones.
+
+\pause\medskip
+First some notation.  Let $A$ be an $n\times n$ matrix.\\
+\pause\medskip
+$\begin{aligned} A_{ij} &= \text{$ij$th \textbf{minor} of $A$}  \\
+  &= (n-1)\times(n-1)\text{ matrix you get by deleting the $i$th row and $j$th column}
+\end{aligned}$\\
+\pause\medskip
+$\begin{aligned}
+  C_{ij} &= (-1)^{i+j} \det A_{ij} \\
+  &= \text{$ij$th \textbf{cofactor} of $A$}
+\end{aligned}$\\
+\pause\medskip
+The signs of the cofactors follow a checkerboard pattern:
+\[ \def\a{\textcolor{seq-green}{\pmb{+}}} \def\b{\textcolor{seq-blue}{\pmb{-}}}
+\mat{\a,\b,\a,\b ; \b,\a,\b,\a ; \a,\b,\a,\b; \b,\a,\b,\a}
+\qquad\text{$\color{seq-violet}\pm$ in the $ij$ entry is the sign of $C_{ij}$} \]
+
+\pause\vskip-5mm\null
+\begin{defn}
+  The \textbf{determinant} of an $n\times n$ matrix $A$ is 
+  \abovedisplayskip=1pt\belowdisplayskip=1pt
+  \[ \det(A) = \sum_{j=1}^n a_{1j} C_{1j}
+  = a_{11}C_{11} + a_{12}C_{12} + \cdots + a_{1n}C_{1n}. \]
+  \pause
+  This formula is called \textbf{cofactor expansion along the first row}.
+\end{defn}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{A Formula for the Determinant}
+\framesubtitle{$1\times 1$ Matrices}
+
+This is the beginning of the recursion.
+\pause
+\[ \det(\,a_{11}\,) = a_{11}. \]
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\def\aijmat#1#2#3#4{\loopmat#1#2{
+  \appendnoexp\namedbox\append{{#3-\i-\j}{#4_{\i\j}}}}
+}
+
+\begin{frame}
+\frametitle{A Formula for the Determinant}
+\framesubtitle{$2\times 2$ Matrices}
+\[ A = \mat{a_{11} a_{12} ; a_{21} a_{22}} \]
+\pause
+The minors are:
+\begin{align*}
+  A_{11} &= \webonlycmd{\aijmat22aa = (\,a_{22}\,)} &
+  A_{12} &= \webonlycmd{\aijmat22ba = (\,a_{21}\,)} \\
+  A_{21} &= \webonlycmd{\aijmat22ca = (\,a_{12}\,)} &
+  A_{22} &= \webonlycmd{\aijmat22da = (\,a_{11}\,)}
+\end{align*}
+\begin{webonly}
+\begin{tikzpicture}[remember picture, overlay,
+    decoration={zigzag,segment length=1.5mm},
+    seq-red, thick, opacity=.7, line join=round,
+    every node/.style={seq-green, draw, thick, circle, inner sep=.5pt}]
+  \node[fit=(a-1-1)] {};
+  \draw[decorate] (a-1-1.west) -- (a-1-2.east);
+  \draw[decorate] (a-1-1.north) -- (a-2-1.south);
+
+  \node[fit=(b-1-2)] {};
+  \draw[decorate] (b-1-1.west) -- (b-1-2.east);
+  \draw[decorate] (b-1-2.north) -- (b-2-2.south);
+
+  \node[fit=(c-2-1)] {};
+  \draw[decorate] (c-2-1.west) -- (c-2-2.east);
+  \draw[decorate] (c-2-1.south) -- (c-1-1.north);
+
+  \node[fit=(d-2-2)] {};
+  \draw[decorate] (d-2-1.west) -- (d-2-2.east);
+  \draw[decorate] (d-1-2.north) -- (d-2-2.south);
+ 
+\end{tikzpicture}
+\end{webonly}
+
+\pause
+The cofactors are
+\begin{align*}
+  C_{11} &= \webonlycmd{+\det A_{11} = a_{22}} &
+  C_{12} &= \webonlycmd{-\det A_{12} = -a_{21}} \\
+  C_{21} &= \webonlycmd{-\det A_{21} = -a_{12}} &
+  C_{22} &= \webonlycmd{+\det A_{22} = a_{11}}
+\end{align*}
+
+\pause
+The determinant is
+\[ \det A = a_{11}C_{11} + a_{12}C_{12} 
+= a_{11}a_{22} - a_{12}a_{21}. \]
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{A Formula for the Determinant}
+\framesubtitle{$3\times 3$ Matrices}
+
+\vskip-.5cm
+\[ A = \loopmat33{\append{a_{\i\j}}} \]
+
+\pause
+The top row minors and cofactors are:
+\begin{align*}
+  A_{11} &= \webonlycmd{\aijmat33aa = \mat{a_{22} a_{23}; a_{32} a_{33}}} &
+  C_{11} &= \webonlycmd{+\det\mat{a_{22} a_{23}; a_{32} a_{33}}} \\
+  A_{12} &= \webonlycmd{\aijmat33ba = \mat{a_{21} a_{23}; a_{31} a_{33}}} &
+  C_{12} &= \webonlycmd{-\det\mat{a_{21} a_{23}; a_{31} a_{33}}} \\
+  A_{13} &= \webonlycmd{\aijmat33ca = \mat{a_{21} a_{22}; a_{31} a_{32}}} &
+  C_{13} &= \webonlycmd{+\det\mat{a_{21} a_{22}; a_{31} a_{32}}}
+\end{align*}
+\begin{webonly}
+\begin{tikzpicture}[remember picture, overlay,
+    decoration={zigzag,segment length=1.5mm},
+    seq-red, thick, opacity=.7, line join=round,
+    every node/.style={seq-green, draw, thick, circle, inner sep=.5pt}]
+  \node[fit=(a-1-1)] {};
+  \draw[decorate] (a-1-1.north) -- (a-3-1.south);
+  \draw[decorate] (a-1-1.west) -- (a-1-3.east);
+
+  \node[fit=(b-1-2)] {};
+  \draw[decorate] (b-1-2.north) -- (b-3-2.south);
+  \draw[decorate] (b-1-1.west) -- (b-1-3.east);
+
+  \node[fit=(c-1-3)] {};
+  \draw[decorate] (c-1-3.north) -- (c-3-3.south);
+  \draw[decorate] (c-1-1.west) -- (c-1-3.east);
+\end{tikzpicture}
+\end{webonly}
+
+\pause
+The determinant is the same formula as before (as it turns out):
+\[\begin{split}
+  \det A &= a_{11}C_{11} + a_{12}C_{12} + a_{13}C_{13} \\
+  &= a_{11}\det\mat{a_{22} a_{23}; a_{32} a_{33}} 
+   - a_{12}\det\mat{a_{21} a_{23}; a_{31} a_{33}}
+   + a_{13}\det\mat{a_{21} a_{22}; a_{31} a_{32}}
+\end{split} \]
+\note{Always good to have more formulas for the same thing!}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{A Formula for the Determinant}
+\framesubtitle{Example}
+
+\[\hss\begin{aligned}
+  \det\mat[r]{5 1 0; -1 3 2; 4 0 -1} &=
+\webonlycmd{
+  5\cdot\det\mat[r]{
+    \namedbox{a-1-1}{5} \namedbox{a-1-2}{1} \namedbox{a-1-3}{0};
+    -1 -3 2;
+    \namedbox{a-3-1}{4} \namedbox{a-3-2}{0} \namedbox{a-3-3}{-1}}
+  -1\cdot\det\mat[r]{
+    \namedbox{b-1-1}{5} \namedbox{b-1-2}{1} \namedbox{b-1-3}{0};
+    -1 \phantom-3 2;
+    \namedbox{b-3-1}{4} \namedbox{b-3-2}{0} \namedbox{b-3-3}{-1}}
+  }\\
+  &\webonlycmd{
+    \qquad\qquad+0\cdot\det\mat[r]{
+    \namedbox{c-1-1}{5} \namedbox{c-1-2}{1} \namedbox{c-1-3}{0};
+    -1 \phantom-3 2;
+    \namedbox{c-3-1}{4} \namedbox{c-3-2}{0} \namedbox{c-3-3}{-1}}
+  }\\
+  &\webonlycmd{= 5\cdot\det\mat{3 2 ; 0 -1} - 1\cdot\det\mat{-1 2; 4 -1}
+  + 0\cdot\det\mat{-1 3 ; 4 0}} \\
+  &\webonlycmd{= 5\cdot(-3-0) - 1\cdot(1-8)} \\
+  &\webonlycmd{= -15 + 7 = -8}
+\end{aligned}\hss\]
+\begin{webonly}
+\begin{tikzpicture}[remember picture, overlay,
+    decoration={zigzag,segment length=1.5mm},
+    seq-red, thick, opacity=.7, line join=round,
+    every node/.style={seq-green, draw, thick, circle, inner sep=.5pt}]
+  \node[fit=(a-1-1)] {};
+  \draw[decorate] (a-1-1.north) -- (a-3-1.south);
+  \draw[decorate] (a-1-1.west) -- (a-1-3.east);
+
+  \node[fit=(b-1-2)] {};
+  \draw[decorate] (b-1-2.north) -- (b-3-2.south);
+  \draw[decorate] (b-1-1.west) -- (b-1-3.east);
+
+  \node[fit=(c-1-3)] {};
+  \draw[decorate] (c-1-3.north) -- (c-1-3.north |- c-3-3.south);
+  \draw[decorate] (c-1-1.west) -- (c-1-3.east);
+\end{tikzpicture}
+\end{webonly}
+  
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{$2n-1$ More Formulas for the Determinant}
+
+\alert{Recall:} the formula
+\[ \det(A) = \sum_{j=1}^n a_{1j} C_{1j}
+= a_{11}C_{11} + a_{12}C_{12} + \cdots + a_{1n}C_{1n}. \]
+is called \textbf{cofactor expansion along the first row.}
+\pause
+Actually, you can expand cofactors along any row or column you like!
+\[\begin{split}
+  \det A &= \sum_{j=1}^n a_{ij} C_{ij} \quad\text{for any fixed } i \\
+  \det A &= \sum_{i=1}^n a_{ij} C_{ij} \quad\text{for any fixed } j
+\end{split}\]
+\pause
+Try this with a row or a column with a lot of zeros.
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Cofactor Expansion}
+\framesubtitle{Example}
+
+\[A = \mat{2 1 \namedbox{a-1-3}{\color<2->{seq-red}0};
+  1 1 \color<2->{seq-red}0;
+  5 9 \namedbox{a-3-3}1} \]
+It looks easiest to expand along the
+\pause
+third column:
+\begin{tikzpicture}[remember picture, overlay]
+  \node[fit=(a-1-3) (a-3-3), draw, thick, seq-green,
+    rounded corners, inner sep=2pt] {};
+\end{tikzpicture}
+\[\begin{aligned} \det A &=
+  \webonlycmd{
+    0\cdot\det\bigg( \parbox{\widthof{don't}}{\centering don't\\care} \bigg) - 
+    0\cdot\det\bigg( \parbox{\widthof{don't}}{\centering don't\\care} \bigg)
+  + 1\cdot\det\mat{2 1 \namedbox{b-1-3}0;
+    1 1 0;
+    \namedbox{b-3-1}5 9 \namedbox{b-3-3}1}} \\
+  &\webonlycmd{= \det\mat{2 1; 1 1} = 2-1 = 1 }
+\end{aligned}\]
+\begin{webonly}
+\begin{tikzpicture}[remember picture, overlay,
+    decoration={zigzag,segment length=1.5mm},
+    seq-red, thick, opacity=.7, line join=round,
+    every node/.style={seq-green, draw, thick, circle, inner sep=.5pt}]
+  \node[fit=(b-3-3)] {};
+  \draw[decorate] (b-1-3.north) -- (b-3-3.south);
+  \draw[decorate] (b-3-1.west) -- (b-3-3.east);
+\end{tikzpicture}
+\end{webonly}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{pollframe}
+
+\vskip-7mm\null
+\begin{bluebox}[Poll]{.8\linewidth}
+  \[ \det\mat[r]{
+    1  7 -5 14  3 22;
+    0 -2 -3 13 11  1;
+    0  0 -1 -9  7 18;
+    0  0  0  3  6 -8;
+    0  0  0  0  1 -11;
+    0  0  0  0  0 -1
+  } ={} ? \]
+  \centering
+  A. $-6$ \quad B. $-3$ \quad C. $-2$ \quad D. $-1$ \quad E. $1$
+  \quad F. $2$ \quad G. $3$ \quad H. $6$
+\end{bluebox}
+
+\pause\small
+If you expand repeatedly along the first column, you get
+\[\hss\begin{aligned}
+  &\uncover<2->
+  {1\cdot \det\mat[r]{-2 -3 13 11 1; 0 -1 -9 7 18; 0 0 3 6 -8; 0 0 0 1 -11; 0 0 0 0 -1}}  
+  \uncover<3->
+  {= 1\cdot(-2)\cdot\det\mat[r]{-1 -9 7 -18; 0 3 6 -8; 0 0 1 -11; 0 0 0 1}} \\
+  &\uncover<4->{\qquad= 1\cdot(-2)\cdot(-1)\cdot\det\mat[r]{3 6 -8; 0 1 -11; 0 0 -1}}
+  \uncover<5->{= 1\cdot(-2)\cdot(-1)\cdot 3\cdot\det\mat{1 -11; 0 -1}} \\
+  &\uncover<6->{\qquad= 1\cdot(-2)\cdot(-1)\cdot 3\cdot 1\cdot(-1) = -6}
+\end{aligned}\hss\]
+
+\end{pollframe}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{The Determinant of an Upper-Triangular Matrix}
+
+The computation in the poll works for any matrix that is
+\emph{upper-triangular} (all entries below the main diagonal are zero).
+
+\pause\vskip .75cm
+\begin{thm}
+  The determinant of an upper-triangular matrix is  the product of the diagonal entries:
+  \[ \det\mat{
+    \namedbox{a1}{a_{11}} a_{12} a_{13} \cdots, a_{1n};
+    0      \namedbox{a2}{a_{22}} a_{23} \cdots, a_{2n};
+    0      0      \namedbox{a3}{a_{33}} \cdots, a_{3n};
+    \vdots,\vdots,\vdots,\ddots,\vdots;
+    0      0      0      \cdots, \namedbox{an}{a_{nn}}}
+  = a_{11}a_{22}a_{33}\cdots a_{nn}. \]
+  \begin{tikzpicture}[remember picture, overlay]
+    \node foreach \i in {1,2,3,n}
+       [draw, circle, seq-green, thick, inner sep=.1pt, fit=(a\i)] {};
+  \end{tikzpicture}
+\end{thm}
+
+\pause
+The same is true for lower-triangular matrices.  (Repeatedly expand along the
+first row.) 
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{A Formula for the Inverse}
+\framesubtitle{For fun---from \S3.3}
+
+For $2\times 2$ matrices we had a nice formula for the inverse:
+\[ A = \mat{a b; c d} \implies
+A\inv = \frac 1{ad-bc}\mat{d -b; -c a}
+\pause
+= \frac 1{\det A}\mat{C_{11} C_{21}; C_{12} C_{22}}. \]
+\pause
+
+\begin{thm}
+This last formula works for any $n\times n$ invertible matrix $A$:
+\[ A\inv = \frac 1{\det A}
+\mat{
+  C_{11} C_{21} C_{31} \cdots, C_{n1} ;
+  C_{12} C_{22} C_{32} \cdots, C_{n2} ;
+  \namedbox{x}{C_{13}} C_{23} C_{33} \cdots, C_{n3} ;
+  \vdots,\vdots,\vdots,\ddots, \vdots ;
+  C_{1n} C_{2n} C_{3n} \cdots, C_{nn}
+}
+\uncover<4->{{}=\frac 1{\det A}\bigl( C_{ij} \bigr)^T}
+ \]
+\end{thm}
+
+\pause
+Note that the cofactors are ``transposed'': the $(i,j)$ entry of the matrix is
+$C_{ji}$.
+\begin{tikzpicture}[remember picture, overlay]
+  \node[draw, circle, seq-green, thick, inner sep=.1pt, fit=(x)] (y) {};
+  \path (y.north west) ++(-1.5,.5) node[blue!50] (expl) {$(3,1)$ entry};
+  \draw[->, blue!50, shorten >=1pt] (expl.east) to[out=0,in=145] (y.145);
+\end{tikzpicture}
+
+\pause\medskip
+The proof uses Cramer's rule.  See Dan Margalit's notes on the website for a
+nice explanation.
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{A Formula for the Inverse}
+\framesubtitle{Example}
+
+Compute $A\inv$, where
+$A = \mat{1 0 1; 0 1 1; 1 1 0}$.
+
+\pause
+The minors are:
+\begin{webonly}
+\begin{align*}
+  A_{11} &= \mat{1 1; 1 0} &
+  A_{12} &= \mat{0 1; 1 0} &
+  A_{13} &= \mat{0 1; 1 1} \\
+  A_{21} &= \mat{0 1; 1 0} &
+  A_{22} &= \mat{1 1; 1 0} &
+  A_{23} &= \mat{1 0; 1 1} \\
+  A_{31} &= \mat{0 1; 1 1} &
+  A_{32} &= \mat{1 1; 0 1} &
+  A_{33} &= \mat{1 0; 0 1}
+\end{align*}
+\end{webonly}
+\pause
+The cofactors are (don't forget to multiply by $(-1)^{i+j}$):
+\begin{webonly}
+\begin{align*}
+  C_{11} &= -1  &  C_{12} &=  \phantom-1  &  C_{13} &= -1 \\
+  C_{21} &= \phantom-1  &  C_{22} &= -1  &  C_{23} &= -1 \\
+  C_{31} &= -1  &  C_{32} &= -1  &  C_{33} &=  \phantom-1
+\end{align*}
+\end{webonly}
+\pause
+The determinant is (expanding along the first row):
+\[ \det A = \webonlycmd{1\cdot C_{11} + 0\cdot C_{12} + 1\cdot C_{13} = -2} \]
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{A Formula for the Inverse}
+\framesubtitle{Example, continued}
+
+Compute $A\inv$, where
+$A = \mat{1 0 1; 0 1 1; 1 1 0}$.
+
+\pause
+The inverse is
+\[ A\inv = \webonlycmd{\frac 1{\det A}\loopmat33{\append{C_{\j\i}}}
+= -\frac12\mat[r]{-1 1 -1; 1 -1 -1; -1 -1 1}.} \]
+
+\pause
+Check:
+\begin{webonly}
+\[ \mat{1 0 1; 0 1 1; 1 1 0}\cdot -\frac12\mat[r]{-1 1 -1; 1 -1 -1; -1 -1 1}
+= \mat{1 0 0; 0 1 0; 0 0 1}. \bigcheck[\quad] \]
+\end{webonly}
+
+\end{frame}
+
+
+%%% Local Variables:
+%%% TeX-master: "../slides"
+%%% End:

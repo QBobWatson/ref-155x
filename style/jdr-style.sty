@@ -1,0 +1,169 @@
+% 
+% EGA style numbering for amsart
+%
+% Joe Rabinoff 
+%
+
+%----------------- Identification ----------------
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{\styledir jdr-style}[2006/08/18
+  EGA style numbering for amsart]
+
+
+\newif\if@custommargins
+\@custommarginstrue
+\DeclareOption{nocustommargins}{\@custommarginsfalse}
+\ProcessOptions
+
+
+%----------------- Package loading ---------------
+
+% Utility
+\RequirePackage{ifthen}
+\RequirePackage{calc}
+\RequirePackage{xcolor}
+\RequirePackage{url}
+
+% Math
+\RequirePackage{amsmath}
+\RequirePackage{amstext}
+\RequirePackage{amssymb}
+\RequirePackage{stmaryrd}
+\RequirePackage{mathtools}
+
+% Fonts
+% Roman font
+\RequirePackage[charter,sfscaled,ttscaled,cal=cmcal]{mathdesign}
+% Serif font
+\renewcommand{\sfdefault}{phv}
+% Text-mode symbols
+\RequirePackage{textcomp}
+
+% Hyperlinks
+\RequirePackage[colorlinks=true]{hyperref}
+\colorlet{linkcolor}{green!50!black}
+\hypersetup{allcolors=linkcolor}
+
+
+%----------------  Page setup --------------------
+
+\if@custommargins
+\RequirePackage[left = 1.2in, right = 1.2in, 
+                top = 1.2in, bottom = 1.2in ]{geometry}
+\fi
+
+% Spacing in table of contents
+\newlength\@oldparskip
+\let\@oldtoc=\tableofcontents
+\def\tableofcontents{\setlength{\@oldparskip}{\parskip}%
+  \setlength{\parskip}{0pt}%
+  \@oldtoc%
+  \setlength{\parskip}{\@oldparskip}}
+
+
+%----------------- Sections and paragraphs -------
+
+\setcounter{tocdepth}{2}
+\setcounter{secnumdepth}{3}
+
+% Bold equation tags but not references
+\newtagform{boldtag}[\bfseries]{\normalfont(}{\normalfont)}
+\usetagform{boldtag}
+\renewcommand\eqref[1]{(\ref{#1})}
+
+% Number equation with subsubsection.
+\let\oldequation\equation
+\let\endoldequation\endequation
+\renewenvironment{equation}{%
+  \refstepcounter{subsubsection}\begin{equation*}}{%
+    \tag{\thesubsubsection}\end{equation*}\@ignoretrue}
+
+% Mildly special behavior for subsection and subsubsection:
+%  * Always boldface the section number
+%  * Don't add a toc entry if the title is empty
+
+%  This is an ugly hack.  The \@seccntformat macro gets used by amsart to format
+%  the section number.  Also, there's a bug in amsart that redefines
+%  \@secnumfont to bold if there's no section title.
+\def\@seccntformat#1{%
+  \protect\textup{%
+    %\protect\@secnumfont
+    \protect\mdseries%
+    \expandafter\protect\csname format#1\endcsname%
+    \csname the#1\endcsname%
+    \protect\@secnumpunct%
+  }}%
+
+\newcommand{\formatsubsection}{\bfseries}
+\newcommand{\formatsubsubsection}{\bfseries}
+
+% This is a very low-level way to expand to empty if the title (argument 3) is
+% empty.  For some reason \ifthenelse won't work with hyperref.
+\let\oldtocsubsection\tocsubsection
+\def\tocsubsection{} % for \renewcommand vs \newcommand...
+\renewcommand\tocsubsection[3]{%
+    \if\relax\detokenize{#3}\relax\else\oldtocsubsection{#1}{#2}{#3}\fi}
+\let\oldtocsubsubsection\tocsubsubsection
+\def\tocsubsubsection{}
+\renewcommand\tocsubsubsection[3]{%
+    \if\relax\detokenize{#3}\relax\else\oldtocsubsubsection{#1}{#2}{#3}\fi}
+
+% Hide toc entries with empty title.  Have to use \ifthenelse here so the
+% argument gets expanded.
+\let\oldcontentsline\contentsline
+\renewcommand\contentsline[4]{%
+    \ifthenelse{\equal{#2}{}}{}{\oldcontentsline{#1}{#2}{#3}{#4}}}
+
+
+%----------------- Theorem environments ----------------
+
+\newcommand{\mynewtheorem}[2]{%
+  \newtheorem{#1}[subsection]{#2}%
+  \newtheorem*{#1*}{#2}%
+  \newtheorem{#1sub}[subsubsection]{#2}}
+
+\mynewtheorem{thm}{Theorem}
+\mynewtheorem{cor}{Corollary}
+\mynewtheorem{lem}{Lemma}
+\mynewtheorem{prop}{Proposition}
+\mynewtheorem{clm}{Claim}
+
+\theoremstyle{definition}
+\mynewtheorem{defn}{Definition}
+\mynewtheorem{notn}{Notation}
+\mynewtheorem{eg}{Example}
+\mynewtheorem{exc}{Exercise}
+\mynewtheorem{question}{Question}
+
+%\theoremstyle{remark}
+\mynewtheorem{rem}{Remark}
+
+\newcounter{jdrthmtype}
+
+% Required argument: theorem text (e.g. ``Theorem'')
+% Optional argument: theorem style (e.g. ``theorem'')
+
+\newenvironment{oneoffthm}[2][plain]{%
+  \addtocounter{jdrthmtype}{1}%
+  \theoremstyle{#1}%
+  \newtheorem{oneoff\thejdrthmtype}[subsection]{#2}%
+  \begin{oneoff\thejdrthmtype}}{%
+  \end{oneoff\thejdrthmtype}}
+
+\newenvironment{oneoffthm*}[2][plain]{%
+  \addtocounter{jdrthmtype}{1}%
+  \theoremstyle{#1}%
+  \newtheorem*{oneoff\thejdrthmtype}{#2}%
+  \begin{oneoff\thejdrthmtype}}{%
+  \end{oneoff\thejdrthmtype}}
+
+
+%----------------- Other macros ------------------
+
+% For term definitions
+\newcommand\defi[1]{\textit{#1}}
+
+
+
+\endinput

@@ -1,0 +1,710 @@
+
+\titleframe{Section 1.5}{Solution Sets of Linear Systems}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Plan For Today}
+
+Today we will learn to describe and draw the solution set of an arbitrary system
+of linear equations $Ax=b$, using spans.
+
+\begin{center}
+\begin{tikzpicture}[scale=1]
+  \path[clip] (-3,-1) rectangle (3,2);
+  \draw (-3,0) -- (3,0);
+  \draw (0,-1) -- (0,2);
+  \draw[seq4, thick] (-4,-1) -- node[pos=.45, above left=1pt, thin border] 
+    {$Ax=b$} (4,3);
+\end{tikzpicture}
+\end{center}
+
+\pause
+\alert{Recall:} the \textbf{solution set} is the collection of all vectors $x$
+such that $Ax=b$ is true.
+
+\pause\bigskip
+Last time we discussed the set of vectors $b$ for which $Ax=b$ has a solution.
+
+\pause\bigskip
+We also described this set using spans, but it was a
+\emph{different problem}.
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Homogeneous Systems}
+Everything is easier when $b=0$, so we start with this case.
+
+\pause
+\begin{defn}
+  A system of linear equations of the form $Ax=0$ is called
+  \textbf{homogeneous.}
+\end{defn}
+
+\pause\smallskip
+These are linear equations where everything to the right of the $=$ is zero.
+
+\pause
+The opposite is:
+
+\begin{defn}
+  A system of linear equations of the form $Ax=b$ with $b\neq 0$ is called
+  \textbf{nonhomogeneous} or \textbf{inhomogeneous.}
+\end{defn}
+
+\pause\smallskip
+A homogeneous system always has the solution $x=\blankuntil{6}0$.
+\pause[6]
+This is called the \textbf{trivial solution.}
+\pause
+The nonzero solutions are called \textbf{nontrivial.}
+
+\pause\smallskip
+\begin{bluebox}[Observation]{.6\textwidth}
+  \abovedisplayskip=0pt \abovedisplayshortskip=0pt
+  \[\begin{split}
+    Ax=0 &\text{ has a nontrivial solution} \\
+    &\iff \uncover<9->{ \text{there is a free variable}} \\
+    &\iff \uncover<10->{ \text{$A$ has a column with no pivot.}}
+  \end{split}\]
+
+\end{bluebox}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Homogeneous Systems}
+\framesubtitle{Example}
+
+\vskip-3mm
+\begin{ques}
+  What is the solution set of $Ax=0$, where
+  \[ A = \mat{1 3 4; 2 -1 2; 1 0 1}? \]
+\end{ques}
+
+\pause
+We know how to do this: first form an augmented matrix and row reduce.
+\begin{webonly}
+\[ \amat{1 3 4 0; 2 -1 2 0; 1 0 1 0}
+\quad\longsquiggly[row reduce]\quad
+\amat{1 0 0 0; 0 1 0 0; 0 0 1 0}. \]
+\end{webonly}
+\pause
+The only solution is the trivial solution $x=0$.
+
+\pause
+\begin{bluebox}[Observation]{.8\textwidth}
+  Since the last column (everything to the right of the $=$) was zero to begin,
+  it will always stay zero! \pause
+  So it's not really necessary to write augmented matrices in the homogeneous case.
+\end{bluebox}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Homogeneous Systems}
+\framesubtitle{Example}
+
+\vskip-3mm
+\begin{ques}
+  What is the solution set of $Ax=0$, where
+  \[ A = \mat{1 -3; 2 -6}? \]
+\end{ques}
+
+\spalignsysdelims\{.
+\begin{webonly}
+\leavevmode
+\hbox to 4cm{\hfil$\mat{1 -3; 2 -6}$}%
+\hbox to 2cm{\hfil\longsquiggly[row reduce]}
+\quad$\mat{1 -3; 0 0}$\\[1mm]
+\leavevmode
+\hbox to 6cm{\hfil\longsquiggly[equation]}\quad $x_1 - 3x_2= 0$\\[2mm]
+\leavevmode
+\hbox to 6cm{\hfil\longsquiggly[parametric form]}\quad 
+$\syseq{x_1 = 3x_2; x_2 = x_2}$\\[1mm]
+\leavevmode
+\hbox to 6cm{\hfil\longsquiggly[parametric vector form]}\quad 
+$x = \vec{x_1 x_2} = x_2\vec{3 1}$.
+\end{webonly}
+
+\pause\medskip
+This last equation is called the \textbf{parametric vector form} of the
+solution.
+
+\pause\medskip
+It is obtained by listing equations for all the variables, in order, including
+the free ones, and making a vector equation.
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Homogeneous Systems}
+\framesubtitle{Example, continued}
+
+\vskip-3mm
+\begin{ques}
+  What is the solution set of $Ax=0$, where
+  \[ A = \mat{1 -3; 2 -6}? \]
+\end{ques}
+
+\alert{Answer: } $x = x_2\vec{3 1}$ for any $x_2$ in $\R$.
+\pause\def\r{\color<4->{seq1}}
+The solution set is $\Span\biggl\{\pause\hbox{\r$\vec{3 1}$}\biggr\}$.
+
+\pause\bigskip
+\begin{center}
+\begin{tikzpicture}[scale=.5]
+  \path[clip] (-6,-2) rectangle (6,2);
+  \draw[grid lines] (-6,-2) grid (6,2);
+  \draw[thick] (-6,0) -- (6,0);
+  \draw[thick] (0,-2) -- (0,2);
+  \draw[seq4] (-6,-2) -- node[pos=.4, above left=1pt, whitebg, thin border] 
+   {$Ax=0$} (6,2);
+  \draw[vector, seq1] (0,0) -- (3,1);
+\end{tikzpicture}
+\end{center}
+
+\pause\bigskip
+\alert{Note:} \emph{one} free variable means the solution set is a \emph{line}
+in $\R^{\color{seq-blue}2}$ ($\textcolor{seq-blue}2={}\#$ variables $=\#$
+columns). 
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Homogeneous Systems}
+\framesubtitle{Example}
+
+\vskip-3mm
+\begin{ques}
+  What is the solution set of $Ax=0$, where
+  \[ A = \mat{1 3 1; 2 -1 -5; 1 0 -2}? \]
+\end{ques}
+
+\spalignsysdelims\{.
+\begin{webonly}
+\leavevmode
+\hbox to 4cm{\hfil$\mat{1 3 1; 2 -1 -5; 1 0 -2}$}%
+\hbox to 2cm{\hfil\longsquiggly[row reduce]}
+\quad$\mat{1 0 -2; 0 1 1; 0 0 0}$ \\[2mm]
+\leavevmode
+\hbox to 6cm{\hfil\longsquiggly[equations]}\quad 
+$\syseq{x_1 \+ \. - 2x_3 = 0; \. \+ x_2 + x_3 = 0}$\\[2mm]
+\leavevmode
+\hbox to 6cm{\hfil\longsquiggly[parametric form]}\quad 
+$\syseq{
+  x_1 = 2x_3; 
+  x_2 = -x_3; 
+  x_3 = x_3}$\\[2mm]
+\leavevmode
+\hbox to 6cm{\hfil\longsquiggly[parametric vector form]}\quad 
+$x = \vec{x_1 x_2 x_3} = x_3\vec{2 -1 1}$.
+\end{webonly}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Homogeneous Systems}
+\framesubtitle{Example, continued}
+
+\vskip-3mm
+\begin{ques}
+  What is the solution set of $Ax=0$, where
+  \[ A = \mat{1 3 1; 2 -1 -5; 1 0 -2}? \]
+\end{ques}
+
+\alert{Answer: } $\Span\left\{\pause\hbox{\textcolor<3->{seq1}{$\vec{2 -1 1}$}}\right\}$.
+
+\pause
+\begin{center}\vskip-3mm
+\begin{tikzpicture}[myxyz, scale=0.5]
+  \path[clip, resetxy] (-6,-2) rectangle (6,3);
+
+  \def\v{(2,-1,1)}
+  \def\w{(1,0,-1)}
+
+  \node[coordinate] (X) at \v {};
+  \node[coordinate] (Y) at \w {};
+
+  \begin{scope}[x=(X), y=(Y), transformxy]
+    \draw[seq4] (-5,0) -- (0,0);
+  \end{scope}
+
+  \draw (0,0,-3) -- (0,0,0);
+
+  \begin{scope}[transformxy]
+    \fill[white, nearly opaque] (-3, -3) rectangle (3, 3);
+    \draw[grid lines] (-3, -3) grid (3, 3);
+    \draw[->] (-3,0) -- (3,0);
+    \draw[->] (0,-3) -- (0,3);
+  \end{scope}
+
+  \draw[->] (0,0,0) -- (0,0,3);
+
+  \begin{scope}[x=(X), y=(Y), transformxy]
+    \draw[seq4] (0,0) 
+      -- node[pos=.75,above left,thin border] {$Ax=0$} (2,0);
+  \end{scope}
+
+  \draw[vector, seq1] (0,0,0) -- \v;
+  \draw[thin, densely dotted] \v -- \projxy\v;
+
+  \point at (0,0,0);
+
+\end{tikzpicture}
+\end{center}
+
+\pause
+\alert{Note:} \emph{one} free variable means the solution set is a \emph{line}
+in $\R^{\color{seq-blue}3}$ ($\textcolor{seq-blue}3={}\#$ variables $= \#$ columns).
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Homogeneous Systems}
+\framesubtitle{Example}
+
+\begin{overlayarea}{\textwidth}{1.2cm}
+\vskip-3mm
+\begin{ques}
+  What is the solution set of $Ax=0$, where \uncover<beamer:0>{$A=$}
+\only<1| handout:0>{  \[ A = \mat[r]{1 2 0 -1; -2 -3 4 5; 2 4 0 -2}? \]}
+\end{ques}
+\end{overlayarea}
+
+\spalignsysdelims\{.
+\pause
+\leavevmode
+\hbox to 3.5cm{\hfil$\mat[r]{1 2 0 -1; -2 -3 4 5; 2 4 0 -2}$}%
+\pause
+\hbox to 2cm{\hfil\longsquiggly[row reduce]}
+\quad$\mat[r]{1 0 -8 -7; 0 1 4 3; 0 0 0 0}$\\[2mm]
+\leavevmode
+\pause
+\hbox to 5.5cm{\hfil\longsquiggly[equations]}\quad 
+$\syseq{x_1 \+ \. - 8x_3 - 7x_4 = 0;
+        \. \+ x_2 + 4x_3 + 3x_4 = 0}$\\[2mm]
+\medskip
+\leavevmode
+\pause
+\hbox to 5.5cm{\hfil\longsquiggly[parametric form]}\quad 
+$\syseq{
+  x_1 = 8x_3 + 7x_4; 
+  x_2 = -4x_3 - 3x_4; 
+  x_3 = x_3; 
+  x_4 = \. \+ x_4}$\\[2mm]
+\medskip
+\leavevmode
+\pause
+\hbox to 5.5cm{\hfil\longsquiggly[parametric vector form]}\quad 
+$x = \vec{x_1 x_2 x_3 x_4} = \pause x_3\vec{8 -4 1 0} + \pause x_4\vec{7 -3 0 1}$.
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Homogeneous Systems}
+\framesubtitle{Example, continued}
+
+\vskip-3mm
+\begin{ques}
+  What is the solution set of $Ax=0$, where
+  \[ A = \mat[r]{1 2 0 -1; -2 -3 4 5; 2 4 0 -2}? \]
+\end{ques}
+
+\alert{Answer: } $\Span\left\{\pause\vec{8 -4 1 0}, \pause\vec{7 -3 0 1}\right\}$.
+
+\pause\vfill
+
+\begin{center}
+  \color{gray}[not pictured here]
+\end{center}
+
+\pause\vfill
+\alert{Note:} \emph{two} free variables means the solution set is a \emph{plane}
+in $\R^{\color{seq-blue}4}$ ($\textcolor{seq-blue}4={}\#$ variables  $=\#$ columns).
+
+\note{Spans are useful for \emph{naming} planes, etc.}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Parametric Vector Form}
+\framesubtitle{Homogeneous systems}
+
+Let $A$ be an $m\times n$ matrix.
+\pause
+Suppose that the free variables in the
+homogeneous equation $Ax=0$ are $x_i,x_j,x_k,\ldots$
+
+\pause\bigskip
+Then the solutions to $Ax=0$ can be written in the form
+\[ \color<7->{seq-blue} x = x_iv_i + x_jv_j + x_kv_k + \cdots \]
+for some vectors $v_i,v_j,v_k,\ldots$ in $\R^{\blankuntil{4}n}$, \pause[4]
+and any scalars $x_i,x_j,x_k,\ldots$
+
+\pause\bigskip
+The solution set is
+\[ \Span\bigl\{ \pause v_i,\,v_j,\,v_k,\ldots\bigr\}. \]
+
+\pause\bigskip
+The \textcolor{seq-blue}{equation} above is called the
+\textbf{parametric vector form} of the solution.
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{pollframe}
+
+\vskip-7mm\null
+\begin{bluebox}[Poll]{.7\textwidth}
+  How many solutions can there be to a homogeneous system with more equations
+  than variables?
+  \smallskip
+  \begin{eAlpherate}
+  \item $0$
+  \item $1$
+  \item $\infty$
+  \end{eAlpherate}
+\end{bluebox}
+
+\pause
+The trivial solution is always a solution to a homogeneous system, so answer A is
+impossible.
+
+\pause\medskip
+This matrix has only one solution to $Ax=0$:
+\[ A = \mat{1 0; 0 1; 0 0} \]
+
+\pause\medskip
+This matrix has infinitely many solutions to $Ax=0$:
+\[ A = \mat{1 1; 0 0; 0 0} \]
+
+\end{pollframe}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Nonhomogeneous Systems}
+\framesubtitle{Example}
+
+\vskip-3mm
+\begin{ques}
+  What is the solution set of $Ax=b$, where
+  \[ A = \mat{1 -3; 2 -6} \sptxt{and} b = \vec{-3 -6}? \]
+\end{ques}
+
+\spalignsysdelims\{.
+\begin{webonly}
+\leavevmode
+\hbox to 4cm{\hfil$\amat{1 -3 -3; 2 -6 -6}$}%
+\hbox to 2cm{\hfil\longsquiggly[row reduce]}
+\quad$\amat{1 -3 -3; 0 0 0}$\\[1mm]
+\leavevmode
+\hbox to 6cm{\hfil\longsquiggly[equation]}\quad $x_1 - 3x_2= -3$\\[2mm]
+\leavevmode
+\hbox to 6cm{\hfil\longsquiggly[parametric form]}\quad 
+$\syseq{x_1 = 3x_2 - 3; x_2 = x_2 + 0}$\\[1mm]
+\leavevmode
+\hbox to 6cm{\hfil\longsquiggly[parametric vector form]}\quad 
+$x = \vec{x_1 x_2} = x_2\vec{3 1} + \vec{-3 0}$.
+\end{webonly}
+
+\pause\medskip
+The only difference from the homogeneous case is the constant vector $p =
+{-3\choose 0}$.
+\note{Put the homogeneous version up on the other screen.}
+
+\pause\medskip
+Note that $p$ is itself a solution: take $x_2=0$.
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Nonhomogeneous Systems}
+\framesubtitle{Example, continued}
+
+\vskip-3mm
+\begin{ques}
+  What is the solution set of $Ax=b$, where
+  \[ A = \mat{1 -3; 2 -6} \sptxt{and} b = \vec{-3 -6}? \]
+\end{ques}
+
+\alert{Answer: } $x = x_2\vec{3 1} + \vec{-3 0}$ for any $x_2$ in $\R$.
+\note{Note that the span is the same as it was before.  Why?}
+
+\pause\smallskip
+This is a \emph{translate} of 
+$\Span\biggl\{\vec{3 1}\biggr\}$: it is the
+parallel line through $p = \vec{-3 0}$.  
+
+\pause\medskip
+\begin{center}
+\begin{tikzpicture}[scale=.5, baseline={(0,0.25)}, thin border nodes]
+  \draw[grid lines] (-6,-2) grid (6,3);
+  \path[clip] (-6,-2) rectangle (6,3);
+  \draw (-6,0) -- (6,0);
+  \draw (0,-2) -- (0,3);
+  \draw[seq2] (-6,-2) -- node[pos=.6,below right=1pt,whitebg] {$Ax=0$} (6,2);
+  \draw[seq4] (-6,-1) -- node[pos=.7,above left=1pt,whitebg] {$Ax=b$} (6,3);
+  \point (a) at (-3,0);
+  \draw[vector, seq1] (a) -- (0,1);
+  \draw[->, vector, seq3] (0,0) -- node[pos=.3,above] {$p$} (a);
+  \point at (0,0);
+\end{tikzpicture}
+\quad
+\begin{minipage}[c]{0.4\linewidth}
+  \pause
+It can be written
+\[\Span\biggl\{{\color{seq1}\vec{3 1}}\biggr\} + \color{seq3}\vec{-3 0}.\]
+\end{minipage}
+\end{center}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Nonhomogeneous Systems}
+\framesubtitle{Example}
+
+\vskip-3mm
+\begin{ques}
+  What is the solution set of $Ax=b$, where
+  \[ A = \mat{1 3 1; 2 -1 -5; 1 0 -2} \sptxt{and} b = \vec{-5 -3 -2}? \]
+\end{ques}
+
+\begin{webonly}
+\spalignsysdelims\{.
+\leavevmode
+\hbox to 4cm{\hfil$\amat{1 3 1 -5; 2 -1 -5 -3; 1 0 -2 -2}$}%
+\hbox to 2cm{\hfil\longsquiggly[row reduce]}
+\quad$\amat{1 0 -2 -2; 0 1 1 -1; 0 0 0 0}$\\[2mm]
+\leavevmode
+\hbox to 6cm{\hfil\longsquiggly[equations]}\quad 
+$\syseq{x_1 \+ \. - 2x_3 = -2; \. \+ x_2 + x_3 = -1}$\\[2mm]
+\leavevmode
+\hbox to 6cm{\hfil\longsquiggly[parametric form]}\quad 
+$\syseq{
+  x_1 = 2x_3 - 2; 
+  x_2 = -x_3 - 1; 
+  x_3 = x_3}$\\[2mm]
+\leavevmode
+\hbox to 6cm{\hfil\longsquiggly[parametric vector form]}\quad 
+\rlap{$x = \vec{x_1 x_2 x_3} = x_3\vec{2 -1 1} + \vec{-2 -1 0}$.}
+\end{webonly}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Nonhomogeneous Systems}
+\framesubtitle{Example, continued}
+
+\vskip-3mm
+\begin{ques}
+  What is the solution set of $Ax=b$, where
+  \[ A = \mat{1 3 1; 2 -1 -5; 1 0 -2} \sptxt{and} b = \vec{-5 -3 -2}? \]
+\end{ques}
+
+\vskip-2pt
+\alert{Answer: } $\Span\left\{\vec{2 -1 1}\right\}
++ \pause \vec{-2 -1 0}$.
+\note{Put the homogeneous case up on the other screen.}
+
+\pause
+\begin{center}
+\begin{tikzpicture}[myxyz, scale=0.5, baseline, thin border nodes]
+  \path[clip, resetxy] (-6,-2) rectangle (6,3);
+
+  \def\v{(2,-1,1)}
+  \def\w{(1,0,-1)}
+
+  \node[coordinate] (X) at \v {};
+  \node[coordinate] (Y) at \w {};
+
+  \begin{scope}[x=(X), y=(Y), transformxy]
+    \draw[seq2] (-5,0) -- (0,0);
+  \end{scope}
+
+  \draw[seq4] (-8,2,-3) -- (-2,-1,0);
+
+  \begin{scope}[transformxy]
+    \fill[white, nearly opaque] (-3, -3) rectangle (3, 3);
+    \draw[grid lines] (-3, -3) grid (3, 3);
+    \draw[->] (-3,0) -- (3,0);
+    \draw[->] (0,-3) -- (0,3);
+  \end{scope}
+
+  \begin{scope}[x=(X), y=(Y), transformxy]
+    \draw[seq2] (0,0) 
+      -- node[pos=.7,below right] {$Ax=0$} (2,0);
+  \end{scope}
+
+  \point (p) at (-2,-1,0);
+
+  \draw[seq4] (p) --
+    node[pos=.4,above left] {$Ax=b$} (4,-4,3);
+
+  \draw[vector, seq1] (p) -- (0,-2,1);
+  \draw[thin, densely dotted] (0,-2,1) -- \projxy(0,-2,1);
+  \draw[thin, densely dotted] \v -- \projxy\v;
+
+  \draw[vector, seq3] (0,0,0) -- 
+    node[midway,above right] {$p$} (p);
+  \point at (0,0,0);
+
+\end{tikzpicture}
+\quad
+\begin{minipage}[c]{.4\textwidth}
+  \abovedisplayskip=5pt\belowdisplayskip=5pt
+  The solution set is a \emph{translate} of 
+  \[ \Span\left\{\textcolor{seq1}{\vec{2 -1 1}}\right\}: \]
+  it is the parallel line through
+  \[ \color{seq3}p = \vec{-2 -1 0}. \]
+\end{minipage}
+\end{center}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Homogeneous vs.\ Nonhomogeneous Systems}
+
+\vskip-7mm\null
+\begin{bluebox}[Key Observation]{.8\textwidth}
+  The set of solutions to $Ax=b$, if it is nonempty, is obtained by taking one
+  \textbf{specific} or \textbf{particular solution} $p$ to $Ax=b$, and adding
+  all solutions to $Ax=0$.
+\end{bluebox}
+
+  \pause
+  \alert{Why?}  If $Ap = b$ and $Ax = 0$, then
+  \[ A(p+x) = Ap + Ax = b + 0 = b, \]
+  \pause
+  so $p+x$ is also a solution to $Ax=b$.
+
+  \pause\medskip
+  We know the solution set of $Ax=0$ is a span.
+  \pause
+  So the solution set of $Ax=b$ is a \emph{translate} of a span: it is
+  \emph{parallel} to a span.  \pause(Or it is empty.)
+
+  \pause
+\begin{center}
+\begin{tikzpicture}[scale=.5, baseline={(0,0.25)}, thin border nodes]
+  \path[clip] (-6,-2) rectangle (6,3);
+  \draw[grid lines] (-6,-2) grid (6,3);
+  \draw (-6,0) -- (6,0);
+  \draw (0,-2) -- (0,3);
+  \draw[seq2] (-6,-2) -- node[pos=.6,below right=1pt,whitebg] {$Ax=0$} (6,2);
+  \draw[seq4] (-6,-1) -- node[pos=.6,above left=1pt,whitebg] {$Ax=b$} (6,3);
+  \foreach \x in {-5,...,5}
+    \draw[->, vector, thin, seq3] (0,0) -- ($(\x,0) + 1/3*(0,\x) + (0,1)$);
+  \point at (0,0);
+\end{tikzpicture}
+\quad
+\begin{minipage}[c]{0.4\linewidth}
+  This works for \emph{any} specific solution $\color{seq3}p$: it doesn't
+  have to be the one produced by finding the parametric vector form and setting
+  the free variables all to zero, as we did before.
+\end{minipage}
+\end{center}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Homogeneous vs.\ Nonhomogeneous Systems}
+\framesubtitle{Varying $b$}
+
+If we understand the solution set of $Ax=0$, then we understand the solution set
+of $Ax=b$ for all $b$: they are all translates (or empty).
+
+\pause\medskip
+For instance, if $A = \mat{1 -3; 2 -6}$, then the solution sets for
+varying $b$ look like this:
+\medskip
+\begin{center}
+\begin{tikzpicture}[scale=.5, baseline, thin border nodes]
+  \path[clip] (-6,-4) rectangle (6,4);
+  \draw (-6,0) -- (6,0);
+  \draw (0,-4) -- (0,4);
+  \foreach \z in {-8,-7.5,...,4}
+    \draw[seq2] (-6,\z) -- ($(6,4)+(0,\z)$);
+  \draw[seq2,thick] (-6,-2) -- (6,2);
+  \draw[seq1, thick] (-6,-1) --
+    node[pos=.55,coordinate,name=N] {} (6,3);
+  \node<4->[above left=1pt,whitebg,text=seq1] at (N) {$Ax=Ap$};
+  \draw[->, vector, seq3] (0,0) -- 
+    node[midway,below right=1pt,whitebg] {$p$} (3,2);
+  \point at (0,0);
+\end{tikzpicture}
+\quad
+\pause
+\begin{minipage}[c]{0.4\linewidth}
+  \raggedright
+  Which $b$ gives the solution set $\color{seq1}Ax=b$ in
+  \textcolor{seq1}{red} in the picture?
+
+  \pause\medskip
+  Choose $p$ on the red line, and set $b=Ap$.
+  Then $p$ is a specific solution to $Ax=b$, so the solution set of
+  $\color{seq1}Ax=b$ is the red line.
+
+  \pause\medskip
+  Note the cool optical illusion!
+\end{minipage}
+\end{center}
+
+\pause\smallskip
+For a matrix equation $Ax=b$, you now know how to find which $b$'s are possible, and
+what the solution set looks like for all $b$, both using spans.
+
+\end{frame}
+
+
+%%% Local Variables:
+%%% TeX-master: "../slides"
+%%% End:

@@ -1,0 +1,11 @@
+**/.DS_Store
+**/*.aux
+**/*.log
+**/*.out
+**/*.synctex.gz
+**/*.nav
+**/*.snm
+**/*.toc
+**/*.vrb
+/*.pdf
+**/auto

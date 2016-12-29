@@ -1,0 +1,868 @@
+
+% JDR: This should take a bit more than one lecture as written.  It can bleed
+%   into 2.9, which is shorter.
+
+\titleframe{Section 2.8}{Subspaces of $\R^n$}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Motivation}
+
+Today we will discuss \textbf{subspaces} of $\R^n$.
+
+\pause\medskip
+A subspace turns out to be the same as a span, except we don't know \emph{which}
+vectors it's the span of.
+
+\pause\medskip
+This arises naturally when you have, say, a plane through the origin in $\R^3$
+which is \emph{not} defined (a priori) as a span, but you still want to say
+something about it.
+
+\begin{center}
+\begin{tikzpicture}[myxyz, scale=.6]
+  \def\v{(2,-1,1)}
+  \def\w{(1,0,-1)}
+
+  \node[coordinate] (X) at \v {};
+  \node[coordinate] (Y) at \w {};
+
+  \begin{scope}[x=(X), y=(Y), transformxy]
+    \fill[seq4!30, nearly opaque] (-1.5,-2) rectangle (1.5,2);
+    \draw[step=.5cm, seq4!50, very thin] (-1.5,-2) grid (1.5,2);
+  \end{scope}
+
+  \node[seq4] at (-2.5cm, 2.9cm) {$x+3y+z=0$};
+
+  \point at (0,0,0);
+\end{tikzpicture}
+\end{center}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Definition of Subspace}
+
+\vskip-3mm
+\begin{defn}
+  A \textbf{subspace} of $\R^n$ is a subset $V$ of $\R^n$ satisfying:
+  \begin{enumerate}
+  \item The zero vector is in $V$.
+    \hfill \pause\textcolor{blue}{``not empty''}
+    \pause
+  \item If $u$ and $v$ are in $V$, then $u+v$ is also in $V$.
+    \hfill \pause\textcolor{blue}{``closed under addition''}
+    \pause
+  \item If $u$ is in $V$ and $c$ is in $\R$, then $cu$ is in $V$.
+    \hfill \pause\textcolor{blue}{``closed under $\times$ scalars''}
+  \end{enumerate}
+\end{defn}
+\note{(3) doesn't imply (1): could be empty}
+
+\pause\medskip
+\alert{What does this mean?}
+\begin{itemize}
+\item If $v$ is in $V$, then all scalar multiples of $v$ are in $V$ by~(3).
+  \pause
+  That is, the line through $v$ is in $V$.
+
+  \pause
+\item If $u,v$ are in $V$, then $xu$ and $yv$ are in $V$ for scalars $x,y$ by~(3).
+  \pause
+  So $xu+yv$ is in $V$ by~(2).
+  \pause
+  So $\Span\{u,v\}$ is contained in $V$.
+
+  \pause
+\item Likewise, if $v_1,v_2,\ldots,v_n$ are all in $V$, then 
+  $\Span\{v_1,v_2,\ldots,v_n\}$ is contained in $V$.
+
+\end{itemize}
+
+\pause\medskip
+\begin{bluebox}{.75\linewidth}
+  A subspace $V$ contains the span of any set of vectors in $V$.
+\end{bluebox}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Examples}
+
+\vskip-3mm
+\begin{eg}
+  \begin{minipage}[t]{.5\linewidth}
+    A line $L$ through the origin: this contains the span of any vector in $L$.
+  \end{minipage}\hfill
+  \begin{tikzpicture}[scale=.5, baseline]
+    \useasboundingbox (-3,-1) -- (3,0);
+    \draw[seq4] (-3,-1) -- (3,1);
+    \draw[vector] (0,0) -- (1,1/3);
+    \point at (0,0);
+    \node[seq4] at (0,.5) {$L$};
+  \end{tikzpicture}
+\end{eg}
+
+\pause
+\begin{eg}
+  \begin{minipage}[t]{.5\linewidth}
+    A plane $P$ through the origin: this contains the span of any vectors in $P$.
+  \end{minipage}\hfill
+  \begin{tikzpicture}[myxyz, scale=.5, baseline=.5cm]
+    \useasboundingbox[resetxy] (-3,-3) rectangle (3,0);
+  
+    \def\v{(2,-1,1)}
+    \def\w{(1,0,-1)}
+  
+    \node[coordinate] (X) at \v {};
+    \node[coordinate] (Y) at \w {};
+  
+    \begin{scope}[x=(X), y=(Y), transformxy]
+      \fill[seq4!30, nearly opaque] (-1,-1) rectangle (1,1);
+      \draw[step=.5cm, seq4!50, very thin] (-1,-1) grid (1,1);
+    \end{scope}
+
+    \draw[vector] (0,0,0) -- ($.5*(X)$);
+    \draw[vector] (0,0,0) -- ($.5*(Y)$);
+  
+    \point at (0,0,0);
+    \node[x=(X),y=(Y),seq4] at (.2,-1.4) {$P$};
+  \end{tikzpicture}
+\end{eg}
+
+\pause
+\begin{eg}
+  All of $\R^n$: this contains $0$, and is closed under addition and scalar
+  multiplication.
+\end{eg}
+
+\pause
+\begin{eg}
+  The subset $\{0\}$: this subspace contains only one vector.
+\end{eg}
+
+\pause\medskip
+Note these are all pictures of spans!  (Line, plane, space, etc.)
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Non-Examples}
+
+\vskip-3mm
+\begin{noneg}
+  \begin{minipage}[t]{.5\linewidth}
+    A line $L$ (or any other set) that doesn't contain the origin is not a
+    subspace.  Fails: \uncover<2->{\alert 1.}
+  \end{minipage}\hfill
+  \begin{tikzpicture}[scale=.5, baseline]
+    \useasboundingbox (-3,-1) -- (3,0);
+    \draw[seq4] (-3,-1) -- (3,1);
+    \point<1> at (0,-.5);
+    \point<2->[red] at (0,-.5);
+  \end{tikzpicture}\hskip 0pt plus .5fill\null
+\end{noneg}
+
+\pause[3]%
+\begin{noneg}
+  \begin{minipage}[t]{.5\linewidth}
+    A circle $C$ is not a subspace.  Fails: \uncover<4->{\alert{1,2,3}.}
+    \uncover<5->{Think: a circle isn't a ``linear space.''}
+  \end{minipage}\hfill
+  \begin{tikzpicture}[scale=.5, baseline]
+    \useasboundingbox (-2,-2) -- (2,0);
+    \draw[seq4] (0,0) circle [radius=2cm];
+    \draw<4->[vector,red] (0,0) -- (2.5,0);
+    \draw<4->[vector] (0,0) -- (0,2);
+    \draw<4->[vector] (0,0) -- (2,0);
+    \draw<4->[vector,red] (0,0) -- (2,2);
+    \point<3> at (0,0);
+    \point<4->[red] at (0,0);
+  \end{tikzpicture}\hskip 0pt plus .5fill\null
+\end{noneg}
+
+\pause[6]%
+\begin{noneg}
+  \begin{minipage}[t]{.5\linewidth}
+    The first quadrant in $\R^2$ is not a subspace.
+    Fails: \uncover<7->{\alert{3} only.}
+  \end{minipage}\hfill
+  \begin{tikzpicture}[scale=.5, baseline]
+    \useasboundingbox (-2,-2) -- (2,1);
+    \fill[seq4!20] (0,0) rectangle (2,2);
+    \draw[->] (-2,0) -- (2,0);
+    \draw[->] (0,-2) -- (0,2);
+    \draw<7->[vector] (0,0) -- (1,1);
+    \draw<7->[vector,red] (0,0) -- (-1,-1);
+    \point at (0,0);
+  \end{tikzpicture}\hskip 0pt plus .5fill\null
+\end{noneg}
+
+\pause[8]%
+\begin{noneg}
+  \begin{minipage}[t]{.5\linewidth}
+    A line union a plane in $\R^3$ is not a subspace.
+    Fails: \uncover<9->{\alert{2} only.}
+  \end{minipage}\hfill
+  \begin{tikzpicture}[scale=.5, baseline, myxyz]
+    \useasboundingbox (-4,-2) -- (4,1);
+    \path[clip, resetxy] (-4,-2) rectangle (4,2);
+  
+    \draw[seq4] (-1,-2,-4) -- (0,0,0);
+
+    \begin{scope}[transformxy]
+      \fill[seq4!20, semitransparent] (-1.5,-1.5) rectangle (1.5,1.5);
+      \draw[step=.5cm, grid lines] (-1.5,-1.5) grid (1.5,1.5);
+    \end{scope}
+  
+    \draw[seq4] (1,2,4) -- (0,0,0);
+
+    \draw<9->[vector] (0,0,0) -- (.3,.6,1.2);
+    \draw<9->[vector] (0,0,0) -- (1,0,0);
+    \draw<9->[vector,red] (0,0,0) -- (1.3,.6,1.2);
+
+    \point at (0,0,0);
+
+  \end{tikzpicture}\hskip 0pt plus .5fill\null
+\end{noneg}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Subsets and Subspaces}
+\framesubtitle{They aren't the same thing}
+
+A \textbf{subset} of $\R^n$ is any collection of vectors whatsoever.
+
+\pause\bigskip
+All of the non-examples are still subsets.
+
+\pause\bigskip
+A \textbf{subspace} is a special kind of subset, which satisfies the three
+defining properties.
+
+\pause\vskip 1cm\hfill
+\begin{tikzpicture}[scale=.5, baseline]
+  \draw[grid lines] (-2.5,-2.5) grid (2.5,2.5);
+  \draw (0,0) circle [radius=2cm];
+\end{tikzpicture}
+\quad
+\begin{minipage}{.5\linewidth}\leavevmode
+\hbox to 1.5cm{Subset:\hss} \emph{yes}\\
+\hbox to 1.5cm{Subspace:\hss} \emph{no}
+\end{minipage}\hfill\null
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Spans are Subspaces}
+
+\vskip-3mm
+\begin{thm}
+  Any $\Span\{v_1,v_2,\ldots,v_n\}$ is a subspace.
+\end{thm}
+
+\pause\medskip
+\begin{bluebox}[!!!]{.7\linewidth}
+  Every subspace is a span, and every span is a subspace.
+\end{bluebox}
+
+\pause
+\begin{defn}
+  If $V = \Span\{v_1,v_2,\ldots,v_n\}$, we say that $V$ is the
+  subspace \textbf{generated by} or \textbf{spanned by}
+  the vectors $v_1,v_2,\ldots,v_n$.
+\end{defn}
+
+\medskip
+\begin{webonly}
+\alert{Check:}
+\begin{enumerate}
+\item $0 = 0v_1 + 0v_2 + \cdots + 0v_n$ is in the span.
+\item If, say, $u = 3v_1 + 4v_2$ and $v = -v_1 - 2v_2$, then
+  \[ u + v = 3v_1 + 4v_2 -v_1 - 2v_2 = 2v_1 + 2v_2 \]
+  is also in the span.
+\item Similarly, if $u$ is in the span, then so is $cu$ for any scalar $c$.
+\end{enumerate}
+\end{webonly}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{pollframe}
+
+\vfill
+
+\begin{bluebox}[Poll]{.9\linewidth}
+  Is the empty set $\{\}$ a subspace?  If not, which property(ies) does it fail?
+\end{bluebox}
+
+\pause\medskip
+The zero vector is not contained in the empty set, so it is \emph{not} a
+subspace.
+
+\pause\bigskip
+\alert{Question:} What is the difference between $\{\}$ and $\{0\}$?
+
+\vfill
+
+\end{pollframe}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Subspaces}
+\framesubtitle{Verification}
+
+Let $V = \left\{ \vec{a b} \text{ in } \R^2\bigm| ab=0 \right\}$.  Let's check
+if $V$ is a subspace or not.
+
+\begin{webonly}
+\begin{enumerate}
+\item Does $V$ contain the zero vector?
+  ${a\choose b} = {0\choose 0} \implies ab = 0$ \bigcheck[\quad]
+\item[3.] Is $V$ closed under scalar multiplication?
+  \begin{itemize}
+  \item Let $a\choose b$ be in $V$.  
+  \item \emph{This means:} $a$ and $b$ are numbers such that $ab=0$.
+  \item Let $c$ be a scalar.  Is $c{a\choose b} = {ca\choose cb}$ in $V$?
+  \item \emph{This means:} $(ca)(cb) = 0$.  
+  \item Well, $(ca)(cb) = c^2(ab) = c^2(0) = 0 \bigcheck[\quad]\namedbox{mark}{}$
+  \end{itemize}
+\item[2.] Is $V$ closed under addition?
+  \begin{itemize}
+  \item Let $a\choose b$ and $a'\choose b'$ be in $V$.  
+  \item \emph{This means:} $ab = 0$ and $a'b' = 0$.
+  \item Is ${a\choose b} + {a'\choose b'} = {a+a'\choose b+b'}$ in $V$?
+  \item \emph{This means:} $(a+a')(b+b')=0$.
+  \item This is not true for all such $a,a',b,b'$: for instance,
+    $1\choose 0$ and $0\choose 1$ are in $V$, but their sum 
+    ${1\choose 0} + {0\choose 1} = {1\choose 1}$ is not in $V$, because
+    $1\cdot 1\neq 0$. \bigcross
+  \end{itemize}
+\end{enumerate}
+\end{webonly}
+
+\pause
+We conclude that $V$ is \emph{not} a subspace.
+\pause
+A picture is above.  (It doesn't look like a span.)
+\begin{tikzpicture}[remember picture, overlay]
+  \begin{scope}[shift=(mark), xshift=3.5cm]
+    \draw[grid lines, step=.25] (-1,-1) grid (1,1);
+    \draw[seq4, <->] (-1,0) -- (1,0);
+    \draw[seq4, <->] (0,-1) -- (0,1);
+    \node[seq4] at (.25,.25) {$V$};
+  \end{scope}
+\end{tikzpicture}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Column Space and Null Space}
+
+An $m\times n$ matrix $A$ naturally gives rise to \emph{two}
+subspaces.
+
+\pause
+\begin{defn}
+  \begin{itemize}
+  \item The \textbf{column space} of $A$ is the subspace of
+    $\R^{\blankuntil{3}{m}}$ spanned by the columns of $A$.  It is written 
+    $\Col A$.
+    \pause[4]
+  \item The \textbf{null space} of $A$ is the set of all solutions of the
+    homogeneous equation $Ax=0$:
+    \[ \Nul A = \bigl\{ x \text{ in } \R^{\blankuntil{5}{n}}\mid Ax=0 \bigr\}. \]
+    This is a subspace of $\R^{\blankuntil{5}{n}}$.
+  \end{itemize}
+\end{defn}
+
+\vskip -.1cm
+\pause[6]
+The column space is defined as a span, so we know it is a subspace.
+\pause
+It is the range (as opposed to the codomain) of the transformation $T(x) = Ax$.
+
+\pause\medskip
+\alert{Check} that the null space is a subspace:
+\begin{webonly}
+\begin{enumerate}
+\item $0$ is in $\Nul A$ because $A0 = 0$.
+\item If $u$ and $v$ are in $\Nul A$, then $Au = 0$ and $Av = 0$.  Hence
+  \abovedisplayskip=1pt\belowdisplayskip=1pt
+  \[ A(u+v) = Au + Av = 0, \]
+  so $u+v$ is in $\Nul A$.
+\item If $u$ is in $\Nul A$, then $Au = 0$.  For any scalar $c$,
+  $A(cu) = cAu = 0$.  So $cu$ is in $\Nul A$.
+\end{enumerate}
+\end{webonly}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Column Space and Null Space}
+\framesubtitle{Example}
+
+Let $A = \mat{1 1; 1 1; 1 1}$.
+
+\medskip
+\begin{minipage}{.7\linewidth}
+Let's compute the column space:
+\begin{webonly}
+\[ \Col A = \Span\left\{\vec{1 1 1},\,\vec{1 1 1}\right\}
+= \Span\left\{\vec{1 1 1}\right\}. \]
+This is a line in $\R^3$.
+\end{webonly}
+\end{minipage}\hfill\pause
+\begin{tikzpicture}[scale=.5, baseline, myxyz]
+  \useasboundingbox (-4,-2) -- (4,1);
+  \path[clip, resetxy] (-4,-2) rectangle (4,2);
+
+  \draw[seq4] (-4,-4,-4) -- (0,0,0);
+   \begin{scope}[transformxy]
+    \fill[white, semitransparent] (-1.5,-1.5) rectangle (1.5,1.5);
+    \draw[step=1cm, grid lines] (-1.5,-1.5) grid (1.5,1.5);
+  \end{scope}
+
+  \draw[seq4] (4,4,4) -- (0,0,0);
+  \draw[vector] (0,0,0) -- (1,1,1);
+  \draw[densely dotted] (1,1,0) -- (1,1,1);
+  \node[resetxy,seq4] at (1.5,1.5) {$\Col A$};
+  \point at (0,0,0);
+\end{tikzpicture}
+
+\bigskip
+
+\begin{minipage}{.7\linewidth}
+\pause
+Let's compute the null space:
+\begin{webonly}
+\displayskips{1pt}
+\[ A\vec{x y} = \vec{x+y x+y x+y}. \]
+This zero if and only if $x=-y$.  So
+\[ \Nul A = \left\{ \vec{x y}\text{ in }\R^2\mid y=-x \right\}. \]
+This defines a line in $\R^2$:
+\end{webonly}
+\end{minipage}
+\hfill\pause
+\begin{tikzpicture}[scale=.5, baseline]
+  \useasboundingbox (-3,-3) -- (3,1);
+  \draw[grid lines] (-3,-3) grid (3,3);
+  \draw[seq4] (3,-3) -- (-3,3);
+  \point at (0,0);
+  \node[seq4,fill=white, inner sep=1pt] at (-.7,2) {$\Nul A$};
+\end{tikzpicture}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{The Null Space is a Span}
+
+The column space of a matrix $A$ is defined to be a span (of the columns).
+
+\pause\medskip
+The null space is defined to be the solution set to $Ax=0$.
+\pause
+It is a subspace, so it is a span.
+
+\pause
+\begin{ques}
+  How to find vectors which span the null space?
+\end{ques}
+
+\pause
+\alert{Answer:} Parametric vector form!
+\pause
+We know that the solution set to $Ax=0$ has a parametric form that looks like
+\[ x_3\vec{1 2 1 0} + x_4\vec{-2 3 0 1}\quad
+\parbox{2.5cm}{\centering if, say, $x_3$ and $x_4$ are the free variables. \pause So}
+\quad
+\Nul A = \Span\left\{ \vec{1 2 1 0},\, \vec{-2 3 0 1} \right\}.
+\]
+
+\pause\medskip
+Refer back to the slides for \S1.5 (Solution Sets).
+
+\pause\medskip
+\alert{Note:} It is much easier to define the null space first as a
+subspace, then find spanning vectors \emph{later}, if we need them.  This is one
+reason subspaces are so useful.
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{The Null Space is a Span}
+\framesubtitle{Example, revisited}
+
+Find vector(s) that span the null space of $A = \mat{1 1; 1 1; 1 1}$.
+
+\begin{webonly}
+\medskip
+The reduced row echelon form is
+$\mat{1 1; 0 0; 0 0}$.
+
+\medskip
+This gives the equation $x + y = 0$, or
+\[ \syseq{x = -y; y = y}
+\quad\longsquiggly[parametric vector form]\quad
+\vec{x y} = y\vec{-1 1}. \]
+\end{webonly}
+
+\begin{minipage}[t]{.6\linewidth}
+  \webonlycmd{
+  The null space is
+  \[ \Nul A = \Span\left\{ \vec{-1 1} \right\}. \]}
+\end{minipage}\pause
+\begin{tikzpicture}[scale=.5, baseline=1cm]
+  \draw[grid lines] (-3,-3) grid (3,3);
+  \draw[seq4] (3,-3) -- (-3,3);
+  \draw[vector] (0,0) -- (-1,1);
+  \point at (0,0);
+  \node[seq4,fill=white, inner sep=1pt] at (-.7,2) {$\Nul A$};
+  \end{tikzpicture}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Subspaces}
+\framesubtitle{Summary}
+
+\vskip 5mm
+
+\begin{bluebox}[How do you check if a subset is a subspace?]{.9\linewidth}
+  \smallskip
+  \begin{itemize}
+  \item<+-> Is it a span?  Can it be written as a span?
+  \item<+-> Can it be written as the column space of a matrix?
+  \item<+-> Can it be written as the null space of a matrix?
+  \item<+-> Is it all of $\R^n$ or the zero subspace $\{0\}$?
+  \item<+-> Can it be written as a type of subspace that we'll learn about later
+    (eigenspaces, \ldots)?
+  \end{itemize}
+
+  \smallskip\uncover<+->{%
+  If so, then it's automatically a subspace.}
+
+  \smallskip\uncover<+->{%
+  If all else fails:}
+  \begin{itemize}
+  \item<+-> Can you verify directly that it satisfies the three defining
+    properties?
+  \end{itemize}
+\end{bluebox}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Basis of a Subspace}
+
+What is the \emph{smallest number} of vectors that are needed to span a subspace?
+
+\pause\bigskip
+\namedbox{basis}{%
+\begin{minipage}{\textwidth}\vskip -.14cm
+\begin{defn}
+  Let $V$ be a subspace of $\R^n$.  A \textbf{basis} of $V$ is a set of vectors
+  $\{v_1,v_2,\ldots,v_m\}$ in $V$ such that:
+  \begin{enumerate}
+    \pause
+  \item $V = \Span\{v_1,v_2,\ldots,v_m\}$, and
+    \pause
+  \item $\{v_1,v_2,\ldots,v_m\}$ is linearly independent.
+  \end{enumerate}
+  \pause
+  The number of vectors in a basis is the \textbf{dimension} of $V$, and is
+  written $\dim V$.
+\end{defn}
+\end{minipage}
+}
+\begin{tikzpicture}[remember picture, overlay]
+  \node<6->[redbox, fit=(basis)] (basisbox) {};
+  \node<6->[red, rotate=-90, anchor=south, font=\small, text width=2cm, align=center]
+    at (basisbox.east) {Note the big red border here};
+\end{tikzpicture}
+
+\begin{uncoverenv}<7->
+\pause[7]\bigskip
+\alert{Why} is a basis the smallest number of vectors needed to span?
+
+\pause\medskip
+Recall: \emph{linearly independent} means that every time you add another
+vector, the span gets bigger.
+
+\pause\medskip
+Hence, if we remove any vector, the span gets \emph{smaller\/}: so any smaller set
+can't span $V$.
+
+\pause
+\begin{bluebox}[Important]{.8\textwidth}
+  A subspace has \emph{many different} bases, but they all have the same
+  number of vectors (see the exercises in \S2.9).
+\end{bluebox}
+
+\end{uncoverenv}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Bases of $\R^2$}
+
+\vskip-.2cm
+\begin{ques}
+  What is a basis for $\R^2$?
+\end{ques}
+
+\begin{minipage}[t]{.6\linewidth}
+  \uncover<2->{We need two vectors that \emph{span $\R^2$} and are
+  \emph{linearly independent}.}
+  \uncover<3->{$\{e_1,e_2\}$ is one basis.}
+  \begin{enumerate}
+  \item<4-> They span: ${a\choose b} =\uncover<5->{ae_1 + be_2.}$
+  \item<6-> They are linearly independent because they are not collinear.
+  \end{enumerate}
+\end{minipage}
+\hfill
+\begin{uncoverenv}<3->
+\begin{tikzpicture}[picture align top, scale=.75]
+  \useasboundingbox (-2,-2) rectangle (2,1);
+  \draw[grid lines] (-2,-2) grid (2,2);
+  \draw[thick vector] (0,0) -- (1,0) node[anchor=west,whitebg] {$e_1$};
+  \draw[thick vector] (0,0) -- (0,1) node[anchor=south,whitebg] {$e_2$};
+  \point at (0,0);
+\end{tikzpicture}
+\end{uncoverenv}
+
+\pause[7]\smallskip
+\begin{ques}
+  What is another basis for $\R^2$?
+\end{ques}
+
+\begin{minipage}[t]{.6\linewidth}
+  \uncover<8->{Any two nonzero vectors that are not collinear.}
+  \uncover<9->{$\bigl\{{1\choose 0},{1\choose 1}\bigr\}$ is also a basis.}
+  \begin{enumerate}
+  \item<10-> They span: $\begin{psmm}1&1\\0&1\end{psmm}$ has a pivot in every row.
+  \item<11-> They are linearly independent: $\begin{psmm}1&1\\0&1\end{psmm}$ has
+    a pivot in every column.
+  \end{enumerate}
+\end{minipage}
+\hfill
+\begin{uncoverenv}<9->
+\begin{tikzpicture}[picture align top, scale=.75]
+  \useasboundingbox (-2,-2) rectangle (2,1);
+  \draw[grid lines] (-2,-2) grid (2,2);
+  \draw[thick vector] (0,0) -- (1,0) node[anchor=west,whitebg] {$1\choose 0$};
+  \draw[thick vector] (0,0) -- (1,1) node[anchor=south,whitebg] {$1\choose 1$};
+  \point at (0,0);
+\end{tikzpicture}
+\end{uncoverenv}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Bases of $\R^n$}
+
+The unit coordinate vectors
+\[ e_1 = \vec{1 0 \vdots, 0 0},\quad e_2 = \vec{0 1 \vdots, 0 0},\quad\ldots,\quad
+   e_{n-1} = \vec{0 0 \vdots, 1 0},\quad e_n = \vec{0 0 \vdots, 0 1} \]
+are a basis for $\R^n$.
+\pause
+\begin{enumerate}
+\item They span: \namedbox{identity}{$I_n$} has a pivot in every row.
+\pause
+\begin{tikzpicture}[blue!50, remember picture, overlay]
+  \path (identity.north) ++(1cm,.25cm)
+    node[font=\small, anchor=west] (expl)
+      {The identity matrix has columns $e_1,e_2,\ldots,e_n$.};
+  \draw[->, shorten >=1pt] (expl.west) to[out=180,in=90] (identity.north);
+\end{tikzpicture}
+\pause
+\item They are linearly independent: $I_n$ has a pivot in every column.
+\end{enumerate}
+
+\pause\medskip
+\alert{In general:} $\{v_1,v_2,\ldots,v_n\}$ is a basis for $\R^n$ if and only
+if the matrix 
+\[ A = \mat{| | ,, |; v_1 v_2 \cdots, v_n; | | ,, |} \]
+has a pivot in every row and every column,
+i.e.\ if $A$ is \blankuntil{6}{\emph{invertible}}.
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Basis of a Subspace}
+\framesubtitle{Example}
+
+\vskip-3mm
+\begin{eg}
+  Let
+  \[ V = \left\{ \vec{x y z} \text{ in } \R^3\bigm| x + 3y + z = 0 \right\} \qquad 
+  \cB = \left\{ \vec{-3 1 0},\;\vec{0 1 -3} \right\}. \]
+  Verify that $\cB$ is a basis for $V$.
+
+  \begin{webonly}
+    \displayskips{3pt}
+  \begin{enumerate}\setcounter{enumi}{-1}
+  \item \alert{In $V$:} both vectors are in $V$ because
+    \[ -3 + 3(1) + 0 = 0 \sptxt{and} 0 + 3(1) + (-3) = 0. \]
+    
+  \item \alert{Span:}
+    If $\vec{x y z}$ is in $V$, then $y = -\frac 13(x+z)$, so
+    \vskip-3mm
+    \[ \vec{x y z} = -\frac x3\vec{-3 1 0} - \frac z3\vec{0 1 -3}. \]
+    
+  \item \alert{Linearly independent:}
+    \[ c_1\vec{-3 1 0} + c_2\vec{0 1 -3} = 0
+    \implies \vec{-3c_1 c_1+c_2 -3c_2} = \vec{0 0 0}
+    \implies c_1 = c_2 = 0. \]
+  \end{enumerate}
+  \end{webonly}
+\end{eg}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Basis for $\Nul A$}
+
+\begin{bluebox}[Fact]{.8\linewidth}
+  The vectors in the parametric vector form of the general
+  solution to $Ax=0$ always form a basis for $\Nul A$.
+\end{bluebox}
+
+\pause
+\begin{eg}
+  \vskip-6mm
+  \begin{webonly}
+  \[\begin{split}
+    A &= \mat[r]{1 2 0 -1; -2 -3 4 5; 2 4 0 -2}
+      \quad\longsquiggly[rref]\quad
+      \mat[r]{1 0 -8 -7; 0 1 4 3; 0 0 0 0} \\
+    &\quad
+      \longsquiggly[\parbox{\widthof{parametric}}
+        {\centering parametric\\vector\\[-2pt]form}]
+    \quad \namedbox{x}{x} {}= x_3\vec{8 -4 1 0} + x_4\vec{7 -3 0 1} 
+      \;\longsquiggly[\parbox{\widthof{basis of}}{
+        \centering basis of\\$\Nul A$\strut}]\;
+      \left\{ \vec{8 -4 1 0},\,\vec{7 -3 0 1} \right\}
+  \end{split}\]
+  \begin{enumerate}
+  \item The vectors span $\Nul A$ by construction (every solution to $Ax=0$
+    has \namedbox{this}{this} form).
+    \tikz[remember picture, overlay, blue!50]
+      \draw[->, shorten >=1pt]
+        (this.north) .. controls ++(0,1) and ++(0,-2) .. (x.south);
+  \item Can you see why they are linearly independent?
+    (Look at the last two rows.)
+  \end{enumerate}
+  \end{webonly}
+\end{eg}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Basis for $\Col A$}
+
+\begin{bluebox}[Fact]{.8\textwidth}
+  The \emph{pivot columns} of $A$ always form a basis for $\Col A$.
+\end{bluebox}
+
+\pause\medskip
+\alert{Warning:} I mean the pivot columns of the \emph{original} matrix $A$, not
+the row-reduced form.
+\pause
+(Row reduction changes the column space.)
+
+\pause
+\begin{eg}\vskip-5mm
+  \begin{webonly}
+  \[ A = \mat[r]{\namedbox{col1top}{1} \namedbox{col2top}{2} 0 -1; -2 -3 4 5;
+    \namedbox{col1bot}{2} \namedbox{col2bot}{4} 0 -2}
+  \quad\longsquiggly[rref]\quad
+  \mat[r]{1 0 -8 -7; 0 1 4 3; \namedbox{rcol1}{0} \namedbox{rcol2}{0} 0 0} \]
+  \begin{tikzpicture}[remember picture, overlay]
+    \path ($(rcol1)!.5!(rcol2)$) ++(0,-1cm)
+      node[blue!50, font=\small] (rref) {pivot columns in rref};
+    \draw[->,blue!50, shorten >=1pt] (rref.north) to[out=90,in=-90] (rcol1.south);
+    \draw[->,blue!50, shorten >=1pt] (rref.north) to[out=90,in=-90] (rcol2.south);
+  \end{tikzpicture}
+  \begin{tikzpicture}[remember picture, overlay]
+    \path let \p1=($(col1bot)!.5!(col2bot)$) in (\p1 |- rref.base)
+      node[blue!50, font=\small,anchor=base] (orig) {pivot columns $=$ basis};
+    \node[fit=(col1top) (col1bot), draw=orange, rounded corners] (col1) {};
+    \node[fit=(col2top) (col2bot), draw=orange, rounded corners] (col2) {};
+    \draw[->,blue!50, shorten >=1pt] (orig.north) to[out=90,in=-90] (col1.south);
+    \draw[->,blue!50, shorten >=1pt] (orig.north) to[out=90,in=-90] (col2.south);
+    \draw[->,
+        decoration={snake, amplitude=.4mm, segment length=1mm, post length=.5mm},
+        decorate]
+      (rref.west) -- (orig.east);
+  \end{tikzpicture}
+
+  \vskip 1cm
+  So a basis for $\Col A$ is 
+  \[ \left\{ \vec[r]{1 -2 2},\,\vec[r]{2 -3 4} \right\}. \]
+  \end{webonly}
+\end{eg}
+
+\pause
+\alert{Why?}  End of \S2.8, or ask in office hours.
+
+\end{frame}
+
+
+%%% Local Variables:
+%%% TeX-master: "../slides"
+%%% End:

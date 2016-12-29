@@ -1,0 +1,699 @@
+
+\titleframe{Section 1.4}{The Matrix Equation $Ax=b$}
+
+\usetikzlibrary{decorations.pathreplacing}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Matrix $\times$ Vector}
+
+\vskip3mm
+Let $A$ be an $\namedbox{rows}{m}\times \namedbox{cols}{n}$ matrix 
+\pause
+\begin{tikzpicture}[remember picture, overlay]
+  \path (rows.north) ++(-1mm,5mm)
+    node[left, blue!50, align=center, text width=2.5cm, inner xsep=1pt] (expl1) 
+      {the first number is the number of rows};
+  \draw[rounded corners, ->, blue!50, shorten >=1pt]
+    (expl1.east) -| (rows.north);
+  \path (cols.north) ++(11mm,5mm)
+    node[right, blue!50, align=center, text width=3cm, inner xsep=1pt] (expl2) 
+      {the second number is the number of columns};
+  \draw[rounded corners, ->, blue!50, shorten >=1pt]
+    (expl2.west) -| (cols.north);
+\end{tikzpicture}%
+\pause
+\[ A = \mat{ 
+| | {} |;
+v_1 v_2 \cdots, v_n;
+| | {}   |}
+\qquad\text{with columns } v_1,v_2,\ldots,v_n
+\]
+
+\pause
+\begin{defn}
+  \def\r{\color<8->{red}}
+  The \textbf{product} of $A$ with a vector $x$ in $\R^{\r n}$ is the linear combination
+  \[ Ax = 
+  \mat{ 
+  | | {} |;
+  v_1 v_2 \cdots, v_{\namedbox{cols}{\scriptstyle\r n}};
+  | | {}   |} 
+  \vec{x_1 x_2 \vdots, x_{\namedbox{rows}{\scriptstyle\r n}}}\;
+  \namedbox{defeq}{\defeq}\;
+  x_1v_1 + x_2v_2 + \cdots + x_{\r n}v_{\r n}.
+ \]
+ \pause
+ \begin{tikzpicture}[remember picture, overlay]
+   \node[fit=(defeq), draw, thick, blue!50, rounded corners, inner sep=2pt] (x) {};
+   \path (x.north) ++(3mm,4mm)
+     node[right, blue!50, align=center, inner xsep=1pt] (expl3)
+       {this means the equality\\is a \emph{definition}};
+   \draw[->, blue!50, shorten >=1pt] (expl3.west) to[out=180, in=90] (x.north);
+   \path<8-> (rows.south) ++(3mm,-4mm)
+     node[red, anchor=west, thin border] (eq) {these must be equal};
+   \draw<8->[->, shorten >=1pt, red, rounded corners] (eq.west) -| (cols.south);
+   \draw<8->[->, shorten >=1pt, red, rounded corners] (eq.west) -| (rows.south);
+ \end{tikzpicture}%
+ \pause
+ The output is a vector in $\R^{\blankuntil{7}{m}}$.
+\end{defn}
+
+\pause[8]%
+Note that the number of {\color{red}columns} of $A$ has to equal the number of
+{\color{red}rows} of $x$.
+
+\pause
+\begin{eg}
+  \vskip -.5cm
+  \[ \mat{
+4 5 6;
+7 8 9}
+\vec{1 2 3}
+= \webonlycmd{1\vec{4 7} + 2\vec{5 8} + 3\vec{6 9} = \vec{32 50}.}
+ \]
+\end{eg}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Matrix Equations}
+\framesubtitle{An example}
+
+\vskip-3mm
+\begin{ques}
+  Let $v_1,v_2,v_3$ be vectors in $\R^3$.
+  \pause
+  How can you write the vector equation
+  \[ 2v_1 + 3v_2 - 4v_3 = \vec{7 2 1} \]
+  in terms of matrix multiplication?
+\end{ques}
+
+\begin{webonly}
+  \medskip
+  \alert{Answer:}
+  Let $A$ be the matrix with colums $v_1,v_2,v_3$, and let $x$ be the vector
+  with entries $2,3,-4$.  Then
+  \[ Ax = \mat{ | | |; v_1 v_2 v_3; | | |}\vec{2 3 -4}
+  = 2v_1 + 3v_2 - 4v_3, \]
+  so the vector equation is equivalent to the matrix equation
+  \[ Ax = \vec{7 2 1}. \]
+\end{webonly}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Matrix Equations}
+\framesubtitle{In general}
+
+Let $v_1,v_2,\ldots,v_n$, and $b$ be vectors in $\R^m$. 
+\pause
+Consider the vector equation
+\[ x_1v_1 + x_2v_2 + \cdots + x_nv_n = b. \]
+\pause
+It is equivalent to the \textbf{matrix equation}
+\[ Ax = b \]
+where
+\pause
+\[ A = \mat{ | | {} |; v_1 v_2 \cdots, v_n; | | {} |} 
+\qquad\text{and}\qquad
+x = \vec{x_1 x_2 \vdots, x_n}. \]
+\pause
+Conversely, if $A$ is any $m\times n$ matrix, then
+\[ Ax = b 
+\qquad \parbox{.3\textwidth}{\centering is equivalent to the vector equation}
+\qquad
+\pause
+x_1v_1 + x_2v_2 + \cdots + x_nv_n = b \]
+\pause
+where $v_1,\ldots,v_n$ are
+\pause 
+the columns of $A$, and $x_1,\ldots,x_n$ are 
+\pause
+the entries of $x$.
+\note{In math, define notation so equations look simpler.}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Linear Systems, Vector Equations, Matrix Equations, $\ldots$}
+
+We now have \emph{four} equivalent ways of writing (and thinking about) linear
+systems:
+\pause
+\begin{enumerate}
+\item As a system of equations:\namedbox{top}{\strut}
+\[ \syseq{2x_1 + 3x_2 = 7; x_1 - x_2 = 5} \]
+\vskip-5mm\pause
+\item As an augmented matrix:
+  \vskip -3mm
+  \[ \amat{ 2 3 7; 1 -1 5} \]
+\vskip-5mm\pause
+\item As a vector equation ($x_1v_1 + \cdots + x_nv_n = b$):
+  \[ x_1\vec{2 1} + x_2\vec{3 -1} = \vec{7 5} \]
+\vskip-7mm\pause
+\item As a matrix equation ($Ax = b$):
+  \[ \mat{ 2 3; 1 -1}\vec{x_1 x_2} = \namedbox{bottom}{\vec{7 5}} \]
+  \note{(4) is by definition equal to (3).}%
+\end{enumerate}
+\pause
+
+In particular, \emph{all four have the same solution set}.
+\pause
+\begin{tikzpicture}[remember picture, overlay]
+  \draw[decoration={brace, amplitude=2mm}, decorate, thick, red] 
+    let \p1=($(current page.north east) - (3.8cm,0)$) in
+      (\p1 |- top.north) -- 
+        node[right=2mm, midway, align=justify, text width=3.3cm] 
+        {We will move back and forth freely between these over and over again, for the
+          rest of the semester.  Get comfortable with them now!}
+      (\p1 |- bottom.south);
+\end{tikzpicture}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Matrix $\times$ Vector}
+\framesubtitle{Another way}
+
+\vskip-3mm
+\note{Now is as good a time as ever$\ldots$}
+\begin{defn}
+  A \textbf{row vector} is a matrix with one row.
+  \pause
+  The product of a row vector of length $n$ and a (column) vector of length $n$
+  is
+  \[ \mat{ a_1 \cdots, a_n} \vec{x_1 \vdots, x_n}
+  \defeq a_1x_1 + \cdots + a_nx_n. \]
+  This is a \blankuntil{3}{scalar}.
+\end{defn}
+
+\pause[4]\medskip
+If $A$ is an $m\times n$ matrix with rows $r_1,r_2,\ldots,r_{\blankuntil{5}m}$,
+\pause
+and $x$ is a vector in $\R^n$, then
+\[ Ax = 
+\mat[c]{ \matrow{r_1};
+     \matrow{r_2};
+     \vdots ;
+     \matrow{r_m}}
+     x
+= \vec{r_1x r_2x \vdots, r_mx}
+ \]
+This is \pause a vector in $\R^m$ (again).
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Matrix $\times$ Vector}
+\framesubtitle{Both ways}
+
+\vskip-3mm
+\begin{eg}
+\vskip-5mm
+  \[ 
+\mat{
+4 5 6;
+7 8 9}
+\vec{1 2 3} = 
+\begin{webonly}
+\vec{{\scriptscriptstyle(\,4\; 5\; 6\,)
+      \Bigl(\smallveciii 123 \Bigr)}
+    {\scriptscriptstyle(\,7\; 8\; 9\,)
+      \Bigl(\smallveciii 123 \Bigr)}} 
+  = \vec{4\cdot1+5\cdot2+6\cdot3 7\cdot1+8\cdot2+9\cdot3}
+  = \vec{32 50}.
+\end{webonly}
+ \]
+\pause
+ Note this is the same as before:\\[\abovedisplayskip]
+\begin{webonly}
+  \hbox to \linewidth{\hss
+$\displaystyle\mat{
+4 5 6;
+7 8 9}
+\vec{1 2 3}
+= 1\vec{4 7} + 2\vec{5 8} + 3\vec{6 9}
+= \vec{1\cdot4+2\cdot5+3\cdot6 1\cdot7+2\cdot8+3\cdot9}
+= \vec{32 50}.
+$\hss}
+\end{webonly}
+\end{eg}
+
+\pause
+\begin{bluebox}{.75\linewidth}
+  Now you have \emph{two} ways of computing $Ax$.  
+
+  \pause\medskip
+  In the second, you calculate $Ax$ one entry at a time.
+
+  \pause\medskip
+  The second way is usually the most convenient, but we'll use both.
+\end{bluebox}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Spans and Solutions to Equations}
+
+Let $A$ be a matrix with columns $v_1,v_2,\ldots,v_n$:
+\[ A = \mat{ | | {} |; v_1 v_2 \cdots, v_n; | | {} |} \]
+
+\pause\smallskip
+\begin{bluebox}
+  [Very Important Fact That Will Appear on Every Midterm and the Final]
+  {.93\textwidth}
+  \mode<handout>{\setbeamercovered{transparent}}
+  \vskip-1.5mm
+  \[ \begin{split}
+    Ax = b &\text{ has a solution}  \\[-5mm]
+    &\uncover<3-7| handout:0>{\namedbox{iff}{{}\iff{}} \text{there exist } x_1,\ldots,x_n \text{ such that }
+    A\vec{x_1 x_2 \vdots, x_n} = b} \\
+    &\uncover<5-7| handout:0>{\iff \text{there exist } x_1,\ldots,x_n \text{ such that }
+    x_1v_1 + \cdots + x_nv_n = b} \\
+    &\uncover<6-7| handout:0>{\iff b \text{ is a linear combination of } v_1,\ldots,v_n} \\
+    &\uncover<7->{\namedbox{iff2}{{}\iff{}} b \text{ is in the span of the columns of } A.}
+  \end{split}\]
+\end{bluebox}
+
+\uncover<9->{The last condition is geometric.}
+
+\begin{tikzpicture}[remember picture, overlay]
+  \node<4->[below=.4cm of iff.west, xshift=-8mm, blue!50] (ifflabel)
+    {``if and only if''};
+  \draw<4-7| handout:0>[->, shorten >=-1.5mm, blue!50]
+    (ifflabel) to[in=180,out=90] (iff.west);
+  \draw<5-7| handout:0>[->, shorten >=-1.5mm, blue!50]
+    (ifflabel) to[in=180,out=90] (iff.west);
+  \draw<8->[->, shorten >=-1.5mm, blue!50]
+    (ifflabel) to[in=180,out=-90] (iff2.west);
+\end{tikzpicture}
+\note{Define $\iff$}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Spans and Solutions to Equations}
+\framesubtitle{Example}
+
+\vskip-3mm
+\begin{ques}
+  Let $A = \mat[r]{2 1; -1 0; 1 -1}$.
+  Does the equation $Ax = \vec{0 2 2}$ have a solution?
+\end{ques}
+
+\pause
+\begin{center}
+\begin{tikzpicture}[myxyz, scale=0.5,
+    thin border nodes, baseline]
+  \path[clip, resetxy] (-4,-4) rectangle (4,4);
+
+  \def\v{(2,-1,1)}
+  \def\w{(1,0,-1)}
+  \def\b{(0,2,2)}
+
+  \node[coordinate] (X) at \v {};
+  \node[coordinate] (Y) at \w {};
+
+  \begin{scope}[x=(X), y=(Y), transformxy]
+    \path[clip] (-5, -5) -- (5, 5) -- (5, 10) -- (-5, 10) -- cycle;
+    \fill<4->[seq4!30, nearly opaque] (-1.5,-1) rectangle (1.5,2);
+    \draw<4->[step=.5cm, seq4, very thin] (-1.5,-1) grid (1.5,2);
+  \end{scope}
+
+  \begin{scope}[transformxy]
+    \fill[white, nearly opaque] (-2, -2) rectangle (3, 3);
+    \draw[grid lines] (-2, -2) grid (3, 3);
+  \end{scope}
+
+  \begin{scope}[x=(X), y=(Y), transformxy]
+    \path[clip] (-5, -5) -- (5, 5) -- (5, -10) -- (-5, -10) -- cycle;
+    \fill<4->[seq4!30, nearly opaque] (-1.5,-1) rectangle (1.5,2);
+    \draw<4->[step=.5cm, seq4, very thin] (-1.5,-1) grid (1.5,2);
+  \end{scope}
+
+  \draw[vector, seq1] (0,0,0) -- 
+    node [midway, above left] {$v$} \v;
+  \draw[thin, densely dotted] \v -- \projxy\v;
+
+  \draw[vector, seq2!50!white] (0,0,0) -- 
+    node [midway, below left] {$w$} \w;
+  \draw[thin, densely dotted, black!50!white] \w -- \projxy\w;
+
+  \draw<3->[vector, seq3] (0,0,0) -- 
+    node [midway, above right] {$b$} \b;
+  \draw<3->[thin, densely dotted] \b -- \projxy\b;
+
+  \node<4->[seq4] at (-1.5cm, 2cm) {$\Span\{v,w\}$};
+
+  \point at (0,0,0);
+
+\end{tikzpicture}
+\qquad
+\begin{minipage}[c]{0.5\textwidth}
+  Columns of $A$:
+  \[ \color{seq1} v = \vec{2 -1 1} \qquad 
+  \color{seq2} w = \vec{1 0 -1} \]
+  \begin{uncoverenv}<3->
+    Output vector:
+    \[ \color{seq3} b = \vec{0 2 2} \]
+  \end{uncoverenv}
+\end{minipage}
+
+\end{center}
+
+\pause[5]\smallskip%
+Is $b$ contained in the span of the columns of $A$?
+\pause
+It sure doesn't look like it.
+
+\pause\medskip
+\alert{Conclusion:} $Ax=b$ is \emph{inconsistent}.
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Spans and Solutions to Equations}
+\framesubtitle{Example, continued}
+
+\vskip-3mm
+\begin{ques}
+  Let $A = \mat[r]{2 1; -1 0; 1 -1}$.
+  Does the equation $Ax = \vec{0 2 2}$ have a solution?
+\end{ques}
+
+\medskip
+\alert{Answer:}
+Let's check by solving the matrix equation using row reduction.  
+
+\begin{webonly}
+\medskip
+The first step is to put the system into an augmented matrix.
+\[  \amat{2 1 0; -1 0 2; 1 -1 2}
+\;\longsquiggly[row reduce]\;
+  \amat{1 0 0; 0 1 0; 0 0 1} \]
+The last equation is $0=1$, so the system is \emph{inconsistent}.
+\end{webonly}
+
+\pause\medskip
+In other words, the matrix equation 
+\[ \mat[r]{2 1; -1 0; 1 -1}x = \vec{0 2 2} \]
+has no solution, as the picture shows.
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Spans and Solutions to Equations}
+\framesubtitle{Example}
+
+\vskip-3mm
+\begin{ques}
+  Let $A = \mat[r]{2 1; -1 0; 1 -1}$.
+  Does the equation $Ax = \vec{1 -1 2}$ have a solution?
+\end{ques}
+
+\pause
+\begin{center}
+\begin{tikzpicture}[myxyz, scale=0.5,
+    thin border nodes, baseline]
+  \path[clip, resetxy] (-4,-4) rectangle (4,4);
+
+  \def\v{(2,-1,1)}
+  \def\w{(1,0,-1)}
+  \def\b{(1,-1,2)}
+
+  \node[coordinate] (X) at \v {};
+  \node[coordinate] (Y) at \w {};
+
+  \begin{scope}[x=(X), y=(Y), transformxy]
+    \path[clip] (-5, -5) -- (5, 5) -- (5, 10) -- (-5, 10) -- cycle;
+    \fill<4->[seq4!30, nearly opaque] (-1.5,-1.5) rectangle (1.5,2);
+    \draw<4->[step=.5cm, seq4, very thin] (-1.5,-1.5) grid (1.5,2);
+  \end{scope}
+
+  \begin{scope}[transformxy]
+    \fill[white, nearly opaque] (-2, -2) rectangle (3, 3);
+    \draw[help lines] (-2, -2) grid (3, 3);
+  \end{scope}
+
+  \begin{scope}[x=(X), y=(Y), transformxy]
+    \path[clip] (-5, -5) -- (5, 5) -- (5, -10) -- (-5, -10) -- cycle;
+    \fill<4->[seq4!30, nearly opaque] (-1.5,-1.5) rectangle (1.5,2);
+    \draw<4->[step=.5cm, seq4, very thin] (-1.5,-1.5) grid (1.5,2);
+  \end{scope}
+
+  \draw[vector, seq1] (0,0,0) -- 
+    node [midway, below right] {$v$} \v;
+  \draw[thin, densely dotted] \v -- \projxy\v;
+
+  \draw[vector, seq2!50!white] (0,0,0) -- 
+    node [midway, below left] {$w$} \w;
+  \draw[thin, densely dotted, black!50!white] \w -- \projxy\w;
+
+  \draw<3->[vector, seq3] (0,0,0) -- 
+    node [midway, above left] {$b$} \b;
+  \draw<3->[thin, densely dotted] \b -- \projxy\b;
+
+  \node<4->[seq4] at (-1.75cm, 2.45cm) {$\Span\{v,w\}$};
+
+  \point at (0,0,0);
+
+\end{tikzpicture}
+\qquad
+\begin{minipage}[c]{0.5\textwidth}
+  Columns of $A$:
+  \[ \color{seq1} v = \vec{2 -1 1} \qquad 
+  \color{seq2} w = \vec{1 0 -1} \]
+  \begin{uncoverenv}<3->
+    Solution vector:
+    \[ \color{seq3} b = \vec{1 -1 2} \]
+  \end{uncoverenv}
+\end{minipage}
+\end{center}
+
+\pause[5]
+Is $b$ contained in the span of the columns of $A$?
+\pause
+It looks like it: in fact,
+\[ b = \blankuntil{7}{1} v + \blankuntil{7}{(-1)}w
+\implies
+x = \vec{\uncover<8->1 \uncover<8->{{-1}}}.
+ \]
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Spans and Solutions to Equations}
+\framesubtitle{Example, continued}
+
+\vskip-3mm
+\begin{ques}
+  Let $A = \mat[r]{2 1; -1 0; 1 -1}$.
+  Does the equation $Ax = \vec{1 -1 2}$ have a solution?
+\end{ques}
+
+\medskip
+\alert{Answer:}
+Let's do this systematically using row reduction.
+\begin{webonly}
+  \[ \amat{2 1 1; -1 0 -1; 1 -1 2}
+  \;\longsquiggly[row reduce]\;
+  \amat{1 0 1; 0 1 -1; 0 0 0} \]
+This gives us
+\[ x = 1\qquad y = -1. \]
+\end{webonly}
+
+\pause
+This is consistent with the picture on the previous slide:
+\[ 1\vec{2 -1 1} -1\vec{1 0 -1} = \vec{1 -1 2}
+\qquad\text{or}\qquad\pause
+A\vec{1 -1} = \vec{1 -1 2}. \]
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{pollframe}
+
+\smallskip
+\begin{bluebox}[Poll]{.8\textwidth}
+  Which of the following true statements can be checked by eyeballing them,
+  \emph{without} row reduction?
+  \medskip
+  \begin{eAlpherate}
+  \item $\vec{0 1 2}$ is in the span of
+    $\;\vec{3 3 4},\; \vec{0 10 20},\; \vec{0 -1 -2}$.
+  \item $\vec{0 1 2}$ is in the span of
+    $\;\vec{3 3 4},\; \vec{0 5 7},\; \vec{0 6 8}$.
+  \item $\vec{0 1 2}$ is in the span of
+    $\;\vec{3 3 4},\; \vec{0 1 0},\; \vec{0 0 \sqrt2}$.
+  \item $\vec{0 1 2}$ is in the span of
+    $\;\vec{5 7 0},\; \vec{6 8 0},\; \vec{3 3 4}$.
+  \end{eAlpherate}
+\end{bluebox}
+
+\note[item]{A: use negative the third}
+\note[item]{C: use the second and third}
+\note[item]{For the other two, draw the span (especially B)}
+
+\end{pollframe}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{When Solutions Always Exist}
+
+Here are criteria for a linear system to always have a solution.
+
+\begin{thm}
+  Let $A$ be an $m\times n$ (non-augmented) matrix.  The following are
+  \namedbox{equivalent}{equivalent}
+  \pause
+  \begin{tikzpicture}[remember picture, overlay]
+    \path (equivalent.south) ++(-1.5mm,-5mm)
+      node[blue!50, align=center, anchor=north] (expl)
+        {recall that this means\\
+          that for given $A$, either they're\\
+          all true, or they're all false};
+    \draw[->, blue!50] (expl.north) to[out=90,in=-90] (equivalent.south);
+  \end{tikzpicture}
+  \pause
+  \begin{enumerate}
+  \item $Ax = b$ has a solution for all $b$ in $\R^{\blankuntil{4}m}$.
+    \pause[5]
+  \item The span of the columns of $A$ is all of $\R^m$.
+    \pause
+  \item A has a pivot in each row.
+  \end{enumerate}
+\end{thm}
+
+\note{Show previous slide for definition of $Ax$ to see why it's $m$ entries.}
+\pause
+Why is (1) the same as (2)?
+\pause
+This was the 
+\tikz[baseline] \node[bluebox, inner sep=2mm, anchor=base] 
+  {Very Important};
+box from before.
+
+\pause\medskip
+Why is (1) the same as (3)?
+\pause
+If $A$ has a pivot in each row then its reduced row echelon form looks like this:
+\[ \mat{
+1   0   \star,   0   \star ;
+0   1   \star , 0   \star ;
+0   0   0   1   \star 
+}
+\pause\quad\parbox{.2\textwidth}
+{\centering and $(\,A\mid b\,)$ reduces to this:}\quad
+\amat[c]{
+1   0   \star,   0   \star, \star ;
+0   1   \star , 0   \star, \star ;
+0   0   0   1   \star, \star
+}.\]
+\pause
+There's no $b$ that makes it inconsistent, so there's always a solution.
+\pause
+If $A$ doesn't have a pivot in each row, then its reduced form looks like this:
+\pause
+\[ \mat{
+1   0   \star,   0   \star ;
+0   1   \star , 0   \star ;
+0   0   0   0  0 
+}
+\pause\quad\parbox{.2\textwidth}
+{\centering and this can be made inconsistent:}\quad
+\amat{
+1   0   \star,   0   \star, 0 ;
+0   1   \star , 0   \star, 0 ;
+0   0   0   0   0 16
+}.
+\]
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Properties of the Matrix--Vector Product}
+
+\begin{bluebox}{.65\textwidth}
+  Let $c$ be a scalar, $u,v$ be vectors, and $A$ a matrix.
+
+  \pause\smallskip
+  \begin{itemize}
+  \item $A(u+v) = Au + Av$
+    \pause
+  \item $A(cv) = cAv$
+  \end{itemize}
+
+  \pause\smallskip
+  {\small\color{black!60}See Lay, \S1.4, Theorem~5.}
+\end{bluebox}
+
+\webonlycmd{For instance, $A(3u-7v) = 3Au - 7Av$.}
+
+\bigskip
+\begin{uncoverenv}<5->
+  \alert{Consequence:}
+  If $u$ and $v$ are solutions to $Ax = 0$, then so is every vector in 
+  $\Span\{u,v\}$.
+  \pause[6]
+  Why?
+  \begin{webonly}
+  \[ \left\{\syseq*{Au = 0; Av = 0}\right.
+  \quad\implies\quad
+  A(xu+yv) = xAu + yAv = x0 + y0 = 0. \]
+  (Here $0$ means the zero vector.)
+  \end{webonly}
+
+  \pause
+
+  \begin{bluebox}[Important]{.65\textwidth}
+    The set of solutions to $Ax = \color{red}0$ is a span.
+  \end{bluebox}
+
+\end{uncoverenv}
+
+\end{frame}
+
+
+%%% Local Variables:
+%%% TeX-master: "../slides"
+%%% End:

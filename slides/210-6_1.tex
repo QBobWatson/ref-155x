@@ -1,0 +1,701 @@
+
+\usetikzlibrary{decorations.pathreplacing}
+
+\titleframe{Chapter 6}{Orthogonality and Least Squares}
+\titleframe{Section 6.1}{Inner Product, Length, and Orthogonality}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Orientation}
+
+\alert{Recall:} This course is about learning to:
+
+\begin{itemize}
+\item \textcolor<2->{gray}{Solve the matrix equation $Ax = b$}\\
+  \pause
+\item \textcolor<3->{gray}{Solve the matrix equation $Ax = \lambda x$}\\
+  \pause
+\item Almost solve the equation $Ax = b$
+\end{itemize}
+
+\pause
+We are now aiming at the last topic.
+
+\pause\medskip
+\alert{Idea:} In the real world, data is imperfect.
+\pause
+Suppose you measure a data point $x$ which you know for theoretical reasons must lie
+on a plane spanned by two vectors $u$ and $v$.
+\pause
+\begin{center}
+\begin{tikzpicture}[myxyz, scale=.5, thin border nodes]
+  \coordinate (u) at (1,0,0);
+  \coordinate (v) at (0,1.1,-.2);
+  \coordinate (uxv) at (0,.2,1.1);
+  \coordinate (x) at ($-1.1*(u)+(v)+1.5*(uxv)$);
+  \coordinate (px) at ($-1.1*(u)+(v)$);
+  \begin{scope}[x=(u),y=(v),transformxy]
+    \fill[seq-violet!30] (-2,-2) rectangle (2,2);
+    \draw[help lines] (-2,-2) grid (2,2);
+  \end{scope}
+  \draw[vector] (0,0,0) -- (u) node[right] {$u$};
+  \draw[vector] (0,0,0) -- (v) node[left] {$v$};
+  \coordinate (xu) at ($(px) + .3*(u)$);
+  \coordinate (xv) at ($(px) + .3*(v)$);
+  \pic<13->[draw] {right angle=(x)--(px)--(xu)};
+  \pic<13->[draw] {right angle=(x)--(px)--(xv)};
+  \draw<13-> (x) -- (px);
+  \point<13-> at (px);
+  \point[seq-red, "$x$" {above,text=seq-red}] at (x);
+  \point at (0,0,0);
+\end{tikzpicture}
+\end{center}
+\pause
+Due to measurement error, though, the measured $x$ is not actually in
+$\Span\{u,v\}$.
+\pause
+In other words, the equation
+$au + bv = x$ has no solution.
+\pause
+What do you do?
+\pause
+The real value is probably the \emph{closest} point to $x$ on $\Span\{u,v\}$.
+\pause
+Which point is that?
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{The Dot Product}
+
+We need a notion of \emph{angle} between two vectors, and in particular, a
+notion of \emph{orthogonality} (i.e.\ when two vectors are perpendicular).
+\pause
+This is the purpose of the dot product.
+
+\pause
+\begin{defn}
+  The \textbf{dot product} of two vectors $x,y$ in $\R^n$ is
+  \[ x\cdot y = \vec{x_1 x_2 \vdots, x_n} \cdot \vec{y_1 y_2 \vdots, y_n}
+  \overset{\rm def}= x_1y_1 + x_2y_2 + \cdots + x_ny_n. \]
+  \pause
+  Thinking of $x,y$ as column vectors, this is the same as $x^Ty$.
+\end{defn}
+
+\pause
+\begin{eg}
+  \[ \vec{1 2 3}\cdot\vec{4 5 6} = \mat{1 2 3}\vec{4 5 6}
+  = \webonlycmd{1\cdot 4 + 2\cdot 5 + 3\cdot 6 = 32.} \]
+\end{eg}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Properties of the Dot Product}
+
+Many usual arithmetic rules hold, as long as you remember you can only dot two
+vectors together, and that the result is a scalar.
+
+\pause
+\begin{itemize}
+\item $x\cdot y = y \cdot x$
+  \pause
+\item $(x + y)\cdot z = x\cdot z+y\cdot z$
+  \pause
+\item $(cx)\cdot y = c(x\cdot y)$
+\end{itemize}
+
+\pause\medskip
+Dotting a vector with itself is special:
+\[ \vec{x_1 x_2 \vdots, x_n}\cdot\vec{x_1 x_2 \vdots, x_n}
+= x_1^2 + x_2^2 + \cdots + x_n^2. \]
+Hence:
+\pause
+\begin{itemize}
+\item $x\cdot x\geq 0$
+  \pause
+\item $x\cdot x = 0$ if and only if $x = 0$.
+\end{itemize}
+
+\pause\medskip
+\alert{Important:} $x\cdot y = 0$ does \emph{not} imply $x = 0$ or $y = 0$.
+\pause
+For example, ${1\choose 0} \cdot {0\choose 1} = 0$.
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{The Dot Product and Length}
+
+\vskip -3mm
+\begin{defn}
+  The \textbf{length} or \textbf{norm} of a vector $x$ in $\R^n$ is
+  \[\|x\| = \sqrt{x\cdot x} = \sqrt{x_1^2 + x_2^2 + \cdots + x_n^2}.\]
+\end{defn}
+
+\pause
+Why is this a good definition?
+\pause
+The Pythagorean theorem!
+\begin{center}
+\begin{tikzpicture}[scale=.5,decoration={brace,raise=3pt}]
+  \draw[grid lines] (0,0) grid (5,5);
+  \point at (0,0);
+  \point["$\vec{3 4}$" right] (x) at (3,4);
+  \draw[vector] (0,0) 
+    -- node[sloped,above,inner sep=1pt] {$\sqrt{3^2 + 4^2} = 5$}
+    (x);
+  \draw[decorate,decoration={mirror}] (0,0) -- node[below=4pt] {3} (3,0);
+  \draw[decorate] (0,0) -- node[left=3pt] {4} (0,4);
+
+  \node at (10,2.5) {$\left\|\vec{3 4}\right\| = \sqrt{3^2+4^2} = 5$};
+  
+\end{tikzpicture}
+\end{center}
+
+\pause\vskip -3mm
+\begin{fact2}
+  If $x$ is a vector and $c$ is a scalar, then
+  $\|cx\| = |c|\cdot\|x\|$.
+\end{fact2}
+
+\pause
+\[ \displaystyle\left\|\vec{6 8}\right\| = \left\|2\vec{3 4}\right\| = 
+\webonlycmd{2\left\|\vec{3 4}\right\| = 10} \]
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{The Dot Product and Distance}
+
+\vskip -3mm
+\begin{defn}
+  The \textbf{distance} between two points $x,y$ in $\R^n$ is
+  \[ \dist(x,y) = \pause \|y-x\|. \]
+\end{defn}
+
+\pause
+This is just the length of the vector from $x$ to $y$.
+
+\pause
+\begin{eg}
+  Let $x = (1,2)$ and $y = (4,4)$.  Then
+  \[ \dist(x,y) = \webonlycmd{
+    \|y-x\| = \left\|\vec{3,2}\right\| = \sqrt{3^2+2^2} = \sqrt{13}.
+  } \]
+  \pause
+  \begin{center}
+  \begin{tikzpicture}[scale=.5, thin border nodes]
+    \draw[grid lines] (0,0) grid (5,5);
+    \point["$0$" left] at (0,0);
+    \point["$x$" left] (x) at (1,2);
+    \point["$y$" right] (y) at (4,4);
+    \draw[vector] (x) --
+      node[sloped,above] {$y-x$} (y);
+
+  \end{tikzpicture}
+  \end{center}
+
+\end{eg}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Unit Vectors}
+
+\vskip-3mm
+\begin{defn}
+  A \textbf{unit vector} is a vector $v$ with length $\|v\|=1$.
+\end{defn}
+
+\pause
+\begin{eg}
+  The unit coordinate vectors are unit vectors:
+  \[
+    \|e_1\| = \left\|\vec{1 0 0}\right\| = \sqrt{1^2 + 0^2 + 0^2} = 1 
+  \]
+\end{eg}
+
+\pause
+\begin{defn}
+  Let $x$ be a nonzero vector in $\R^n$.  The
+  \textbf{unit vector in the direction of $x$} is the vector
+  $\displaystyle\frac{\mathstrut x}{\|x\|}$.
+\end{defn}
+
+\pause\medskip
+This is in fact a unit vector:
+\[ \left\|\frac{x}{\namedbox{scalar}{\|x\|}}\right\|
+= \frac 1{\|x\|}\|x\| = 1. \]
+\begin{tikzpicture}[remember picture, overlay]
+  \node[draw,blue!50,circle,fit=(scalar),inner sep=.5pt] (scalarbox) {};
+  \path (scalar) ++ (-2cm,2mm) node[blue!50] (expl) {scalar};
+  \draw[->,blue!50] (expl) to[out=-45,in=225] (scalarbox);
+\end{tikzpicture}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Unit Vectors}
+\framesubtitle{Example}
+
+\vskip-3mm
+\begin{eg}
+  What is the unit vector in the direction of $x = \vec{3 4}$?
+  \begin{webonly}
+  \[ u = \frac{x}{\|x\|} = \frac 1{\sqrt{3^2+4^2}}\vec{3 4}
+  = \frac{1}{5}\vec{3 4}. \]
+  \begin{center}
+    \medskip
+  \begin{tikzpicture}[scale=.5, thin border nodes]
+    \draw[grid lines] (-1,-1) grid (5,5);
+    \coordinate["$x$" above] (x) at (3,4);
+    \draw[vector] (0,0) -- (x);
+    \draw[vector,seq-blue] (0,0) to["$u$"] ($1/5*(x)$);
+    \point["$0$" left] at (0,0);
+  \end{tikzpicture}
+  \end{center}
+
+  \end{webonly}
+
+\end{eg}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Orthogonality}
+
+\vskip 1mm
+\namedbox{ortho}{
+\begin{minipage}{\linewidth}
+\vskip-2mm
+\begin{defn}
+  Two vectors $x,y$ are \textbf{orthogonal} or \textbf{perpendicular} if
+  $x\cdot y = 0$.\\
+  \uncover<2->{\emph{Notation:} $x\perp y$ means $x\cdot y = 0$.}
+\end{defn}
+\end{minipage}}
+\tikz[remember picture, overlay]
+  \node[redbox, fit=(ortho)] {};
+
+\pause[3]\bigskip
+Why is this a good definition?
+\pause
+The Pythagorean theorem / law of cosines!
+\begin{center}
+\begin{tikzpicture}[scale=.75]
+  \point ["$x$" right] (x) at (3,1);
+  \point ["$y$" above] (y) at (-1,3);
+  \coordinate (o) at (0,0);
+  \draw[vector] (0,0) -- node[below] {$\|x\|$} (x);
+  \draw[vector] (0,0) -- node[left] {$\|y\|$} (y);
+  \draw[vector] (y) -- node[sloped,above] {$\|x-y\|$} (x);
+  \pic[draw] {right angle=(x)--(o)--(y)};
+\end{tikzpicture}
+\end{center}
+\begin{webonly}
+  \[\begin{split}
+    \parbox{2cm}{\centering $x$ and $y$ are\\perpendicular}
+    &\iff \|x\|^2 + \|y\|^2 = \|x-y\|^2 \\
+    &\iff x\cdot x + y\cdot y = (x-y)\cdot(x-y) \\
+    &\iff x\cdot x + y\cdot y = x\cdot x + y\cdot y -2x\cdot y \\
+    &\iff x\cdot y = 0
+  \end{split}\]
+\end{webonly}
+
+\pause
+\alert{Fact:} $x\perp y \iff \|x-y\|^2=\|x\|^2+\|y\|^2$ 
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Orthogonality}
+\framesubtitle{Example}
+
+\alert{Problem:} Find \emph{all} vectors orthogonal to $v = \vec{1,1,-1}$.
+
+\medskip
+\begin{webonly}
+We have to find all vectors $x$ such that $x\cdot v = 0$.  This means solving
+the equation
+\[ 0 = x\cdot v = \vec{x_1 x_2 x_3}\cdot\vec{1 1 -1} = x_1 + x_2 - x_3. \]
+The parametric form for the solution is $x_1 = -x_2 + x_3$, so the parametric
+vector form of the general solution is
+\[ x = \vec{x_1 x_2 x_3} = x_2\vec{-1 1 0} + x_3\vec{1 0 1}. \]
+For instance, $\vec{-1 1 0}\perp\vec{1 1 -1}$ because
+$\vec{-1 1 0}\cdot\vec{1 1 -1} = 0$.
+\end{webonly}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Orthogonality}
+\framesubtitle{Example}
+
+\alert{Problem:} Find \emph{all} vectors orthogonal to both $v = \vec{1 1 -1}$ and 
+$w = \vec{1 1 1}$.
+
+\medskip
+\begin{webonly}
+Now we have to solve the system of two homogeneous equations
+\spalignsysdelims..
+\[ \syseq{
+  0 = x\cdot v = \vec{x_1 x_2 x_3}\cdot\vec{1 1 -1} = x_1 + x_2 - x_3;
+  0 = x\cdot w = \vec{x_1 x_2 x_3}\cdot\vec{1 1 1}  = x_1 + x_2 + x_3\rlap.} \]
+In matrix form:
+\[ \namedbox{vw}{\mat{1 1 -1; 1 1 1}} \;\longsquiggly[rref]\;\mat{1 1 0; 0 0 1}. \]
+The parametric vector form of the solution is 
+\[ \vec{x_1 x_2 x_3} = x_2\vec{-1 1 0}. \]
+\begin{tikzpicture}[remember picture, overlay]
+  \path (vw.west) ++(-5mm,0)
+    node[blue!50, anchor=mid east, inner sep=3pt] (expl) {The rows are $v$ and $w$};
+  \draw[->, blue!50] (expl.mid east) -- (vw.west);
+\end{tikzpicture}
+\end{webonly}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Orthogonality}
+\framesubtitle{General procedure}
+
+\alert{Problem:} Find all vectors orthogonal to some number of vectors
+$v_1,v_2,\ldots,v_m$ in $\R^n$.
+
+\pause\medskip
+This is the same as finding all vectors $x$ such that 
+\[ 0 = v_1^Tx = v_2^Tx = \cdots = v_m^Tx. \]
+\pause\leavevmode
+\begin{minipage}[c]{0.5\linewidth}
+  Putting the \emph{row} vectors $v_1^T,v_2^T,\ldots,v_m^T$ into a matrix, this
+  is the same as finding all $x$ such that
+\end{minipage}%
+\begin{minipage}[c]{0.5\linewidth}
+  \[
+  \mat{ \matrow{v_1^T};
+    \matrow{v_2^T}; \spvdots;
+    \matrow{v_m^T}} x = 
+  \vec{v_1\cdot x v_2\cdot x \spvdots, v_m\cdot x} = 0. \]
+\end{minipage}%
+\pause\medskip
+\begin{bluebox}[Important]{.8\linewidth}
+  \vskip-2mm
+  \begin{minipage}[c]{0.7\linewidth}
+    The set of all vectors orthogonal to some vectors $v_1,v_2,\ldots,v_m$ in
+    $\R^n$ is the \emph{null space} of the $m\times n$ matrix
+  \end{minipage}
+  \begin{minipage}[c]{0.25\linewidth}
+  \[ \mat{
+    \matrow{v_1^T};
+    \matrow{v_2^T};
+    \spvdots;
+    \matrow{v_m^T}}. \]
+  \end{minipage}\\
+  \pause
+  In particular, this set is a subspace!
+\end{bluebox}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Orthogonal Complements}
+
+\vskip-3mm
+\begin{defn}
+  Let $W$ be a subspace of $\R^n$.  Its \textbf{orthogonal complement} is
+  \[ W^{\namedbox{perp}{\scriptstyle\perp}} = \bigl\{ \text{$v$ in $\R^n$}\mid
+  v\cdot w=0 \text{ for all $w$ in $W$} \bigr\}
+  \rlap{\qquad\text{read ``$W$ perp''}.} \]
+\end{defn}
+\pause
+\begin{tikzpicture}[remember picture, overlay]
+  \node[blue!50, draw, circle, inner sep=.5pt, fit=(perp)] (perpbox) {};
+  \path (perpbox.south) ++(3mm,-7mm)
+    node[right, blue!50, align=left] (expl)
+      {$W^{\color{seq-red}{\scriptstyle\perp}}$ is orthogonal complement\\
+       $A^{\color{seq-red}{\scriptstyle T}}$ is transpose};
+  \draw[->, blue!50] (expl.west) to[bend left] (perpbox.south);
+\end{tikzpicture}
+
+\pause
+\alert{Pictures}:\vskip-5mm
+\begin{columns}[c,onlytextwidth]
+  \column{.7\linewidth}
+    The orthogonal complement of a \textcolor{seq-blue}{line} in $\R^2$ is
+    \uncover<4->{the perpendicular \textcolor{seq-green}{line}.}
+  \column{.3\linewidth}\centering
+    \begin{tikzpicture}[scale=.5, thin border nodes]
+      \draw (-2,-2) rectangle (2,2);
+      \clip (-2,-2) rectangle (2,2);
+      \draw[seq-blue] (-2,-3) -- node[right,pos=.6] {$W$} (2,3);
+      \draw<4->[seq-green] (3,-2) -- node[below left,pos=.6] {$W^\perp$} (-3,2);
+      \draw<4->[very thin]
+        let \p1=($(0,0)!4mm!(-2,-3)$), \p2=($(0,0)!4mm!(3,-2)$) in
+          (\p1) -- ($(\p1) + (\p2)$) -- (\p2);
+    \end{tikzpicture}
+\end{columns}
+\begin{columns}[c,onlytextwidth]
+  \column{.7\linewidth}
+  \pause[5]%
+    The orthogonal complement of a \textcolor{seq-blue}{line} in $\R^3$ is
+    \uncover<6->{the perpendicular \textcolor{seq-green}{plane}.}
+  \column{.3\linewidth}\centering
+    \begin{tikzpicture}[scale=.5, myxyz, thin border nodes]
+      \clip[resetxy] (-2,-2) rectangle (2,2);
+      \coordinate (x) at ($1/sqrt(1.09)*(.3,0,1)$);
+      \coordinate (y) at (0.957826, 0., -0.287348);
+      \coordinate (z) at (0,1,0);
+      \draw[seq-blue] (0,0) -- ($-3*(x)$);
+      \begin{scope}[x=(y), y=(z), transformxy]
+        \filldraw<6->[seq-green,fill opacity=.5]
+          (-1.5,-1.5) rectangle (1.5,1.5);
+        \node<6->[seq-green] at (-2,-1) {$W^\perp$};
+      \end{scope}
+      \draw[seq-blue] (0,0) -- node[right,pos=.5] {$W$} ($3*(x)$);
+      \point<6-> (o) at (0,0,0);
+      \pic<6->[draw] {right angle=(z)--(o)--(x)};
+      \pic<6->[draw] {right angle=(y)--(o)--(x)};
+    \end{tikzpicture}
+\end{columns}
+\begin{columns}[c,onlytextwidth]
+  \column{.7\linewidth}
+  \pause[7]%
+    The orthogonal complement of a \textcolor{seq-blue}{plane} in $\R^3$ is
+    \uncover<8->{the perpendicular \textcolor{seq-green}{line}.}
+  \column{.3\linewidth}\centering
+    \begin{tikzpicture}[scale=.5, myxyz, thin border nodes]
+      \clip[resetxy] (-2,-2) rectangle (2,2);
+      \coordinate (x) at ($1/sqrt(1.09)*(.3,0,1)$);
+      \coordinate (y) at (0.957826, 0., -0.287348);
+      \coordinate (z) at (0,1,0);
+      \draw<8->[seq-green] (0,0) -- ($-3*(x)$);
+      \begin{scope}[x=(y), y=(z), transformxy]
+        \filldraw[seq-blue,fill opacity=.5]
+          (-1.5,-1.5) rectangle (1.5,1.5);
+        \node[seq-blue] at (-2,-1) {$W$};
+      \end{scope}
+      \draw<8->[seq-green] (0,0) -- node[right,pos=.5] {$W^\perp$} ($3*(x)$);
+      \point<8-> (o) at (0,0,0);
+      \pic<8->[draw] {right angle=(z)--(o)--(x)};
+      \pic<8->[draw] {right angle=(y)--(o)--(x)};
+    \end{tikzpicture}
+\end{columns}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{pollframe}
+
+\vskip 1cm
+
+\begin{bluebox}[Poll]{.8\linewidth}
+  Let $W$ be a plane in $\R^4$.  How would you describe $W^\perp$?
+  \smallskip
+  \begin{eAlpherate}
+  \item The zero space $\{0\}$.
+  \item A line in $\R^4$.
+  \item A plane in $\R^4$.
+  \item A $3$-dimensional space in $\R^4$.
+  \item All of $\R^4$.
+  \end{eAlpherate}
+\end{bluebox}
+
+\end{pollframe}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Orthogonal Complements}
+\framesubtitle{Basic properties}
+
+Let $W$ be a subspace of $\R^n$.
+
+\medskip
+\alert{Facts:}\pause
+\begin{enumerate}
+\item $W^\perp$ is also a subspace of $\R^n$
+\pause
+\item $(W^\perp)^\perp = W$
+\pause
+\item $\dim W + \dim W^\perp = n$
+\pause
+\item If $W = \Span\{v_1,v_2,\ldots,v_m\}$, then
+  \[\begin{split}
+    W^\perp &= \text{all vectors orthogonal to each $v_1,v_2,\ldots,v_m$}\\
+    &= \bigl\{ \text{$x$ in $\R^n$}\mid
+  x\cdot v_i = 0 \text{ for all } i=1,2,\ldots,m \bigr\}\\
+    &= \Nul\mat{
+    \matrow{v_1^T};
+    \matrow{v_2^T};
+    \spvdots;
+    \matrow{v_m^T}}.
+  \end{split}\]
+
+\end{enumerate}
+
+\medskip\small
+\begin{webonly}
+Let's check \alert{1.}
+\begin{itemize}
+\item Is $0$ in $W^\perp$?  
+  Yes: $0\cdot w = 0$ for any $w$ in $W$.
+\item Suppose $x,y$ are in $W^\perp$.
+  So $x\cdot w = 0$ and $y\cdot w = 0$ for all $w$ in $W$.
+  Then $(x+y)\cdot w = x\cdot w + y\cdot w = 0+0 = 0$ for all $w$ in $W$.
+  So $x+y$ is also in $W^\perp$.
+\item Suppose $x$ is in $W^\perp$.
+  So $x\cdot w = 0$ for all $w$ in $W$.
+  If $c$ is a scalar, then $(cx)\cdot w = c(x\cdot 0) = c(0) = 0$ for any $w$ in
+  $W$.
+  So $cx$ is in $W^\perp$.
+\end{itemize}
+\end{webonly}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Orthogonal Complements}
+\framesubtitle{Computation}
+
+\alert{Problem:} if $W = \Span\left\{ \vec{1 1 -1},\;\vec{1 1 1} \right\}$,
+compute $W^\perp$.
+
+\medskip
+\begin{webonly}
+By property \alert{4}, we have to find the null space of the matrix whose rows
+are $\mat{1 1 -1}$ and $\mat{1 1 1}$, which we did before:
+\[ \Nul\mat{1 1 -1; 1 1 1} = \Span\left\{ \vec{-1 1 0} \right\}. \]
+\end{webonly}
+
+\pause\medskip
+\begin{bluebox}{.8\linewidth}
+  \[ \Span\{v_1,v_2,\ldots,v_m\}^\perp=\Nul\mat{
+    \matrow{v_1^T};
+    \matrow{v_2^T};
+              \spvdots;
+    \matrow{v_m^T}} \]
+\end{bluebox}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Orthogonal Complements}
+\framesubtitle{Row space, column space, null space}
+
+\vskip-3mm
+\begin{defn}
+  The \textbf{row space} of an $m\times n$ matrix $A$ is the span of the
+  \emph{rows} of $A$.  It is denoted $\Row A$.
+  \pause
+  Equivalently, it is the column span of $A^T$:
+  \[ \Row A = \Col A^T. \]
+  \pause
+  It is a subspace of $\R^{\blankuntil{4}{n}}$.
+\end{defn}
+
+\pause[5]\medskip
+We showed before that if $A$ has rows $v_1^T,v_2^T,\ldots,v_m^T$, then 
+\[ \Span\{v_1,v_2,\ldots,v_m\}^\perp = \pause\Nul A. \]
+\pause
+Hence we have shown:
+
+\medskip
+\alert{Fact:} $(\Row A)^\perp = \Nul A$.
+
+\pause\medskip
+Replacing $A$ by $A^T$, and remembering $\Row A^T = \Col A$:
+
+\pause\medskip
+\alert{Fact:} $(\Col A)^\perp = \Nul A^T$.
+
+\pause\medskip
+Using property \alert{2} and taking the orthogonal complements of both sides, 
+we get:
+
+\pause\medskip
+\alert{Fact:} $(\Nul A)^\perp = \Row A$ and
+$\Col A = (\Nul A^T)^\perp$.
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Orthogonal Complements}
+\framesubtitle{Reference sheet}
+
+\hbox to \linewidth{
+\hss\alert{\large Orthogonal Complements of Most of the
+  Subspaces We've Seen}\hss
+}
+
+\bigskip\centering
+For any vectors $v_1,v_2,\ldots,v_m$:
+\[\color{seq-orange} \Span\{v_1,v_2,\ldots,v_m\}^\perp = \Nul\mat{
+  \matrow{v_1^T};
+  \matrow{v_2^T};
+  \spvdots;
+  \matrow{v_m^T}} \]
+\medskip
+For any matrix $A$:
+\[\color{seq-orange} \Row A = \Col A^T \]
+\medskip
+and
+\[\color{seq-orange}
+\begin{aligned}
+  (\Row A)^\perp &= \Nul A    &  \Row A &= (\Nul A)^\perp \\
+  (\Col A)^\perp &= \Nul A^T  &  \Col A &= (\Nul A^T)^\perp
+\end{aligned}\]
+
+\end{frame}
+
+
+
+%%% Local Variables:
+%%% TeX-master: "../slides"
+%%% End:

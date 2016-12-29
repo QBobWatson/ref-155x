@@ -1,0 +1,787 @@
+
+% JDR: The first 1/3 of this lecture can be safely skipped if you want to get to
+%   1.2 more quickly.
+
+\titleframe{Chapter 1}{Linear Equations}
+\titleframe{Section 1.1}{Systems of Linear Equations}
+
+\def\rowop#1#2{%
+  \hfill%
+  \hbox to 0.2\linewidth{\hss\longsquiggly[#1]}%
+  \hbox to 0.4\linewidth{\hss#2}%
+  }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Disable a bunch of these slides to get to 1.2 quicker
+%\iffalse
+\begin{frame}
+\frametitle{One Linear Equation}
+
+What does the solution set of a linear equation look like?
+
+\pause\medskip
+\begin{columns}[onlytextwidth]
+  \column[t]{.6\linewidth}
+  \vskip-\baselineskip
+  \begin{itemize}
+  \item $x+y=1$ 
+    \pause\\[1mm]
+    $\longsquiggly$ a line in the plane: \color{seq1}$y = 1-x$
+  \end{itemize}
+  \column[t]{.4\linewidth}\centering
+  \begin{tikzpicture}[scale=.5, picture align top]
+    \draw[grid lines] (-2,-2) grid (2,2);
+    \draw[->] (-2,0) -- (2,0);
+    \draw[->] (0,-2) -- (0,2);
+    \draw[seq1, thick] (-1,2) -- (2,-1);
+  \end{tikzpicture}
+\end{columns}
+\pause
+\begin{columns}[onlytextwidth]
+  \column[t]{.6\linewidth}
+  \vskip-\baselineskip
+  \begin{itemize}
+  \item $x + y + z = 1$
+    \pause\\[1mm]
+    $\longsquiggly$ a plane in space: \color{seq1}$z = 1-x-y$
+  \end{itemize}
+  \column[t]{.4\linewidth}\centering
+  \begin{tikzpicture}[scale=.25, picture align top, myxyz]
+    \draw[densely dotted] (0,0,0) -- (1,0,0);
+    \draw[densely dotted] (0,0,0) -- (0,1,0);
+    \draw[densely dotted] (0,0,0) -- (0,0,1);
+    \begin{scope}[x={(-1,0,1)}, y={(0,-1,1)}, transformxy=1]
+      \fill[help lines, seq1!50, fill opacity=.7] (-2, -2) rectangle (2, 2);
+      \draw[help lines, seq1!50] (-2, -2) grid (2, 2);
+    \end{scope}
+    \point[scale=.5] at (1,0,0);
+    \point[scale=.5] at (0,1,0);
+    \point[scale=.5] at (0,0,1);
+    \draw[->] (1,0,0) -- (2,0,0) node[right] {$x$};
+    \draw[->] (0,1,0) -- (0,2,0) node[below left] {$y$};
+    \draw[->] (0,0,1) -- (0,0,2) node[above] {$z$};
+  \end{tikzpicture}
+\end{columns}
+\pause
+\begin{columns}[onlytextwidth]
+  \column[c]{.6\linewidth}
+  \begin{itemize}
+  \item $x + y + z + w = 1$
+    \pause\\[1mm]
+    $\longsquiggly$ a ``$3$-plane'' in ``$4$-space''\ldots
+  \end{itemize}
+  \column[c]{.4\linewidth}\centering\color{black!50}
+  [not pictured here]
+\end{columns}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Systems of Linear Equations}
+
+What does the solution set of a \emph{system} of more than one linear equation
+look like?
+
+\pause\vfill
+\begin{columns}[onlytextwidth]
+  \column[t]{.4\linewidth}
+  \[\begin{split}
+    \color{seq1}x - 3y &\color{seq1}= \color{seq1}-3 \\
+    \color{seq2}2x + y &\color{seq2}= \color{seq2}8
+  \end{split}\]
+  \webonlycmd{\noindent
+  \ldots is the \emph{intersection} of two lines,
+  which is a \emph{point} in this case.}
+  \note{Find the intersection point}
+  \pause
+  \column[t]{.6\linewidth}\centering
+  \begin{tikzpicture}[picture align top, scale=.095]
+    \draw[grid lines] (-20,-20) rectangle (20,20);
+    \clip (-20,-20) rectangle (20,20);
+    \draw[->] (-20,0) -- (20,0);
+    \draw[->] (0,-20) -- (0,20);
+    \draw[seq1, thick] (-20,-20/3+1) -- (20,20/3+1);
+    \draw[seq2, thick] (-20,40+8) -- (20,-40+8);
+    \point at (3,2);
+  \end{tikzpicture}
+\end{columns}
+
+\pause
+\bigskip
+In general it's an intersection of lines, planes, etc.
+
+\vfill
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Kinds of Solution Sets}
+  
+In what other ways can two lines intersect?
+
+\pause\vfill
+\begin{columns}[onlytextwidth]
+  \column[t]{.4\linewidth}
+    \[\begin{split}
+      \color{seq1}x - 3y &\color{seq1}= \color{seq1}-3 \\
+      \color{seq2}x - 3y &\color{seq2}= \color{seq2}3
+    \end{split}\]
+    \webonlycmd{\noindent
+    has no solution: the lines are \emph{parallel}.}
+  \note[item]{Find the lack of intersection point}
+  \pause
+  \column[t]{.6\linewidth}\centering
+  \begin{tikzpicture}[picture align top, scale=.095]
+    \draw[grid lines] (-20,-20) rectangle (20,20);
+    \clip (-20,-20) rectangle (20,20);
+    \draw[->] (-20,0) -- (20,0);
+    \draw[->] (0,-20) -- (0,20);
+    \draw[seq1, thick] (-20,-20/3+1) -- (20,20/3+1);
+    \draw[seq2, thick] (-20,-20/3-1) -- (20,20/3-1);
+  \end{tikzpicture}
+\end{columns}
+
+\pause
+\bigskip
+A system of equations with no solutions is called \textbf{inconsistent}.
+\note[item]{Obviously inconsistent in this case}
+
+\vfill
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Kinds of Solution Sets}
+  
+In what other ways can two lines intersect?
+
+\pause\vfill
+
+\begin{columns}[onlytextwidth]
+  \column[t]{.4\linewidth}
+  \[\begin{split}
+    \color{seq1}x - 3y &\color{seq1}= \color{seq1}-3 \\
+    \color{seq2}2x - 6y &\color{seq2}= \color{seq2}-6
+  \end{split}\]
+  \webonlycmd{\noindent
+  has infinitely many solutions: they are the \emph{same line}.}
+  \pause
+  \column[t]{.6\linewidth}\centering
+  \begin{tikzpicture}[picture align top, scale=.095]
+    \draw[grid lines] (-20,-20) rectangle (20,20);
+    \clip (-20,-20) rectangle (20,20);
+    \draw[->] (-20,0) -- (20,0);
+    \draw[->] (0,-20) -- (0,20);
+    \draw[seq2, double=seq1!50, double distance=1pt, thick] (-20,-20/3+1) -- (20,20/3+1);
+  \end{tikzpicture}
+\end{columns}
+
+\pause
+\bigskip
+Note that multiplying an equation by a nonzero number gives the
+\emph{same solution set}.
+\pause In other words, they are \emph{equivalent} (systems
+of) equations.
+
+\vfill
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{pollframe}
+
+What about in three variables?
+\pause
+\bigskip
+
+\begin{bluebox}[Poll]{.65\textwidth}
+  In how many different ways can three planes intersect in space?
+
+  \smallskip
+  \begin{eAlpherate}
+  \item One
+  \item Two
+  \item Three
+  \item Four
+  \item Five
+  \item Six
+  \item Seven
+  \end{eAlpherate}
+\end{bluebox}
+
+\note{Think: how many ``ways'' can three lines intersect in $\R^2$?}
+
+\end{pollframe}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\iffalse % This is a poll question in 1.2
+\begin{frame}
+\frametitle{Number of Solutions}
+
+\begin{bluebox}{.65\textwidth}
+  In general, a system of linear equations can have:
+
+  \smallskip
+  \begin{itemize}
+    \pause
+  \item Zero solutions (\emph{inconsistent});
+    \pause
+  \item One solution;
+    \pause
+  \item Infinitely many solutions.
+  \end{itemize}
+\end{bluebox}
+
+\onslide<5->{We will verify this later on.}
+
+\end{frame}
+\fi
+%\fi
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% JDR: can start lecture here
+
+\begin{frame}
+\frametitle{Solving Systems of Equations}
+
+\vskip-3mm
+\begin{eg}
+  Solve the system of equations
+  \[\syseq{x + 2y + 3z = 6;
+    2x - 3y + 2z = 14;
+    3x + y - z = -2
+  }\]
+\end{eg}
+
+This is the kind of problem we'll talk about for the first half of the course.
+
+\pause
+
+\begin{bluebox}{.6\textwidth}
+  \begin{itemize}
+  \item A \textbf{solution} is a list of numbers $x,y,z,\ldots$ that make
+    \emph{all} of the equations true.
+    \pause
+  \item The \textbf{solution set} is the collection of all solutions.
+    \pause
+  \item \textbf{Solving} the system means finding the solution set.
+  \end{itemize}
+\end{bluebox}
+
+\uncover<5->{What is a \emph{systematic} way to solve a system of equations?}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Solving Systems of Equations}
+
+\vskip-3mm
+\begin{eg}
+  Solve the system of equations
+  \[\syseq{x + 2y + 3z = 6;
+    2x - 3y + 2z = 14;
+    3x + y - z = -2
+  }\]
+\end{eg}
+
+\pause
+What strategies do you know?
+
+\begin{webonly}
+  \begin{itemize}
+  \item Substitution
+  \item Elimination
+  \end{itemize}
+
+  Both are perfectly valid, but only elimination scales well to large numbers of
+  equations.
+\end{webonly}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Solving Systems of Equations}
+
+\vskip-3mm
+\begin{eg}
+  Solve the system of equations
+  \[\syseq{x + 2y + 3z = 6;
+    2x - 3y + 2z = 14;
+    3x + y - z = -2
+  }\]
+\end{eg}
+
+\alert{Elimination method:} in what ways can you manipulate the equations?
+
+\vfill
+
+\begin{webonly}
+  \begin{itemize}
+  \item Multiply an equation by a nonzero number.
+      \hfill{\bf\color{seq-blue}(scale)}
+  \item Add a multiple of one equation to another.
+      \hfill{\bf\color{seq-blue}(replacement)} 
+  \item Swap two equations.
+      \hfill{\bf\color{seq-blue}(swap)}
+  \end{itemize}
+\end{webonly}
+\vfill
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Solving Systems of Equations}
+
+\vskip-3mm
+\begin{eg}
+  Solve the system of equations
+  \[\syseq{x + 2y + 3z = 6;
+    2x - 3y + 2z = 14;
+    3x + y - z = -2
+  }\]
+\end{eg}\pause
+
+\begin{webonly}
+\leavevmode
+\hbox to .4\textwidth{\hss\longsquiggly[\color{red}Multiply first by $-3$]}
+\hskip 5mm
+  $\syseq{-3x - 6y - 9z = -18;
+    2x - 3y + 2z = 14;
+    3x + y - z = -2
+  }$\\[4mm]
+\leavevmode
+\hbox to .4\textwidth{\hss\longsquiggly[\color{red}Add first to third]}
+\hskip 5mm
+  $\syseq{-3x - 6y - 9z = -18;
+    2x - 3y + 2z = 14;
+    \. \+ -5y - 10z = -20
+  }$
+\end{webonly}
+
+\bigskip
+
+Now I've eliminated $x$ from the last equation!
+
+\pause\medskip
+~\ldots but there's a long way to go still.  Can we make our lives easier?
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Solving Systems of Equations}
+\framesubtitle{Better notation}
+
+It sure is a pain to have to write $x, y, z,$ and $=$ over and over again.
+\pause
+
+\bigskip
+\alert{Matrix notation:} write just the numbers, in a box, instead!
+
+\begin{center}
+\bigskip
+  $\syseq{x + 2y + 3z = 6;
+    2x - 3y + 2z = 14;
+    3x + y - z = -2
+  }$
+~\longsquiggly[becomes]~
+$\amat{
+1  2  3  6 ;
+2  -3  2  14; 
+3  1  -1  -2
+}$
+\end{center}
+
+\pause\medskip
+This is called an \textbf{(augmented) matrix}.  Our equation manipulations
+become \textbf{elementary row operations}:
+
+\note[item]{Augmented means ``remember there was an $=$ there.''}
+
+\pause\medskip
+\begin{itemize}
+  \item Multiply all entries in a row by a nonzero number.
+    {\hfill\bf\color{seq-blue}(scale)}
+    \pause
+  \item Add a multiple of each entry of one row to the
+    corresponding entry in another.
+      \hfill{\bf\color{seq-blue}(row replacement)}
+    \pause
+  \item Swap two rows.
+      {\hfill\bf\color{seq-blue}(swap)}
+\end{itemize}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Row Operations}
+
+\vskip-3mm
+\begin{eg}
+  Solve the system of equations
+  \[\syseq{x + 2y + 3z = 6;
+    2x - 3y + 2z = 14;
+    3x + y - z = -2
+  }\]
+\end{eg}
+
+\pause
+
+Start:
+\[\amat{
+1   2   3   6 ;
+2   -3   2   14 ;
+3   1   -1   -2
+}\]
+
+\pause
+\alert{Goal:} we want our elimination method to eventually produce a system of
+equations like\\
+\begin{center}
+$\syseq{x \+ \. \+ \. = A; \. \+ y \+ \. = B; \. \+ \. \+ z = C}$
+\pause
+\hskip5mm or in matrix form,\hskip5mm
+\webonlycmd{$\amat{
+1   0   0   A ;
+0   1   0   B ;
+0   0   1   C
+}$}
+\end{center}
+\pause
+So we need to do row operations that make the start matrix look like the end
+one.
+
+\pause\smallskip
+\alert{Strategy:} fiddle with it so we only have ones and zeros.
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Row Operations}
+\framesubtitle{Continued}
+
+\def\r{\color{red}}
+$\amat{
+\color<3->{red}1   2   3   6 ;
+\namedbox{a21}{2}   -3   2   14 ;
+\namedbox{a31}{3}   1   -1   -2
+}$%
+\begin{tikzpicture}[remember picture, overlay]
+  \node<2-> [draw,thick,rounded corners,blue!50,fit=(a21) (a31)] (x) {};
+  \node<2-> [blue!50, below=5mm of x, xshift=1.5cm, align=center] (expl) 
+    {We want these to be zero.\\
+     {\uncover<3->{So we subract multiples of the first row.}}};
+  \draw<2->[->, blue!50] (expl.north) to[out=90,in=-90] (x.south);
+\end{tikzpicture}%
+\begin{webonly}%
+\rowop{$R_2 = R_2-2R_1$}{$\amat{
+      1   2   3   6 ;
+      \r0   -7   -4   2 ;
+      3   1   -1   -2
+    }$}\\
+\rowop{$R_3 = R_3-3R_1$}{$\amat{
+      1   2   3   6 ;
+      0   -7   -4   2 ;
+      \r0   -5   -10   -20
+    }$}
+\end{webonly}%
+
+\pause[4]\bigskip
+$\amat{
+  1\phantom-   \namedbox{b12}{\phantom-2}   3   6 ;
+  0\phantom-   \namedbox{b22}{\color<6->{seq-green}-7}   -4   2 ;
+  0\phantom-   \namedbox{b32}{-5}   -10   -20
+}$%
+\begin{tikzpicture}[remember picture, overlay]
+  \node<5-> [draw, thick, rounded corners, blue!50, fit=(b12)] (x) {};
+  \node<5-> [draw, thick, rounded corners, blue!50, fit=(b32)] (y) {};
+  \node<5-> [blue!50, below=5mm of y] (expl) {We want these to be zero.};
+  \draw<5-> [->, blue!50] 
+    let \p1=($(x.west) - (3mm,0)$) in
+      (expl.north -| \p1) -- (x.south west -| \p1) to[out=90,in=180] (x.west);
+  \draw<5-> [->, blue!50] 
+    let \p1=($(y.west) - (3mm,0)$) in
+      (expl.north -| \p1) -- (y.south west -| \p1) to[out=90,in=180] (y.west);
+  \node<6-> [seq-green, below=1mm of expl, xshift=5mm, align=center] (expl2) 
+    {It would be nice if this were a $1$.\\
+     {\uncover<7->{We could divide by $-7$, but that}}\\
+     {\uncover<7->{would produce ugly fractions.}}\\[3mm]
+     {\uncover<8->{\color{black}Let's swap the last two rows first.}}};
+  \draw<6-> [->, seq-green] 
+    let \p1=($(b22.east) + (3mm,0)$) in
+      ($(expl2.north -| expl.east) + (1mm,0)$) 
+        -- ($(expl.east) + (1mm,0)$)
+        to[out=90,in=0] ($(expl.north east) + (-2mm,1mm)$)
+        -- ($(expl.north -| \p1) + (2mm,1mm)$)
+        to[out=180,in=-90] ($(expl.north -| \p1) + (0,3mm)$)
+        -- ($(b22.south east -| \p1)-(0,1mm)$) 
+        to[out=90,in=0] (b22.east);
+\end{tikzpicture}%
+\begin{webonly}%
+\rowop{$R_2\ToT R_3$}{$\amat{
+    1   2   3   6 ;
+    0   -5   -10   -20 ;
+    0   -7   -4   2
+  }$}\\
+\rowop{$R_2 = R_2\divsymb-5$}{$\amat{
+      1   2   3   6 ;
+      0   \r1   2   4 ;
+      0   -7   -4   2 
+    }$}\\
+\rowop{$R_1 = R_1-2R_2$}{$\amat{
+      1   \r0   -1   -2 ;
+      0   1   2   4 ;
+      0   -7   -4   2 
+    }$}\\
+\rowop{$R_3 = R_3+7R_2$}{$\amat{
+      1   0   -1   -2 ;
+      0   1   2   4 ;
+      0   \r0   10   30
+    }$}
+\end{webonly}%
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Row Operations}
+\framesubtitle{Continued}
+\def\r{\color{red}}
+
+$\amat{
+    1   0   \namedbox{c13}{-1}   -2 ;
+    0   1   \namedbox{c23}{2}   4 ;
+    0   0   \namedbox{c33}{\color<3->{seq-green}10}   30
+  }$
+\begin{tikzpicture}[remember picture, overlay]
+  \node<2-> [draw, thick, rounded corners, blue!50, fit=(c13) (c23)] (x) {};
+  \node<2-> [blue!50, below=8mm of x, xshift=-5mm] (expl) {We want these to be zero.};
+  \draw<2-> [->, blue!50] 
+    let \p1=($(x.west) - (2mm,0)$) in
+      (expl.north -| \p1) to[out=90,in=-135] ($(x.south west) + .5*(1mm,1mm)$);
+  \node<3-> [seq-green, below=1mm of expl, xshift=8mm] (expl2) 
+    {Let's make this a $1$ first.};
+  \draw<3-> [->, shorten >=.5mm, seq-green] 
+      ($(expl2.north -| expl.east) + (1mm,0)$) 
+        -- ($(expl.east) + (1mm,0)$)
+        to[out=90,in=0] ($(expl.north east) + (-2mm,1mm)$)
+        -- ($(expl.north -| c33.south) + (2mm,1mm)$)
+        to[out=180,in=-90] ($(expl.north -| c33.south) + (0,3mm)$)
+        -- (c33.south);
+\end{tikzpicture}%
+\begin{webonly}%
+\rowop{$R_3 = R_3\divsymb 10$}{$\amat{
+        1   0   -1   -2 ;
+        0   1   2   4 ;
+        0   0   \r1   3
+      }$}\\
+\rowop{$R_1 = R_1+R_3$}{$\amat{
+        1   0   \r0   1 ;
+        0   1   2   4 ;
+        0   0   1   3
+      }$}\\
+\rowop{$R_2 = R_2 - 2R_3$}{$\amat{
+        1   0   0   1 ;
+        0   1   \r0   -2 ;
+        0   0   1   3
+      }$}\\[3mm]
+\rowop{translates into}{$\syseq{
+    x \+ \. \+ \. = 1;
+    \. \+ y \+ \. = -2;
+    \. \+ \. \+ z = 3}$}
+\end{webonly}%
+
+\pause[4]%
+Success!
+
+\pause\medskip
+\alert{Check:}
+
+\bigskip\centering
+$\syseq{x + 2y + 3z = 6;
+  2x - 3y + 2z = 14;
+  3x + y - z = -2
+}$
+~\longsquiggly[substitute solution]~
+\begin{webonly}
+  $\syseq{
+    1 + 2\cdot(-2) + 3\cdot 3 = 6;
+    2\cdot 1 - 3\cdot(-2) + 2\cdot 3 = 14;
+    3\cdot 1 + (-2) - 3 = -2
+  }$\bigcheck 
+\end{webonly}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Row Equivalence}
+
+\begin{bluebox}[Important]{.7\textwidth}
+  The process of doing row operations to a matrix does not change the solution
+  set of the corresponding linear equations!
+\end{bluebox}
+
+\pause
+
+\vfill
+
+\begin{defn}
+  Two matrices are called \textbf{row equivalent} if one can be obtained from
+  the other by doing some number of elementary row operations.
+\end{defn}
+
+\pause\bigskip
+So the linear equations of row-equivalent matrices have the
+\emph{same solution set}.
+
+\vfill
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{A Bad Example}
+
+\vskip-3mm
+\begin{eg}
+  Solve the system of equations
+  \[\syseq{x + y = 2;
+    3x + 4y = 5;
+    4x + 5y = 9
+  }\]
+\end{eg}
+
+\pause
+Let's try doing row operations:
+
+\bigskip
+
+\def\r{\color{red}}
+\begin{center}\hskip 2cm\begin{minipage}{.75\linewidth}
+\pause\hfill
+$\amat{
+\color<4->{red}\phantom-1 1 2;
+\namedbox{a21}{3} 4 5;
+\namedbox{a31}{4} 5 9}$%
+\begin{tikzpicture}[remember picture, overlay]
+  \node<4-> [draw, thick, rounded corners, blue!50, fit=(a21) (a31)] (x) {};
+  \node<4-> [blue!50, left=2mm of x, xshift=-5mm, align=center] (expl) 
+    {First clear these by\\
+     subtracting multiples\\
+     of the first row.};
+  \draw<4-> [->, blue!50] (expl.east) -- (x.west);
+\end{tikzpicture}%
+\begin{webonly}%
+\rowop{$R_2 = R_2 - 3R_1$}{$\amat{ 
+    1 1 2; {\r0} 1 {-1};
+  4 5 9}$\hskip 8mm}\par
+\rowop{$R_3 = R_3 - 4R_1$}{$\amat{
+  1 1 2;
+  0 1 {-1};
+  {\r0} 1 1}$\hskip 8mm}\par\vskip3mm
+\end{webonly}%
+\pause[5]\hfill$\amat{
+  1 1 2;
+  0 \color<6->{red}1 {-1};
+  0 \namedbox{b32}{1} 1}$%
+\begin{tikzpicture}[remember picture, overlay]
+  \node<6-> [draw, thick, rounded corners, blue!50, fit=(b32)] (y) {};
+  \node<6-> [blue!50, align=center] at (y.west -| expl.south) (expl2) 
+    {Now clear this by\\
+     subtracting\\
+     the second row.};
+  \draw<6-> [->, blue!50] (expl2.east) -- (y.west);
+\end{tikzpicture}%
+\begin{webonly}%
+\rowop{$R_3 = R_3 - R_2$}{$\amat{
+  1 1 2;
+  0 1 {-1};
+  0 {\r0} 2}$\hskip 8mm}
+\end{webonly}%
+\end{minipage}\end{center}%
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{A Bad Example}
+\framesubtitle{Continued}
+
+\begin{center}
+  $\amat{
+  1 1 2;
+  0 1 -1;
+  0 0 2}$
+  \;\longsquiggly[translates into]\;
+  \begin{webonly}\def\r{\color{red}}
+    $\syseq{x + y = 2; \. \+ y = -1; \. \+ \r0 \r= \r2}$
+  \end{webonly}
+\end{center}
+
+\pause\medskip
+In other words, the original equations
+\begin{center}
+  $\syseq{x + y = 2;
+    3x + 4y = 5;
+    4x + 5y = 9
+  }$
+  \qquad have the same solutions as \qquad
+  $\syseq{x + y = 2; \. \+ y = -1; \. \+ 0 = 2}$
+\end{center}
+
+\pause\medskip
+But the latter system obviously has no solutions (there is no way to make them
+all true), so our original system has no solutions either.
+
+\pause
+\bigskip
+
+\begin{defn}
+  A system of equations is called \textbf{inconsistent} if it has no solution.
+  It is \textbf{consistent} otherwise.
+\end{defn}
+
+\end{frame}
+
+
+%%% Local Variables:
+%%% TeX-master: "../slides"
+%%% End:

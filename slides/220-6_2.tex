@@ -1,0 +1,376 @@
+
+% JDR: This is meant to be half a lecture, the other half being 6.3.
+
+\titleframe{Section 6.2}{Orthogonal Sets}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Best Approximation}
+
+Suppose you measure a data point $\color{seq-red}x$ which you know for
+theoretical reasons must lie on a subspace $W$.
+\begin{center}
+\begin{tikzpicture}[myxyz, scale=.5, thin border nodes]
+  \coordinate (u) at (1,0,0);
+  \coordinate (v) at (0,1.1,-.2);
+  \coordinate (uxv) at (0,.2,1.1);
+  \coordinate (x) at ($-1.1*(u)+(v)+1.5*(uxv)$);
+  \begin{scope}[x=(u),y=(v),transformxy]
+    \fill[seq-violet!30] (-2,-2) rectangle (2,2);
+    \draw[seq-violet, help lines] (-2,-2) grid (2,2);
+    \node[seq-violet] at (2.6,1) {$W$};
+  \end{scope}
+  \point<2->[seq-blue, "$y$" {below,text=seq-blue}] (y) at ($-1.1*(u)+1*(v)$);
+  \coordinate<2-> (yu) at ($(y)+(u)$);
+  \coordinate<2-> (yv) at ($(y)+(v)$);
+  \pic<4->[draw, right angle len=1.5mm] {right angle=(x)--(y)--(yu)};
+  \pic<4->[draw, right angle len=1.5mm] {right angle=(x)--(y)--(yv)};
+  \point[seq-red, "$x$" {above,text=seq-red}] (xx) at (x);
+  \draw<4->[vector, thin] (y) -- node[auto] {$x-y$} (xx);
+  \point at (0,0,0);
+\end{tikzpicture}
+\end{center}
+\pause
+Due to measurement error, though, the measured $\color{seq-red}x$ is not actually in
+$W$.  Best approximation: $\color{seq-blue}y$ is the \emph{closest} point to
+$\color{seq-red}x$ on $W$.
+
+\pause\medskip
+How do you know that $\color{seq-blue}y$ is the closest point?
+\pause
+The vector from $\color{seq-blue}y$ to $\color{seq-red}x$ is orthogonal to $W$:
+\pause
+it is in the \emph{orthogonal complement} $W^\perp$.
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Orthogonal Projection onto a Line}
+
+\vskip-3mm
+\begin{thm}
+  Let $L = \Span\{u\}$ be a line in $\R^n$, and let $x$ be in $\R^n$.  The
+  closest point to $x$ on $L$ is the point
+  \[ \proj_L(x) = \frac{x\cdot u}{u\cdot u}\,u. \]
+  \pause
+  This point is called the \textbf{orthogonal projection of $x$ onto $L$.}
+\end{thm}
+
+\pause\medskip
+\begin{center}
+\begin{tikzpicture}[scale=.5, thin border nodes]
+  \draw[seq-violet] (-3,-2) -- node[below right, very near start] {$L$} (3,2);
+  \draw[vector] (0,0) --  node[below right] {$u$} (1.5,1);
+  \point[seq-red] (x) at (-3,2);
+  \point (o) at (0,0);
+  \draw[vector,seq-red] (o) -- node[auto,swap] {$x$} (x);
+  \point[seq-blue, "$y=\proj_L(x)$" {below right,seq-blue}]
+    (p) at (${-2.5/(1.5*1.5+1)}*(1.5,1)$);
+  \draw[vector, seq-green] (p) -- node[below left] {$x-y$} (x);
+  \pic[draw] {right angle=(x)--(p)--(o)};
+\end{tikzpicture}
+\end{center}
+
+\begin{webonly}\medskip
+\alert{Why?}
+Let $y = \proj_L(x)$.
+We have to verify that $x-y$ is in $L^\perp$. 
+This means proving that $u\cdot(x-y) = 0$.
+\[ u\cdot(x-y) = u\cdot\left(x-\frac{x\cdot u}{u\cdot u}u\right) 
+= u\cdot x - \frac{x\cdot u}{u\cdot u} (u\cdot u)
+= u\cdot x - x\cdot u = 0.
+\]
+\end{webonly}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Orthogonal Projection onto a Line}
+\framesubtitle{Example}
+
+Compute the orthogonal projection of $x = \vec{-6 4}$ onto the line
+$L$ spanned by $u = \vec{3 2}$.
+
+\begin{webonly}
+  \[ y = \proj_L(x) = \frac{x\cdot u}{u\cdot u}u
+  = \frac{-18+8}{9+4}\vec{3 2} = -\frac{10}{13}\vec{3 2}. \]
+\end{webonly}
+
+\pause
+\begin{center}
+\begin{tikzpicture}[scale=.5, thin border nodes]
+  \draw[seq-violet] (-3,-2) -- node[below right, very near start] {$L$} (3,2);
+  \draw[vector] (0,0) --  node[below right, at end] {$\vec{3 2}$} (1.5,1);
+  \point[seq-red] (x) at (-3,2);
+  \point (o) at (0,0);
+  \draw[vector,seq-red] (o) -- node[at end, left=1mm] {$\vec{-6 4}$} (x);
+  \point[seq-blue, "$\displaystyle-\frac{10}{13}\vec{3 2}$" {below right,seq-blue}]
+    (p) at (${-2.5/(1.5*1.5+1)}*(1.5,1)$);
+  \draw (p) -- (x);
+  \pic[draw] {right angle=(x)--(p)--(o)};
+\end{tikzpicture}
+\end{center}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Orthogonal Sets}
+
+\vskip-3mm
+\begin{defn}
+  A set of \emph{nonzero} vectors is \textbf{orthogonal} if each pair of vectors
+  is orthogonal.
+  \pause
+  It is \textbf{orthonormal} if, in addition, each vector is a unit vector.
+\end{defn}
+\note{Lay forgets(?) nonzero}
+
+\pause\medskip
+\alert{Example:} $\cB = \left\{\vec{1 1 1},\;\vec{1 -2 1},\;\vec{1 0 -1}\right\}$
+is an orthogonal set.  Check:
+\begin{webonly}
+  \[ \vec{1 1 1}\cdot\vec{1 -2 1} = 0 \qquad \vec{1 1 1}\cdot\vec{1 0 -1} = 0
+  \qquad \vec{1 -2 1}\cdot\vec{1 0 -1} = 0. \]
+\end{webonly}
+
+\pause\vskip-3mm
+\begin{lem}
+  An orthogonal set of vectors is linearly independent.
+\end{lem}
+
+\begin{webonly}\medskip
+\displayskips{5pt}
+Suppose $\{u_1,u_2,\ldots,u_m\}$ is orthogonal.  We need to show that the
+equation
+\[ c_1u_1 + c_2u_2 + \cdots + c_mu_m = 0 \]
+has only the trivial solution $c_1=c_2=\cdots=c_m=0$.
+\[ 0 = u_1\cdot(c_1u_1 + c_2u_2 + \cdots + c_mu_m)
+= c_1(u_1\cdot u_1) + 0 + 0 + \cdots + 0. \]
+Hence $c_1=0$.  Similarly for the other $c_i$.
+\end{webonly}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Orthogonal Bases}
+
+An orthogonal set $\cB = \{u_1,u_2,\ldots,u_m\}$ forms a basis for
+$W = \Span\cB$.\\[1mm]
+\pause
+An advantage of orthogonal bases is it's \emph{very easy} to compute the
+$\cB$-coordinates of a vector in $W$.
+
+\pause
+\begin{thm}
+  Let $\cB = \{u_1,u_2,\ldots,u_m\}$ be an orthogonal set, and let $x$ be a
+  vector in $W = \Span\cB$.  Then
+  \[ x = \sum_{i=1}^m \frac{x\cdot u_i}{u_i\cdot u_i}\,u_i
+  = \frac{x\cdot u_1}{u_1\cdot u_1}\,u_1 + \frac{x\cdot u_2}{u_2\cdot u_2}\,u_2
+  + \cdots + \frac{x\cdot u_m}{u_m\cdot u_m}\,u_m. \]
+\end{thm}
+
+\pause
+In other words, the $\cB$-coordinates of $x$ are
+$\displaystyle\left(\frac{x\cdot u_1}{u_1\cdot u_1},
+  \frac{x\cdot u_2}{u_2\cdot u_2},\ldots,
+\frac{x\cdot u_m}{u_m\cdot u_m} \right)$.
+
+\medskip
+\begin{webonly}
+\alert{Why?}
+If $x = c_1u_1 + c_2u_2 + \cdots + c_mu_m$, then
+\[ x\cdot u_1 = c_1(u_1\cdot u_1) + 0 + \cdots + 0 \implies c_1 =
+\frac{x\cdot u_1}{u_1\cdot u_1}. \]
+Similarly for the other $c_i$.
+\end{webonly}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Orthogonal Bases}
+\framesubtitle{Geometric reason}
+
+\vskip-3mm
+\begin{thm}
+  Let $\cB = \{u_1,u_2,\ldots,u_m\}$ be an orthogonal set, and let $x$ be a
+  vector in $W = \Span\cB$.  Then
+  \[ x = \sum_{i=1}^m \frac{x\cdot u_i}{u_i\cdot u_i}\,u_i
+  = \frac{x\cdot u_1}{u_1\cdot u_1}\,u_1 
+  + \namedbox{u2}{\displaystyle\frac{\mathstrut x\cdot u_2}{u_2\cdot u_2}\,u_2}
+  + \cdots + \frac{x\cdot u_m}{u_m\cdot u_m}\,u_m. \]
+  \begin{tikzpicture}[remember picture, overlay]
+    \node[blue!50, draw, rounded corners, inner sep=1pt, fit=(u2)] (u2box) {};
+    \path (u2box.north) ++(5mm,4mm)
+      node[blue!50, right] (expl) {$\proj_{L_2}(u_2)$};
+    \draw[blue!50, ->] (expl.west) to[out=180,in=90] (u2box.north);
+  \end{tikzpicture}
+\end{thm}
+
+If $L_i$ is the line spanned by $u_i$, then this says
+\[ x = \proj_{L_1}(x) + \proj_{L_2}(x) + \cdots + \proj_{L_m}(x). \]
+\pause
+\begin{center}\vskip-3mm
+\begin{tikzpicture}[myxyz, scale=.75, thin border nodes]
+  \coordinate (u) at (1,0,0);
+  \coordinate (v) at (0,1.1,-.2);
+  \coordinate (uxv) at (0,.2,1.1);
+  \coordinate (x) at ($-1.1*(u)+(v)+1.5*(uxv)$);
+  \begin{scope}[x=(u),y=(v),transformxy]
+    \fill[seq-violet!20] (-2,-2) rectangle (2,2);
+    \draw[seq-blue] (-2,0) -- node[auto, near start]{$L_1$} (2,0);
+    \draw[seq-green] (0,-2) -- node[auto, near end]{$L_2$} (0,2);
+    \point (o) at (0,0);
+    \node[seq-violet] at (2.6,1.3) {$W$};
+    \point[seq-red, "$x$" {above right, seq-red}] (y) at (1,-1.25);
+    \coordinate (p2) at (0,-1.25);
+    \draw[vector] (0,0) -- (p2) node[left=2pt] {$\proj_{L_2}(x)$};
+    \coordinate (p1) at (1,0);
+    \draw[vector] (0,0) -- (p1) node[below=1pt] {$\proj_{L_1}(x)$};
+    \draw[dashed] (1,0) -- (y);
+    \draw[dashed] (0,-1.25) -- (y);
+    \pic[draw] {right angle=(p2)--(o)--(p1)};
+    \pic[draw] {right angle=(o)--(p1)--(y)};
+    \pic[draw] {right angle=(o)--(p2)--(y)};
+    \pic[draw] {right angle=(p1)--(y)--(p2)};
+  \end{scope}
+\end{tikzpicture}
+\pause
+\begin{tikzpicture}[scale=.75, thin border nodes,
+    remember picture, right angle len=1.5mm]
+  \draw[seq-blue] (-1,0) -- node[near end,auto, swap] {$L_1$} (2,0);
+  \draw[seq-green] (-.5,-1) -- node[near end,auto] {$L_2$} (1,2);
+  \point (o) at (0,0);
+  \point[seq-red, "$x$" {below left, text=seq-red}] (y) at (1,1);
+  \coordinate (p1) at (1,0);
+  \draw[vector] (o) -- (p1);
+  \draw[dashed] (y) -- (p1);
+  \coordinate (p2) at ($3/5*(1,2)$);
+  \draw[vector] (o) -- (p2);
+  \draw[densely dashed] (y) -- (p2);
+  \pic[draw] {right angle=(o)--(p1)--(y)};
+  \pic[draw] {right angle=(o)--(p2)--(y)};
+  \point (s) at ($(p1) + (p2)$);
+  \draw (p1) -- (s.center) (p2) -- (s.center)
+    node[above right] {$\proj_{L_1}(x) + \proj_{L_2}(x)$};
+  \coordinate (end) at (.5,-.5);
+\end{tikzpicture}
+\end{center}
+
+\medskip
+\alert{Warning:} This only works for an \emph{orthogonal} basis.\namedbox{start}{\strut}
+\begin{tikzpicture}[remember picture, overlay]
+  \draw[blue!50, ->] (start) to[out=0,in=-90] (end);
+\end{tikzpicture}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Orthogonal Bases}
+\framesubtitle{Example}
+
+\alert{Problem:} Find the $\cB$-coordinates of $x = {0\choose 3}$, where
+\[ \cB = \left\{ \vec{1 2},\;\vec{-4 2} \right\}. \]
+
+\pause\medskip
+\alert{Old way:}\vskip-4mm
+\[ \amat{1 -4 0; 2 2 3} \;\longsquiggly[rref]\; \amat{1 0 6/5; 0 1 6/20}
+\implies [x]_\cB = \vec{6/5 6/20}. \]
+
+\pause\medskip
+\alert{New way:} note $\cB$ is an \emph{orthogonal} basis.
+\begin{webonly}
+  \[
+    x = \frac{x\cdot u_1}{u_1\cdot u_1} u_1 + \frac{x\cdot u_2}{u_2\cdot u_2}u_2
+    = \frac{3\cdot 2}{1^2+2^2} u_1 + \frac{3\cdot 2}{(-4)^2+2^2} u_2 
+    = \frac 65 u_1 + \frac 6{20} u_2.
+  \]
+  So the $\cB$-coordinates are $\frac 65, \frac 6{20}$.
+\end{webonly}
+
+\pause
+\begin{center}
+\begin{tikzpicture}[scale=.5, thin border nodes]
+  \draw[grid lines] (-5,-1) grid (2,4);
+  \draw[->] (-5,0) -- (2,0);
+  \draw[->] (0,-1) -- (0,4);
+  \clip (-5,-1) rectangle (3,4);
+  \coordinate (u1) at (1,2);
+  \coordinate (u2) at (-4,2);
+  \draw[seq-blue] ($-3*(u1)$) -- ($3*(u1)$);
+  \draw[seq-green] ($-3*(u2)$) -- ($3*(u2)$);
+  \draw[vector] (0,0) -- node[auto,swap] {$u_1$} (u1);
+  \draw[vector] (0,0) -- node[auto,near end] {$u_2$} (u2);
+  \point[seq-red, "$x$" {above right, text=seq-red}] (y) at (0,3);
+  \point (o) at (0,0);
+  \coordinate (p1) at ($6/5*(u1)$);
+  \coordinate (p2) at ($6/20*(u2)$);
+  \point[scale=.75] at (p1);
+  \node[right=2.5pt, yshift=-2pt, fill=white] at (p1) {$\frac 65 u_1$};
+  \point[scale=.75] at (p2);
+  \node[below left=1pt, fill=white] at (p2) {$\frac 6{20} u_2$};
+  \draw[densely dashed] (y) -- (p1) (y) -- (p2);
+  \pic[draw] {right angle=(o)--(p1)--(y)};
+  \pic[draw] {right angle=(o)--(p2)--(y)};
+\end{tikzpicture}
+\end{center}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Orthogonal Bases}
+\framesubtitle{Example}
+
+\alert{Problem:} Find the $\cB$-coordinates of $x = (6,1,-8)$ where
+\[ \cB = \left\{ \vec{1 1 1},\;\vec{1 -2 1},\;\vec{1 0 -1} \right\}. \]
+
+\begin{webonly}
+\alert{Answer:}\vskip\abovedisplayskip
+\hbox to \linewidth{\hss$\displaystyle\begin{aligned}
+  [x]_\cB &=
+  \left(
+    \frac{x\cdot u_1}{u_1\cdot u_1},\;
+    \frac{x\cdot u_2}{u_2\cdot u_2},\;
+    \frac{x\cdot u_3}{u_3\cdot u_3}
+  \right) \\
+  &= \left(
+    \frac{6\cdot 1+1\cdot 1-8\cdot 1}{1^2+1^2+1^2},\;
+    \frac{6\cdot 1+1\cdot(-2)-8\cdot 1}{1^2+(-2)^2+1^2},\;
+    \frac{6\cdot 1+1\cdot 0+(-8)\cdot(-1)}{1^2 + 0^2 + (-1)^2}
+  \right) \\
+  &= \left( -\frac13,\; -\frac23,\;7 \right).
+\end{aligned}$\hss}
+\vskip\belowdisplayskip
+\alert{Check:}
+\[ \vec{6 1 -8} = -\frac 13\vec{1 1 1} -\frac 23\vec{1 -2 1} + 7\vec{1 0 -1}.
+\bigcheck[\quad] \]
+\end{webonly}
+
+\end{frame}
+
+
+%%% Local Variables:
+%%% TeX-master: "../slides"
+%%% End:

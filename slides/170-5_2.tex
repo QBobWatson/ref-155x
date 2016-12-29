@@ -1,0 +1,551 @@
+
+% JDR: This is less than 50 minutes; it can be combined with 5.1.
+
+\usetikzlibrary{decorations.pathreplacing}
+
+\titleframe{Section 5.2}{The Characteristic Equation}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{The Invertible Matrix Theorem}
+\framesubtitle{Addenda}
+
+We have a couple of new ways of saying ``$A$ is invertible'' now:
+\pause\medskip
+
+\begin{oneoffthm}{The Invertible Matrix Theorem}
+  Let $A$ be a square $n\times n$ matrix, and let $T\colon\R^n\to\R^n$ be the
+  linear transformation $T(x) = Ax$.  The following statements are equivalent.\\
+  \begin{enumerate}
+  \item $A$ is invertible.
+  \end{enumerate}
+  \pause
+  \rlap{
+  \begin{tikzpicture}
+    \node[scale=.7, anchor=west] (L) {\begin{minipage}{\linewidth}
+      \begin{enumerate}
+      \setcounter{enumi}{1}
+      \item $T$ is invertible.
+      \item $A$ is row equivalent to $I_n$.
+      \item $A$ has $n$ pivots.
+      \item $Ax=0$ has only the trivial solution.
+      \item The columns of $A$ are linearly independent.
+      \item $T$ is one-to-one.
+      \item $Ax = b$ is consistent for all $b$ in $\R^n$.
+      \item The columns of $A$ span $\R^n$.
+      \item $T$ is onto.
+      \end{enumerate}
+      \end{minipage}};
+    \node[scale=.7, right=-2.5cm of L] {
+      \begin{minipage}{\linewidth}
+      \begin{enumerate}
+      \setcounter{enumi}{10}
+      \item $A$ has a left inverse (there exists $B$ such that $BA = I_n$).
+      \item $A$ has a right inverse (there exists $B$ such that $AB = I_n$).
+      \item $A^T$ is invertible.
+      \item The columns of $A$ form a basis for $\R^n$.
+      \item $\Col A = \R^n$.
+      \item $\dim\Col A = n$.
+      \item $\rank A = n$.
+      \item $\Nul A = \{0\}$.
+      \item $\dim\Nul A = 0$.
+      \end{enumerate}
+    \end{minipage}};
+  \useasboundingbox (-1mm,0);
+  \end{tikzpicture}}\par\vskip-1mm
+  \begin{enumerate}
+    \setcounter{enumi}{18}
+    \pause
+  \item The determinant of $A$ is \emph{not} equal to zero.
+    \pause
+  \item The number $0$ is \emph{not} an eigenvalue of $A$.
+  \end{enumerate}
+\end{oneoffthm}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{The Characteristic Polynomial}
+
+Let $A$ be a square matrix.
+\[\begin{split}
+  \text{$\lambda$ is an eigenvalue of $A$}
+  &\iff\uncover<2->{Ax=\lambda x \text{ has a nontrivial solution}} \\
+  &\uncover<3->{\iff (A-\lambda I)x = 0  \text{ has a nontrivial solution}} \\
+  &\uncover<4->{\iff A-\lambda I \text{ is not invertible}} \\
+  &\uncover<5->{\iff \det(A-\lambda I) = 0.}
+\end{split}\]
+\pause[6]%
+This gives us a way to compute the eigenvalues of $A$.
+
+\pause\medskip
+\begin{defn}
+  Let $A$ be a square matrix.  The \textbf{characteristic polynomial} of $A$ is
+  \[ f(\lambda) = \det(A-\lambda I). \]
+  \pause
+  The \textbf{characteristic equation} of $A$ is the equation
+  \[ f(\lambda) = \det(A-\lambda I) = 0. \]
+\end{defn}
+
+\pause
+\begin{bluebox}[Important]{.7\linewidth}
+  The eigenvalues of $A$ are the roots of the characteristic polynomial
+  $f(\lambda) = \det(A-\lambda I)$.
+\end{bluebox}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{The Characteristic Polynomial}
+\framesubtitle{Example}
+
+\alert{Question:} What are the eigenvalues of 
+\[ A = \mat{5 2; 2 1}? \]
+
+\begin{webonly}
+\alert{Answer:}
+First we find the characteristic polynomial:
+\[\begin{split} f(\lambda) &= \det(A-\lambda I)
+= \det\left[ \mat{5 2; 2 1} - \mat{\lambda, 0; 0 \lambda} \right]
+= \det\mat{5-\lambda, 2; 2 1-\lambda} \\
+&= (5-\lambda)(1-\lambda) - 2\cdot 2 \\
+&= \lambda^2 - 6\lambda + 1.
+\end{split}\]
+The eigenvalues are the roots of the characteristic polynomial, which we can
+find using the quadratic formula:
+\[ \lambda = \frac{6\pm\sqrt{36-4}}2
+= 3\pm 2\sqrt 2. \]
+\end{webonly}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{The Characteristic Polynomial}
+\framesubtitle{Example}
+
+\alert{Question:} What is the characteristic polynomial of
+\[ A = \mat{a b; c d}? \]
+
+\displayskips{3pt}
+\begin{webonly}
+\alert{Answer:}\vskip -5mm
+\[\begin{split} f(\lambda) &= \det(A-\lambda I)
+= \det\mat{a-\lambda, b; c d-\lambda} 
+= (a-\lambda)(d-\lambda) - bc \\
+&= \lambda^2 - (a+d)\lambda + (ad-bc)
+\end{split}\]
+\end{webonly}
+
+\pause
+What do you notice about $f(\lambda)$?
+
+\begin{itemize}
+\pause
+\item The constant term is $\det(A)$, which is zero if and only if
+  \pause
+  $\lambda=0$ is a root.
+
+  \pause
+\item The linear term $-(a+d)$ is the negative of the sum of the diagonal
+  entries of $A$.
+\end{itemize}
+
+\pause
+\begin{defn}
+  The \textbf{trace} of a square matrix $A$ is 
+  $\Tr(A) = \text{sum of the diagonal entries of $A$}$.
+\end{defn}
+
+\pause
+\begin{bluebox}[Shortcut]{.7\linewidth}
+  \displayskips{3pt}
+  The characteristic polynomial of a $\color{seq-red}2\times 2$ matrix $A$ is
+  \[ f(\lambda) = \lambda^2 - \Tr(A)\,\lambda + \det(A). \]
+\end{bluebox}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{The Characteristic Polynomial}
+\framesubtitle{Example}
+
+\alert{Question:} What are the eigenvalues of the rabbit population matrix
+\[ A = \mat{0 6 8; \frac 12 0 0; 0 \frac 12 0}? \]
+
+\begin{webonly}
+\alert{Answer:}
+First we find the characteristic polynomial:
+\abovedisplayskip=3pt\belowdisplayskip=\abovedisplayskip
+\[\begin{split} f(\lambda) &= \det(A-\lambda I)
+= \det\mat{-\lambda, 6 8; \frac 12 -\lambda, 0; 0 \frac 12 -\lambda} \\
+&= 8\biggl(\frac 14 - 0\cdot-\lambda\biggr)
+- \lambda\biggl( \lambda^2 - 6\cdot\frac 12 \biggr) \\
+&= -\lambda^3 + 3\lambda + 2.
+\end{split}\]
+We know from before that one eigenvalue is $\lambda=2$: indeed,
+$f(2) = -8 + 6 + 2 = 0$.  Doing polynomial long division, we get:
+\[ \frac{-\lambda^3 + 3\lambda + 2}{\lambda-2} = -\lambda^2 - 2\lambda - 1
+= -(\lambda+1)^2. \]
+Hence $\lambda=-1$ is also an eigenvalue.
+\end{webonly}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Algebraic Multiplicity}
+
+\vskip-3mm
+\begin{defn}
+  The \textbf{(algebraic) multiplicity} of an eigenvalue $\lambda$ is its
+  multiplicity as a root of the characteristic polynomial.
+\end{defn}
+
+\pause\medskip
+This is not a very interesting notion \emph{yet}.  
+\pause
+It will become interesting when we also define \emph{geometric} multiplicity
+later. 
+
+\pause\medskip
+\begin{eg}
+In the rabbit population matrix, 
+$f(\lambda) = -(\lambda-2)(\lambda+1)^2$,
+so the algebraic multiplicity of the eigenvalue
+$2$ is \blankuntil{5}{1},
+\pause[6]%
+and the algebraic multiplicity of the eigenvalue
+$-1$ is \blankuntil{7}{2}.
+\end{eg}
+
+\pause[8]\medskip
+\begin{eg}
+In the matrix $\mat{5 2; 2 1}$, 
+$f(\lambda) = (\lambda-(3-2\sqrt2))(\lambda-(3+2\sqrt 2))$, so
+the algebraic multiplicity of
+$3+2\sqrt 2$ is \blankuntil{9}{1},
+\pause[10]%
+and the algebraic multiplicity of
+$3-2\sqrt 2$ is \blankuntil{11}{1}.
+\end{eg}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{The Characteristic Polynomial}
+
+\displayskips{3mm}
+\alert{Fact:}
+If $A$ is an $n\times n$ matrix, the characteristic polynomial
+\[ f(\lambda) = \det(A-\lambda I) \]
+turns out to be a polynomial of degree $n$, and its roots are the eigenvalues of
+$A$:
+\[ f(\lambda) 
+= (-1)^n\lambda^n + a_{n-1}\lambda^{n-1} + a_{n-2}\lambda^{n-2} + \cdots +
+a_1\lambda + a_0. \]
+
+\ifx\slidesmode\blankmode\else{
+\framesubtitle{Poll}
+\pause
+\begin{bluebox}[Poll]{.7\linewidth}
+  If you count the eigenvalues of $A$, with their algebraic multiplicities, you
+  will get:
+  \begin{eAlpherate}
+  \item Always $n$.
+  \item Always at most $n$, but sometimes less.
+  \item Always at least $n$, but sometimes more.
+  \item None of the above.
+  \end{eAlpherate}
+\end{bluebox}
+
+\pause\smallskip
+The answer depends on whether you allow \emph{complex} eigenvalues.
+\pause
+If you only allow real eigenvalues, the answer is \alert{B.}
+\pause
+Otherwise it is \alert{A,} because any degree-$n$ polynomial has exactly $n$
+\emph{complex} roots, counted with multiplicity.
+\pause
+Stay tuned.
+}\fi
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Similarity}
+
+\vskip-3mm
+\begin{defn}
+  Two $n\times n$ matrices $A$ and $B$ are \textbf{similar} if there is an
+  invertible $n\times n$ matrix $C$ such that
+  \[ A = CBC\inv. \]
+\end{defn}
+
+\pause
+\alert{What does this mean?}
+\begin{webonly}
+Say the columns of $C$ are $v_1,v_2,\ldots,v_n$.
+These form a basis $\cB = \{v_1,v_2,\ldots,v_n\}$ for $\R^n$ because $C$ is invertible.
+If $x = c_1v_1 + c_2v_2 + \cdots + c_nv_n$ then 
+\displayskips{5pt}
+\[ [x]_\cB = 
+\vec{c_1 c_2 \vdots, c_n}
+\implies x = c_1v_1 + c_2v_2 + c_nv_n
+= C[x]_\cB. \]
+Since $x = C[x]_\cB$ we have $[x]_\cB = C\inv x$.
+\[ B[x]_\cB = [y]_\cB \implies Ax = CBC\inv x = CB[x]_\cB = C[y]_\cB = y. \]
+\end{webonly}
+
+\pause
+\begin{bluebox}{.8\linewidth}
+  $A$ acts on the standard coordinates of $x$ in the same way that $B$ acts
+  on the $\cB$-coordinates of $x$: $B[x]_\cB = [Ax]_\cB$.
+\end{bluebox}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Similarity}
+\framesubtitle{Example}
+
+\vskip -5mm
+\[ A = \mat{1 2; -1 4} \quad
+B = \mat{2 0; 0 3}\quad
+C = \mat{2 1; 1 1}
+\quad\implies\quad
+A = CBC\inv. \]
+\pause
+\alert{What does $B$ do geometrically?}
+\pause
+It scales the $x$-direction by $2$ and the $y$-direction by $3$.
+
+\pause\smallskip
+So $A$ does to the standard coordinates what $B$ does to the $\cB$-coordinates, where
+\[ \cB = \left\{ \vec{2 1},\,\vec{1 1} \right\}. \]
+
+\pause
+\begin{center}
+\begin{tikzpicture}[scale=.5, thin border nodes]
+  \node at (5,3.75) {$B$ acting on the usual coordinates};
+
+  \begin{scope}[scale=.6]
+    \draw[grid lines] (-5,-5) grid (5,5);
+    \draw[thin] (-5,0) -- (5,0) (0,-5) -- (0,5);
+    \draw[<-] (2.5,0) -- ++(0,-1.8) node[below, font=\scriptsize] {2-eigenspace};
+    \draw[<-] (0,2.5) -- ++(-.8,0) node[left, font=\scriptsize] {3-eigenspace};
+    \draw[thin, dashed] (-5,-5) rectangle (5,5);
+    \draw[vector, seq-orange] (0,0) to["$e_1$" swap] (1,0);
+    \draw[vector, seq-blue] (0,0) to["$e_2$"] (0,1);
+    \point at (0,0);
+    \point[seq-red, "$x$" {above,text=seq-red}] at (1,1);
+    \point[seq-green, "$y$" {below,text=seq-green}] at (-2,-1);
+    \coordinate (X) at (5,1);
+  \end{scope}
+
+  \begin{scope}[xshift=10cm, scale=.6]
+    \draw[grid lines] (-5,-5) grid (5,5);
+    \draw[thin] (-5,0) -- (5,0) (0,-5) -- (0,5);
+    \draw[thin, dashed] (-5,-5) rectangle (5,5);
+    \draw[vector, seq-orange] (0,0) to["$Be_1$" swap] (2,0);
+    \draw[vector, seq-blue] (0,0) to["$Be_2$"] (0,3);
+    \point at (0,0);
+    \point[seq-red, "$Bx$" {above,text=seq-red}] at (2,3);
+    \point[seq-green, "$By$" {below,text=seq-green}] at (-4,-3);
+    \coordinate (Y) at (-5,1);
+  \end{scope}[scale=.5]
+
+  \draw[->, shorten=1mm] (X) to[bend left, "$B$" yshift=2pt] (Y);
+
+\end{tikzpicture}
+\end{center}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+
+\vskip2mm
+\leavevmode
+\hbox to \linewidth{\hss
+\begin{tikzpicture}[scale=.25, thin border nodes, baseline, remember picture]
+  \node at (0,15) 
+    {$A$ does to the usual coordinates what $B$ does to the $\cB$-coordinates};
+  \clip (-16,-14) rectangle (16,14);
+  \pgftransformcm2111{\pgfpointorigin}
+  \draw[grid lines] (-50,-50) grid (50,50);
+  \draw[thin] (-50,0) -- (50,0) (0,-50) -- (0,50);
+  \draw[thin, dashed] (-5,-5) rectangle (5,5);
+  \draw[vector, seq-orange] (0,0) to["$v_1$" swap] (1,0);
+  \draw[vector, seq-blue] (0,0) to["$v_2$"] (0,1);
+  \point at (0,0);
+  \point[seq-red, "$x$" {above right,text=seq-red}] at (1,1);
+  \point[seq-green, "$y$" {below left,text=seq-green}] at (-2,-1);
+  \pgftransformreset
+  \begin{scope}[x={(2cm,1cm)},y={(1cm,1cm)}]
+    \draw[<-] (1.6,0) -- ++(0cm,-.6cm) node[below, font=\scriptsize] {2-eigenspace};
+    \draw[<-] (0,2) -- ++(155:.6cm) node[left, font=\scriptsize] {3-eigenspace};
+  \end{scope}
+\end{tikzpicture}
+\begin{minipage}[c]{0.3\linewidth}
+  \def\r{\textcolor{seq-red}}
+  \def\g{\textcolor{seq-green}}
+  $\displaystyle
+  \begin{aligned}[c]
+    \textcolor{seq-orange}{v_1} &= \namedbox{v1}{\vec{2 1}} \\
+    \textcolor{seq-blue}{v_2} &= \namedbox{v2}{\vec{1 1}} \\
+    \phantom B[\r x]_\cB &= \vec{1 1} \\
+    \r x &= \webonlycmd{v_1 + v_2 = \vec{3 2}} \\
+    [\g y]_\cB &= \vec{-2 -1} \\
+    \g y &= \webonlycmd{-2v_1 - v_2} \\
+    &\webonlycmd{\quad= \vec{-5 -3}}
+  \end{aligned}$
+\end{minipage}\hss}
+\begin{tikzpicture}[remember picture, overlay]
+  \draw[decoration={brace,amplitude=2mm}, decorate, thick]
+    let \p1=($(v1.north east) + (4mm,0)$) in
+      (\p1) -- 
+        node[rotate=-90, yshift=4mm] {vectors in $\cB$}
+      (\p1 |- v2.south);
+\end{tikzpicture}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+
+\vskip2mm
+\leavevmode\hbox to \linewidth{\hss
+\begin{tikzpicture}[scale=.25, thin border nodes, baseline]
+  \node at (0,15) 
+    {$A$ does to the usual coordinates what $B$ does to the $\cB$-coordinates};
+  \clip (-16,-14) rectangle (16,14);
+  \pgftransformcm2111{\pgfpointorigin}
+  \draw[grid lines] (-50,-50) grid (50,50);
+  \draw[thin] (-50,0) -- (50,0) (0,-50) -- (0,50);
+  \draw[thin, dashed] (-5,-5) rectangle (5,5);
+  \draw[vector, seq-orange] (0,0) to["$Av_1$" swap] (2,0);
+  \draw[vector, seq-blue] (0,0) to["$Av_2$"] (0,3);
+  \point at (0,0);
+  \point[seq-red, "$Ax$" {above right,text=seq-red}] at (2,3);
+  \point[seq-green, "$Ay$" {below left,text=seq-green}] at (-4,-3);
+  \pgftransformreset
+  \begin{scope}[x={(2cm,1cm)},y={(1cm,1cm)}]
+    \draw[<-] (1.6,0) -- ++(0cm,-.6cm) node[below, font=\scriptsize] {2-eigenspace};
+    \draw[<-] (0,2) -- ++(155:.6cm) node[left, font=\scriptsize] {3-eigenspace};
+  \end{scope}
+\end{tikzpicture}
+\begin{minipage}[c]{0.3\linewidth}
+  \def\r{\textcolor{seq-red}}
+  \def\g{\textcolor{seq-green}}
+  $\displaystyle
+  \begin{aligned}[c]
+    \textcolor{seq-orange}{Av_1} &=\webonlycmd{2v_1 = \vec{4 2}} \\
+    \textcolor{seq-blue}{Av_2} &=\webonlycmd{3v_2 = \vec{3 3}} \\
+    B[\r x]_\cB &= \webonlycmd{\vec{2 3}} = [\r{Ax}]_\cB \\
+    \r{Ax} &= \webonlycmd{2v_1 + 3v_2 = \vec{7 5}} \\
+    B[\g y]_\cB &= \webonlycmd{\vec{-4 -3}} = [\g{Ay}]_\cB \\
+    \g{Ay} &= \webonlycmd{-4v_1 - 3v_2} \\
+    &\webonlycmd{\quad= \vec{-11 -7}}
+  \end{aligned}$
+\end{minipage}\hss}\\[3mm]
+\hskip-3mm{\alert{Check:}}
+\hfill
+\webonlycmd{$\displaystyle
+\textcolor{seq-red}{Ax} = \mat{1 2; -1 4}\vec{3 2} = \vec{7 5} \quad
+\textcolor{seq-green}{Ay} = \mat{1 2; -1 4}\vec{-5 -3} = \vec{-11 -7} \bigcheck$}
+\hfill\null
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Similar Matrices Have the Same Characteristic Polynomial}
+
+\alert{Fact:} If $A$ and $B$ are similar, then they have the same characteristic
+polynomial.
+
+\pause\medskip
+\alert{Why?}
+Suppose $A = CBC\inv$.
+\begin{webonly}
+\[\begin{split}
+  A-\lambda I &= CBC\inv - \lambda I \\
+  &= CBC\inv - C(\lambda I)C\inv \\
+  &= C(B-\lambda I)C\inv.
+\end{split}\]
+Therefore,
+\[\begin{split} \det(A-\lambda I) &= \det\bigl(C(B-\lambda I)C\inv\bigr) \\
+&= \det(C)\det(B-\lambda I)\det(C\inv) \\
+&= \det(B-\lambda I), \end{split}\]
+because $\det(C\inv) = \det(C)\inv$.
+\end{webonly}
+
+\pause\medskip
+\begin{bluebox}{.7\linewidth}
+  \alert{Conseqence:} similar matrices have the same eigenvalues!  
+  \pause
+  (But different eigenvectors in general.)
+\end{bluebox}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Similarity}
+\framesubtitle{Caveats}
+
+\vfill
+\begin{bluebox}[Warning]{.8\linewidth}
+  \begin{enumerate}
+  \item Matrices with the same eigenvalues need not be similar.  For instance,
+    \[ \mat{2 1; 0 2} \sptxt{and} \mat{2 0; 0 2} \]
+    both only have the eigenvalue $2$, but they are not similar.
+
+    \pause
+
+  \item Similarity has nothing to do with row equivalence.  For instance,
+    \[ \mat{2 1; 0 2} \sptxt{and} \mat{1 0; 0 1} \]
+    are row equivalent, but they have different eigenvalues.
+  \end{enumerate}
+\end{bluebox}
+\vfill
+
+\end{frame}
+
+
+%%% Local Variables:
+%%% TeX-master: "../slides"
+%%% End:

@@ -1,0 +1,570 @@
+
+% JDR: These are the topics I thought my students found most confusing from
+%   chapter 1, and the ones they asked me to cover.  They can probably be covered
+%   in 50 minutes, but aren't necessarily meant to--the students can always review
+%   the rest online.
+
+\titleframe{Review for Midterm 1}{Selected Topics}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Linear Equations}
+
+We have \emph{four} equivalent ways of writing (and thinking about) linear
+systems:
+\pause
+\begin{enumerate}
+\item As a system of equations:
+\[ \syseq{2x_1 + 3x_2 = 7; x_1 - x_2 = 5} \]
+\vskip-5mm\pause
+\item As an augmented matrix:
+  \vskip -3mm
+  \[ \amat{ 2 3 7; 1 -1 5} \]
+\vskip-5mm\pause
+\item As a vector equation ($x_1v_1 + \cdots + x_nv_n = b$):
+  \[ x_1\vec{2 1} + x_2\vec{3 -1} = \vec{7 5} \]
+\vskip-7mm\pause
+\item As a matrix equation ($Ax = b$):
+  \[ \mat{ 2 3; 1 -1}\vec{x_1 x_2} = \vec{7 5} \]
+  \note{(4) is by definition equal to (3).}%
+\end{enumerate}
+\pause
+
+In particular, \emph{all four have the same solution set}.
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Number of Solutions}
+
+There are \emph{three possibilities} for the reduced row echelon form of the
+augmented matrix of a linear system.\pause
+
+\begin{enumerate}
+\item \alert{The last column is a pivot column.}\\
+  \pause
+  There are \emph{zero} solutions, i.e.\ the solution set is \emph{empty}.
+  \pause
+  In this case, the system is called \textbf{inconsistent}.  
+  Picture:
+  \pause
+  \[ \amat{ 1 0 {\color{red}0}; 0 1 {\color{red}0}; 0 0 {\color{red}1}} \]
+
+\pause
+\item \alert{Every column except the last column is a pivot column.}\\
+  In this case, the system has a \emph{unique solution}.  Picture:
+  \[ \amat{
+      1  0  0  \star ;
+      0  1  0  \star ;
+      0  0  1  \star
+    } \]
+\note{Ask: what are $x,y,z$?}%
+
+\pause
+\item \alert{The last column is not a pivot column, and some other column isn't either.}\\
+  In this case, the system has \emph{infinitely many} solutions, corresponding
+  to the infinitely many possible values of the free variable(s).  Picture:
+  \[\amat{
+      1  \color{seq-red}\star,  0  \color{seq-blue}\star,  \star ;
+      0  \color{seq-red}0   1  \color{seq-blue}\star, \star
+    }\]
+
+\end{enumerate}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Span}
+
+The \textbf{span} of vectors $v_1,v_2,\ldots,v_n$ is the set of all linear
+combinations of these vectors:
+\[ \Span\{v_1,v_2,\ldots,v_n\}
+= \bigl\{ a_1v_1+a_2v_2+\cdots+a_nv_n\mid a_1,a_2,\ldots,a_n\text{ in }\R \bigr\}. \]
+
+\pause
+\begin{thm}
+  Let $v_1,v_2,\ldots,v_n$, and $b$ be vectors in $\R^m$, and let $A$ be the
+  $m\times n$ matrix with columns $v_1,v_2,\ldots,v_n$.  The following are
+  equivalent\namedbox{colon}{:}
+  \begin{tikzpicture}[remember picture, overlay, blue!50]
+    \path (colon.east) ++(1.2cm,.2cm) node[anchor=north west, text width=3cm]
+      (expl) {either they're all true, or they're all false, for the given vectors};
+    \draw[->, thick] (expl.west) to[out=180, in=0] (colon.east);
+  \end{tikzpicture}
+  \begin{enumerate}
+    \pause
+  \item $Ax = b$ is consistent.
+    \pause
+  \item $(\,A\mid b\,)$ does not have a pivot in \pause the last column.
+    \pause
+  \item $b$ is in $\Span\{v_1,v_2,\ldots,v_n\}$ (the span of the columns of
+    $A$).
+  \end{enumerate}
+\end{thm}
+
+\pause
+In this case, a solution to the matrix equation
+\[ A\vec{x_1 x_2 \vdots, x_n} = b
+\parbox{3cm}{\centering gives the linear\\combination}
+x_1v_1 + x_2v_2 + \cdots + x_nv_n = b. \]
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Transformations}
+
+\vskip-3mm
+\begin{defn}
+  A \textbf{transformation} (or \textbf{function} or \textbf{map}) from $\R^n$
+  to $\R^m$ is a rule $T$ that assigns to each vector $x$ in $\R^n$ a vector
+  $T(x)$ in $\R^m$.
+\end{defn}
+
+\pause
+Picture and vocabulary words:
+
+\begin{center}
+\begin{tikzpicture}[scale=0.35, baseline, thin border nodes]
+  \path[use as bounding box] (-3,-5.5) -- (15,3);
+  \draw[grid lines] (-3,-3) grid (3,3);
+
+  \node (A) at (0,-4) {$\R^n$};
+  \node (B) at (12,-4) {$\R^m$};
+  \node at (0,-5) {domain};
+  \node at (12,-5) {codomain};
+  \draw[->] (A.east) +(5mm,0) -- node[midway,above=1pt] {$T$}
+    ($(B.west)-(5mm,0)$);
+
+  \point["$x$" left] (P) at (1,1.5);
+
+  \begin{scope}[myxyz, xshift=12cm]
+    \path[clip, resetxy] (-3,-3) rectangle (3,3);
+
+    \def\v{(2,-1,1)}
+    \def\w{(1,0,-1)}
+  
+    \node[coordinate] (X) at \v {};
+    \node[coordinate] (Y) at \w {};
+
+    \draw[very thin] (-2,0,0) -- (0,0,0);
+    \draw[very thin] (0,-2,0) -- (0,0,0);
+    \draw[very thin] (0,0,-2) -- (0,0,0);
+
+    \begin{scope}[x=(X), y=(Y), transformxy]
+      \fill[seq4!10, nearly opaque] (-1,-1) rectangle (1,1);
+      \draw[step=.5cm, seq4!30, very thin] (-1,-1) grid (1,1);
+      \point[label={[font=\tiny,fill=none]below:$T(x)$}]
+        (Q) at (-.5,.5);
+      \node[coordinate,
+          pin={[pin edge={very thin,-},pin distance=3mm,anchor=north,font=\small,xshift=1mm,text=seq4]-90:range}]
+        at (0.1,1) {};
+    \end{scope}
+
+    \draw[->, very thin] (0,0,0) -- (2,0,0);
+    \draw[->, very thin] (0,0,0) -- (0,2,0);
+    \draw[->, very thin] (0,0,0) -- (0,0,2);
+
+    \draw[resetxy] (-3,-3) rectangle (3,3);
+
+  \end{scope}
+
+  \pic[scale=.4, "$T$"] (machine) at (6,0) {machine};
+  \draw[->, shorten >=.35mm, shorten <=.35mm] (P.east)
+    .. controls +(0:1cm) and +(180:1cm) .. (machine-input);
+  \draw[->, shorten >=.35mm, shorten <=.35mm] (machine-output)
+    .. controls +(0:1cm) and +(190:2cm) .. (Q.west);
+
+\end{tikzpicture}
+\end{center}
+
+\pause
+It is \textbf{one-to-one} if different vectors in the domain go to different
+vectors in the codomain: $x\neq y\implies T(x)\neq T(y)$.
+
+\pause\medskip
+It is \textbf{onto} if every vector in the codomain is $T(x)$ for some $x$.
+\pause
+In other words, the range equals the codomain.
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Linear Transformations}
+
+A transformation $T\colon\R^n\to\R^m$ is \textbf{linear} if it satisfies:
+\[ T(u+v) = T(u) + T(v) \sptxt{and} T(cu) = cT(u) \]
+for every $u,v$ in $\R^n$ and every $c$ in $\R$.
+
+\pause\smallskip
+\begin{bluebox}{.85\linewidth}\centering
+  Linear transformations are the same as matrix transformations.
+\end{bluebox}
+
+\pause
+\hbox to \linewidth{\hfil\alert{Dictionary}\hfil}
+\pause\leavevmode
+\parbox{.3\linewidth}{\centering
+  Linear transformation\\$T\colon\R^n\to\R^m$}%
+\;\longsquiggly\;
+\hbox to .5\linewidth{$m\times n$ matrix
+\small$A = \mat{| | ,, |; T(e_1) T(e_2) \cdots, T(e_n); | | ,, | }$\hss}\\[1mm]
+\pause\leavevmode
+\hbox to .3\linewidth{\hfil
+  $\begin{aligned}&T(x) = Ax\\&T\colon\R^n\to\R^m\end{aligned}$\hfil}%
+\;\rlongsquiggly\;
+\hbox to .5\linewidth{$m\times n$ matrix $A$\hfil}
+
+\pause\smallskip
+As always, $e_1,e_2,\ldots,e_n$ are the \textbf{unit coordinate vectors}\small
+\[ e_1 = \vec{1 0 \vdots, 0 0},\quad e_2 = \vec{0 1 \vdots, 0 0},\quad\ldots,\quad
+   e_{n-1} = \vec{0 0 \vdots, 1 0},\quad e_n = \vec{0 0 \vdots, 0 1}. \]
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Linear Transformations and Matrices}
+
+Let $A$ be an $m\times n$ matrix and let $T$ be the linear transformation
+$T(x)=Ax$.
+\begin{itemize}
+  \pause
+\item The domain of $T$ is $\R^n$.  (Inputs are vectors with $n$ entries.)
+  \pause
+\item The codomain of $T$ is $\R^m$.  (Outputs are vectors with $m$ entries.)
+  \pause
+\item The range of $T$ is span of the columns of $A$.\\
+  \pause
+  (This is the set of all
+  $b$ in $\R^m$ such that $Ax=b$ has a solution.)
+\end{itemize}
+
+\pause\leavevmode
+\begin{minipage}[t]{.5\textwidth}
+\begin{eg}
+  \vskip -.5cm
+  \[ A = \mat[r]{2 1; -1 0; 1 -1} \qquad T(x) = Ax \]
+  \begin{itemize}
+  \item<7-> The domain of $T$ is $\R^{\blankuntil{8}2}$.
+  \item<9-> The codomain of $T$ is $\R^{\blankuntil{10}3}$.
+  \item<11-> The range of $T$ is 
+    \uncover<12->{\[ \Span\left\{\textcolor{seq-red}{\vec{2 -1 1}},\,
+        \textcolor{seq-blue}{\vec{1 0 -1}}\right\}. \]}
+  \end{itemize}
+\end{eg}
+\end{minipage}\quad
+\begin{uncoverenv}<12->
+\begin{tikzpicture}[myxyz, scale=.6, baseline=3cm]
+  \begin{scope}
+  \path[clip, resetxy] (-4,-3) rectangle (4,3);
+
+  \def\v{(2,-1,1)}
+  \def\w{(1,0,-1)}
+
+  \node[coordinate] (X) at \v {};
+  \node[coordinate] (Y) at \w {};
+
+  \begin{scope}[x=(X), y=(Y), transformxy]
+    \path[clip] (-5, -5) -- (5, 5) -- (5, 10) -- (-5, 10) -- cycle;
+    \fill[seq4!10, nearly opaque] (-1.5,-1) rectangle (1.5,2);
+    \draw[step=.5cm, seq4!30, very thin] (-1.5,-1) grid (1.5,2);
+  \end{scope}
+
+  \begin{scope}[transformxy]
+    \fill[white, semitransparent] (-2, -2) rectangle (3, 3);
+    \draw[step=1cm, grid lines] (-2, -2) grid (3, 3);
+  \end{scope}
+
+  \begin{scope}[x=(X), y=(Y), transformxy]
+    \path[clip] (-5, -5) -- (5, 5) -- (5, -10) -- (-5, -10) -- cycle;
+    \fill[seq4!10, nearly opaque] (-1.5,-1) rectangle (1.5,2);
+    \draw[step=.5cm, seq4!30, very thin] (-1.5,-1) grid (1.5,2);
+  \end{scope}
+
+  \draw[vector, seq1] (0,0,0) -- \v;
+  \draw[thin, densely dotted] \v -- \projxy\v;
+
+  \draw[vector, seq2!50!white] (0,0,0) -- \w;
+  \draw[thin, densely dotted, black!50!white] \w -- \projxy\w;
+
+  \node[seq4] at (-1.5cm, 1.5cm) {$\range(T)$};
+
+  \point at (0,0,0) {};
+  \draw[thin,resetxy] (-4,-3) rectangle (4,3);
+  \end{scope}
+  \node at (0,-3.5cm) {$\R^3 = {\rm codomain}(T)$};
+\end{tikzpicture}
+\end{uncoverenv}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{When the Span is Everything}
+
+\vskip-3mm
+
+\begin{thm}
+  Let $A$ be an $m\times n$ matrix, and let $T\colon\R^n\to\R^m$ be the linear
+  transformation $T(x) = Ax$.  The following are equivalent:
+  \begin{enumerate}
+    \pause
+  \item $T$ is onto.
+    \pause
+  \item $T(x) = b$ has a solution for every $b$ in $\R^m$.
+    \pause
+  \item $Ax = b$ is consistent for every $b$ in $\R^m$.
+    \pause
+  \item The columns of $A$ span $\R^m$.
+    \pause
+  \item A has a pivot in each \emph{row}.
+  \end{enumerate}
+\end{thm}
+
+\pause
+\alert{Moral:}
+If $A$ has a pivot in each row then its reduced row echelon form looks like this:
+\[\def\r{\color{red}} \mat{
+\r1   0   \star,   0   \star ;
+0   \r1   \star , 0   \star ;
+0   0   0   \r1   \star 
+}
+\pause\quad\parbox{.2\textwidth}
+{\centering and $(\,A\mid b\,)$ reduces to this:}\quad
+\amat[c]{
+\r1   0   \star,   0   \star, \star ;
+0   \r1   \star , 0   \star, \star ;
+0   0   0   \r1   \star, \star 
+}.\]
+\pause
+There's no $b$ that makes it inconsistent, so there's always a solution.
+
+\pause\medskip
+\alert{Refer:} slides for \S1.4 and \S1.9.
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Linear Independence}
+
+A \emph{set} of vectors $\{v_1,v_2,\ldots,v_n\}$ is
+\textbf{linearly independent} if
+\[ a_1v_1 + a_2v_2 + \cdots + a_nv_n = 0 
+\sptxt{only when} a_1 = a_2 = \cdots = a_n = 0. \]
+\pause
+Otherwise they are \textbf{linearly dependent}, and an equation
+$a_1v_1 + a_2v_2 + \cdots + a_nv_n = 0$
+with some $a_i\neq0$ is a \textbf{linear dependence relation}.
+
+\pause
+\begin{thm}
+  Let $v_1,v_2,\ldots,v_n$ be vectors in $\R^m$, and let $A$ be the
+  $m\times n$ matrix with columns $v_1,v_2,\ldots,v_n$.  The following are
+  equivalent:
+  \begin{enumerate}
+    \pause
+  \item The set $\{v_1,v_2,\ldots,v_n\}$ is linearly independent.
+    \pause
+  \item For every $i$ between $1$ and $n$, $v_i$ is not in
+    $\Span\{v_1,v_2,\ldots,v_{i-1}\}$.
+    \pause
+  \item $Ax=0$ only has the trivial solution.
+    \pause
+  \item $A$ has a pivot in every \blankuntil{8}{column}\pause.
+  \end{enumerate}
+\end{thm}
+
+\pause
+If the vectors are linearly \emph{de}pendent, a nontrivial solution to the
+matrix equation
+\[ A\vec{x_1 x_2 \vdots, x_n} = 0
+\parbox{3.5cm}{\centering gives the linear\\dependence relation}
+x_1v_1 + x_2v_2 + \cdots + x_nv_n = 0. \]
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{More Criteria for Linear Independence}
+
+\vskip-3mm
+
+\begin{thm}
+  Let $A$ be an $m\times n$ matrix, and let $T\colon\R^n\to\R^m$ be the linear
+  transformation $T(x) = Ax$.  The following are equivalent:
+  \begin{enumerate}
+    \pause
+  \item $T$ is one-to-one.
+    \pause
+  \item $T(x) = b$ has one or zero solutions for every $b$ in $\R^m$.
+    \pause
+  \item $Ax = b$ has a unique solution or is inconsistent for every $b$ in $\R^m$.
+    \pause
+  \item $Ax = 0$ has a unique solution.
+    \pause
+  \item The columns of $A$ are linearly independent.
+    \pause
+  \item A has a pivot in each \emph{column}.
+  \end{enumerate}
+\end{thm}
+
+\pause
+\alert{Moral:}
+If $A$ has a pivot in each column then its reduced row echelon form looks like this:
+\[\def\r{\color{red}} \mat{
+\r1   0   0 ;
+0   \r1   0 ;
+0     0   \r1 ;
+0     0   0 
+}
+\pause\quad\parbox{.2\textwidth}
+{\centering and $(\,A\mid b\,)$ reduces to this:}\quad
+\amat[c]{
+\r1   0   0 \star;
+0   \r1   0 \star;
+0     0   \r1 \star ;
+0     0   0 \star
+}.\]
+\pause
+This can be inconsistent, but if it is consistent, it has a unique solution.
+
+\pause\medskip
+\alert{Refer:} slides for \S1.4, \S1.8, \S1.9.
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Parametric Form of Solution Sets}
+
+To find the solution set to $Ax=b$, first form the augmented matrix
+$(\,A\mid b\,)$, then row reduce.
+\pause
+\def\r{\color<5->{red}}\def\g{\color<5->{green!70!black}}
+\[ \amat{1 \r3 0  \g4 0 2;
+         0 \r0 1 \g{-1} 0 3;
+         0 \r0 0  \g0 1 -7} \]
+\pause
+This translates into
+\spalignsysdelims..
+\[ \syseq{x_1 + \r3x_2 \+ \.  \+ \g{x_4} \+ \.  = 2;
+          \. \+  \.  \+ x_3  - \g{x_4}  \+ \.  = 3;
+          \. \+  \.  \+ \.  \+  \.  \+ x_5 = -7} \]
+\pause
+The variables correspond to the non-augmented columns of the matrix.\\
+\pause
+The \emph{\r{free} \g{variables}} correspond to the non-augmented columns
+\pause
+\emph{without pivots}.
+
+\pause\medskip
+Move the free variables to the other side, get the \emph{parametric form}:
+\[ \syseq{x_1 = 2 - 3x_2 - x_4;
+          %x_2 = \. \+ x_2;
+          x_3 = 3 \+ \. + x_4;
+          %x_4 = \. \+ \. \+ x_4;
+          x_5 = -7
+        } \]
+This is a solution for every value of $x_3$ and $x_4$.
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Parametric Vector Form of Solution Sets}
+
+\def\r{\color<3->{seq1}}\def\g{\color<3->{seq2}}
+\def\b{\color<3->{seq3}}\def\a{\color<3->{seq4}}
+Parametric form:
+\[ \syseq{x_1 = 2 - 3x_2 - x_4;
+          %x_2 = \. \+ x_2;
+          x_3 = 3 \+ \. + x_4;
+          %x_4 = \. \+ \. \+ x_4;
+          x_5 = -7
+        } 
+ \pause
+ \quad\longsquiggly[add free variables]\quad
+ \syseq{\r{x_1} = \g2 - \b3x_2 - \a{x_4};
+        \r{x_2} = \. \+ \b{x_2};
+        \r{x_3} = \g3 \+ \. + \a{x_4};
+        \r{x_4} = \. \+ \. \+ \a{x_4};
+        \r{x_5} = \g-7
+      } 
+\]
+\pause
+Now collect all of the equations into a vector equation:
+\[ x = {\r\vec{x_1 x_2 x_3 x_4 x_5}}
+= {\g\vec{2 0 3 0 -7}}
++ {\b x_2\vec{-3 1 0 0 0}}
++ {\a x_4\vec{-1 0 1 1 0}}. \]
+This is the \textbf{parametric vector form} of the solution set.
+\pause
+This means that the
+\[ \text{(solution set)}
+= \vec{2 0 3 0 -7}
+  + \Span\left\{ \vec{-3 1 0 0 0},\, \vec{-1 0 1 1 0}\right\}. \]
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Homogeneous and Non-Homogeneous Equations}
+
+The equation $Ax=b$ is called \textbf{homogeneous} if $b=0$, and
+\textbf{non-homogeneous} otherwise.
+\pause
+A homogeneous equation always has the \textbf{trivial solution} $x=0$:
+\[ A0 = 0. \]
+
+\pause\medskip
+The solution set to a homogeneous equation is always a span:
+\[ \text{(solutions to $Ax=0$)} = \Span\{v_1,v_2,\ldots,v_r\} \]
+where $r$ is the
+\pause
+number of free variables.
+\pause
+The solution set to a consistent non-homogeneous equation is
+\[ \text{(solutions to $Ax=b$)} = p + \Span\{v_1,v_2,\ldots,v_r\} \]
+where $p$ is a \textbf{specific solution} (i.e.\ some vector such that $Ap=b$),
+\pause
+and $\Span\{v_1,\ldots,v_r\}$ is the solution set to the homogeneous equation
+$Ax=0$.
+\pause
+This is a \emph{translate of a span}.
+
+\pause\bigskip
+Both expressions can be read off from the parametric vector form.
+
+\end{frame}
+
+
+%%% Local Variables:
+%%% TeX-master: "../slides"
+%%% End:

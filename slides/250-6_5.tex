@@ -1,0 +1,761 @@
+
+\usetikzlibrary{decorations.pathreplacing,math}
+
+\titleframe{Section 6.5}{Least Squares Problems}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Motivation}
+
+We now are in a position to solve the motivating problem of this third part of
+the course:
+
+\pause\medskip
+\begin{bluebox}[Problem]{.7\linewidth}
+  Suppose that $Ax=b$ does not have a solution.  What is the best possible
+  approximate solution?
+\end{bluebox}
+
+\pause\medskip
+To say $Ax=b$ does not have a solution means that $b$ is not in $\Col A$.
+
+\pause\medskip
+The closest possible $\hat b$ for which $Ax = \hat b$ does have a solution is
+\pause
+$\hat b = \proj_{\Col A}(b)$.
+
+\pause\medskip
+Then $A\hat x = \hat b$ is a consistent equation.
+
+\pause\medskip
+A solution $\hat x$ to $A\hat x = \hat b$ is a \textbf{least squares solution.}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Least Squares Solutions}
+
+Let $A$ be an $m\times n$ matrix.
+
+\begin{defn}
+  A \textbf{least squares solution} to $Ax=b$ is a vector $\hat x$ in $\R^n$
+  such that
+  \[ \|b-A\hat x\|\leq \|b-Ax\| \]
+  for all $x$ in $\R^n$.
+\end{defn}
+
+\begin{center}
+\begin{tikzpicture}[myxyz, scale=.6, thin border nodes]
+  \coordinate (u) at (1,0,0);
+  \coordinate (v) at (0,1.1,-.2);
+  \coordinate (uxv) at (0,.2,1.1);
+  \coordinate (x) at ($-1.1*(u)+(v)+1.5*(uxv)$);
+  \begin{scope}[x=(u),y=(v),transformxy]
+    \fill[seq-violet!30] (-2,-2) rectangle (2,2);
+    \draw[seq-violet, help lines] (-2,-2) grid (2,2);
+    \node[seq-violet] at (2.8,1) {$\Col A$};
+    \point[seq-brown, "$Ax$" text=seq-brown] at (1,-1);
+    \point[seq-brown, "$Ax$" text=seq-brown] at (-1,0);
+    \point[seq-brown, "$Ax$" text=seq-brown] at (1,1);
+  \end{scope}
+  \point[seq-blue, pin={[
+      text=seq-blue,
+      pin edge={<-,very thin, seq-blue, shorten <=1pt},
+      pin distance=.6cm]
+      below:$A\hat x = \hat b = \proj_{\Col A}(b)$}]
+    (y) at ($-1.1*(u)+1*(v)$);
+  \coordinate (yu) at ($(y)+(u)$);
+  \coordinate (yv) at ($(y)+(v)$);
+  \pic[draw, right angle len=1.5mm] {right angle=(x)--(y)--(yu)};
+  \pic[draw, right angle len=1.5mm] {right angle=(x)--(y)--(yv)};
+  \point[seq-red, "$b$" {above,text=seq-red}] (xx) at (x);
+  \draw[vector, thin] (y) -- node[auto,pos=.6] {$b-A\hat x$} (xx);
+  \point at (0,0,0);
+
+  \begin{scope}[xshift=-6.5cm,overlay,align=center]
+    \node<2-> {Note that $b-A\hat x$\\is in $(\Col A)^\perp$.};
+  \end{scope}
+\end{tikzpicture}
+\end{center}
+
+\pause[3]
+In other words, a least squares solution $\hat x$ solves $Ax=b$
+\emph{as closely as possible}.
+
+\pause\medskip
+Equivalently, a least squares solution to $Ax=b$ is a vector $\hat x$ in $\R^n$
+such that 
+\[ A\hat x = \hat b = \proj_{\Col A}(b). \]
+\pause
+This is because $\hat b$ is the closest vector to $b$ such that
+$A\hat x=\hat b$ is consistent.
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Least Squares Solutions}
+\framesubtitle{Computation}
+
+\vskip-3mm
+\begin{thm}
+  The least squares solutions to $Ax=b$ are the solutions to 
+  \displayskips{3pt}
+  \[ (A^TA)\hat x = A^Tb. \]
+\end{thm}
+
+\pause
+This is just another $Ax=b$ problem, but with a \emph{square} matrix $A^TA$!
+\pause\\
+Note we compute $\hat x$ directly, without computing $\hat b$ first.
+
+\pause\medskip
+\alert{Why is this true?}
+\begin{webonly}
+\begin{itemize}
+\item We want to find $\hat x$ such that $A\hat x = \proj_{\Col A}(b)$.
+\item This means $b-A\hat x$ is in $(\Col A)^\perp$.
+\item Recall that $(\Col A)^\perp = \Nul(A^T)$.
+\item So $b-A\hat x$ is in $(\Col A)^\perp$ if and only if $A^T(b-A\hat x) = 0$.
+\item In other words, $A^T A\hat x = A^T b$.
+\end{itemize}
+\end{webonly}
+
+\pause\medskip
+\alert{Alternative when $A$ has orthogonal columns $v_1,v_2,\ldots,v_n$:}
+\displayskips{2pt}
+\[ \hat b = \proj_{\Col A}(b)
+= \sum_{i=1}^n \frac{b\cdot v_i}{v_i\cdot v_i}\,v_i \]
+The right hand side equals $A\hat x$, where $\displaystyle\hat x = \left(
+  \frac{b\cdot v_1}{v_1\cdot v_1},\;
+  \frac{b\cdot v_2}{v_2\cdot v_2},\;
+  \cdots,\;
+  \frac{b\cdot v_n}{v_n\cdot v_n}
+ \right).$
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Least Squares Solutions}
+\framesubtitle{Example}
+
+Find the least squares solutions to $Ax=b$ where:
+\[ A = \mat{1 0; 1 1; 1 2} \qquad b = \vec{6 0 0}. \]
+
+\begin{webonly}
+  We have
+  \[ A^TA = \mat{1 1 1; 0 1 2}\mat{1 0; 1 1; 1 2} = \mat{3 3; 3 5} \]
+  and
+  \[ A^T b = \mat{1 1 1; 0 1 2}\vec{6 0 0} = \vec{6 0}. \]
+  Row reduce:
+  \[ \amat{3 3 6; 3 5 0} \;\longsquiggly\; \amat{1 0 5; 0 1 -3}. \]
+\end{webonly}%
+\pause
+So the only least squares solution is $\hat x = \vec{5 -3}$.
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Least Squares Solutions}
+\framesubtitle{Example, continued}
+
+How close did we get?
+\begin{webonly}
+  \[ \hat b = A\hat x = \mat{1 0; 1 1; 1 2}\vec{5 -3} = \vec{5 2 -1} \]
+  The distance from $b$ is
+  \[ \|b-A\hat x\| = \left\|\vec{6 0 0} - \vec{5 2 -1}\right\|
+  = \left\|\vec{1 -2 1}\right\| = \sqrt{1^2+(-2)^2+1^2} = \sqrt 6. \]
+\end{webonly}
+
+\pause\leavevmode
+\hbox to .5\linewidth{\hss
+\begin{tikzpicture}[x={(1.2cm,.4cm)}, y={(1cm,-.8cm)}, z={(0cm,1cm)},
+    scale=.25, thin border nodes, baseline]
+  \coordinate (v1) at (1,1,1);
+  \coordinate (v2) at (0,1,2);
+  \coordinate (b)  at (6,0,0);
+  \coordinate (bh) at ($5*(v1)-3*(v2)$);
+
+  \begin{scope}[xshift=-5cm, yshift=1.5cm, scale=2]
+    \draw[->] (0,0,0) -- (1,0,0) node[right] {$x$};
+    \draw[->] (0,0,0) -- (0,1,0) node[right] {$y$};
+    \draw[->] (0,0,0) -- (0,0,1) node[above] {$z$};
+  \end{scope}
+
+  \begin{scope}[x=(v1), y=(v2), transformxy]
+    \draw[help lines, seq-violet!50] (-1,-4) grid (6,2);
+    \fill[seq-violet!50, opacity=.7] (-1,-4) rectangle (6,2);
+    \node[seq-violet] at (3,-5) {$\Col A$};
+    \draw[vector] (0,0) to["$v_1$"'] (1,0);
+    \draw[vector] (0,0) -- (0,1)
+      node[anchor=south] {$v_2$};
+
+    \draw<3->[dashed] (0,0) -| 
+      node[pos=.25, above=1pt] {$5v_1$}
+      node[pos=.75, right] {$-3v_2$}
+        (5,-3);
+  \end{scope}
+
+  \point (o) at (0,0,0);
+  \draw (b) -- node[font=\scriptsize,pos=.5,left=1pt] {$\sqrt 6$} (bh);
+  \coordinate (b1) at ($(bh)-(v1)$);
+  \coordinate (b2) at ($(bh)+(v2)$);
+  \point[seq-blue, pin={[
+      text=seq-blue,
+      pin edge={<-,very thin, seq-blue, shorten <=1pt},
+      pin distance=.6cm]
+      below right:$\hat b=A\vec{5 -3}$}] at (bh);
+  \point[seq-red, "$b$" text=seq-red] at (b);
+  \pic[draw] {right angle=(b)--(bh)--(b1)};
+  \pic[draw] {right angle=(b)--(bh)--(b2)};
+
+\end{tikzpicture}\quad}%
+\begin{minipage}[c]{.5\linewidth}\raggedright
+  Let 
+  \[ v_1 = \vec{1 1 1} \sptxt{and} v_2 = \vec{0 1 2} \]
+  be the columns of $A$, and let $\cB=\{v_1,v_2\}$.
+\end{minipage}
+
+\pause\smallskip
+Note $\hat x = {5\choose -3}$ is just the $\cB$-coordinates of $\hat b$,
+in $\Col A = \Span\{v_1,v_2\}$.
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Least Squares Solutions}
+\framesubtitle{Second example}
+
+Find the least squares solutions to $Ax=b$ where:
+\[ A = \mat[r]{2 0; -1 1; 0 2} \qquad b = \vec[r]{1 0 -1}. \]
+
+\begin{webonly}
+  We have
+  \[ A^T A = \mat[r]{2 -1 0; 0 1 2}\mat[r]{2 0; -1 1; 0 2} =
+  \mat[r]{5 -1; -1 5} \]
+  and
+  \[ A^T b = \mat[r]{2 -1 0; 0 1 2}\vec[r]{1 0 -1}
+  = \vec[r]{2 -2}. \]
+  Row reduce:
+  \[ \amat{5 -1 2; -1 5 -2} \;\longsquiggly\;
+  \amat{1 0 1/3; 0 1 -1/3}. \]
+\end{webonly}%
+\pause
+So the only least squares solution is $\hat x = \vec{1/3 -1/3}$.
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Least Squares Solutions}
+\framesubtitle{Uniqueness}
+
+When does $Ax=b$ have a \emph{unique} least squares solution $\hat x$?
+
+\pause
+\begin{thm}
+  Let $A$ be an $m\times n$ matrix.  The following are equivalent:
+  \pause
+  \begin{enumerate}
+  \item $Ax=b$ has a \emph{unique} least squares solution for all $b$ in $\R^n$.
+  \pause
+  \item The columns of $A$ are linearly independent.
+  \pause
+  \item $A^TA$ is invertible.
+  \end{enumerate}
+  \pause
+  In this case, the least squares solution is $(A^T A)\inv(A^T b)$.
+\end{thm}
+
+\pause\smallskip
+\alert{Why?}
+\pause
+If the columns of $A$ are linearly \emph{de\/}pendent, then $A\hat x=\hat b$ has
+many solutions:\\[-1mm]
+\hfill\begin{tikzpicture}[x={(1.2cm,.4cm)}, y={(1cm,-.8cm)}, z={(0cm,1cm)},
+    scale=.25, thin border nodes, baseline]
+  \coordinate (v1) at (1,1,1);
+  \coordinate (v2) at (0,1,2);
+  \coordinate (b)  at (6,0,0);
+  \coordinate (bh) at ($5*(v1)-3*(v2)$);
+
+  \begin{scope}[x=(v1), y=(v2), transformxy]
+    \draw[help lines, seq-violet!50] (-1,-4) grid (6,2);
+    \fill[seq-violet!50, opacity=.7] (-1,-4) rectangle (6,2);
+    \node[seq-violet] at (3,-5) {$\Col A$};
+    \draw[vector] (0,0) to["$v_1$"'] (1,0);
+    \draw[vector] (0,0) -- (0,1)
+      node[anchor=south] {$v_2$};
+    \draw[vector] (0,0) -- (1,-2)
+      node[anchor=east] {$v_3$};
+  \end{scope}
+
+  \point (o) at (0,0,0);
+  \draw (b) -- (bh);
+  \coordinate (b1) at ($(bh)-(v1)$);
+  \coordinate (b2) at ($(bh)+(v2)$);
+  \point[seq-blue, pin={[
+      text=seq-blue,
+      pin edge={<-,very thin, seq-blue, shorten <=1pt},
+      pin distance=.6cm]
+      below right:$\hat b=A\hat x$}] at (bh);
+  \point[seq-red, "$b$" text=seq-red] at (b);
+  \pic[draw] {right angle=(b)--(bh)--(b1)};
+  \pic[draw] {right angle=(b)--(bh)--(b2)};
+
+\end{tikzpicture}\hfill\null
+
+\pause\smallskip
+\alert{Note:} $A^TA$ is always a square matrix, but it need not be invertible.
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Application}
+\framesubtitle{Data modeling: best fit line}
+
+Find the best fit line through $(0,6)$, $(1,0)$, and $(2,0)$.
+
+\medskip
+\begin{columns}[onlytextwidth]
+\column[c]{.6\linewidth}
+\begin{webonly}%
+The general equation of a line is
+\[ y = C + Dx. \]
+So we want to solve:
+\[\begin{split}
+  6 &= C + D\cdot 0 \\
+  0 &= C + D\cdot 1 \\
+  0 &= C + D\cdot 2.
+\end{split}\]
+In matrix form:
+\[ \mat{1 0; 1 1; 1 2}\vec{C D} = \vec{6 0 0}. \]
+We already saw: the least squares solution is ${5\choose-3}$.
+So the best fit line is
+\[ y = -3x + 5. \]
+\vss
+\end{webonly}
+
+\column[c]{.4\linewidth}\centering
+\begin{tikzpicture}[scale=.6,decoration={brace,raise=1mm},
+    thin border nodes]
+  \draw[grid lines] (-2,-2) grid (4,7);
+  \draw[->] (-2,0) -- (4,0);
+  \draw[->] (0,-2) -- (0,7);
+  \point["{$(0,6)$}" above right] at (0,6);
+  \point["{$(1,0)$}" below] at (1,0);
+  \point["{$(2,0)$}" anchor=-130] at (2,0);
+  \draw<3->[decorate, seq-blue, thick, decoration={mirror}]
+    (0,5) -- node[right=2mm] {$1$} (0,6);
+  \draw<3->[decorate, seq-blue, thick]
+    (1,0) -- node[left=2mm,yshift=1.5pt] {$-2$} (1,2);
+  \draw<3->[decorate, seq-blue, thick]
+    (2,0) -- node[right=2mm] {$1$} (2,-1);
+  \draw<2->[thick, seq-red] (-2/3,7) --
+    node[sloped,above=1pt] {$y=-3x+5$} (7/3,-2);
+  \node<3->[text=seq-blue] at (1,-3.2) 
+    {$A\vec{5 -3} - \vec{6 0 0} = \vec{1 -2 1}$};
+  \useasboundingbox (1,-4.25);
+
+\end{tikzpicture}
+\end{columns}
+\note{Don't reveal the last overlay until answering the poll.}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{pollframe}
+
+\vskip 1cm
+
+\begin{bluebox}[Poll]{.7\linewidth}
+  What does the best fit line minimize?
+  \smallskip
+  \begin{eAlpherate}
+  \item The sum of the squares of the distances from the data points to the line.
+  \item The sum of the squares of the vertical distances from the data points to
+    the line.
+  \item The sum of the squares of the horizontal distances from the data points
+    to the line.
+  \item The maximal distance from the data points to the line.
+  \end{eAlpherate}
+
+\end{bluebox}
+
+\pause\medskip
+\alert{Answer: B.}  See the picture on the previous slide.
+
+\end{pollframe}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\def\eqline#1#2{(#1)^2 + A(#2)^2 + B(#1)(#2) + C(#1) + D(#2) + E = 0}
+\edef\eqs{\eqline02;
+  \eqline21;
+  \eqline1{-1};
+  \eqline{-1}{-2};
+  \eqline{-3}1
+}
+
+\begin{frame}
+\frametitle{Application}
+\framesubtitle{Best fit ellipse}
+
+Find the best fit ellipse for the points 
+$(0,2)$, $(2,1)$, $(1,-1)$, $(-1,-2)$, $(-3,1)$.
+\note{Tell the students not to bother writing this down.}
+
+\pause\medskip
+The general equation for an ellipse is
+\[ x^2 + Ay^2 + Bxy + Cx + Dy + E = 0 \]
+\pause
+So we want to solve:
+\[\spalignsysdelims..
+\expandafter\syseq\expandafter{\eqs}
+\]
+\pause
+In matrix form:
+\[ \mat[r]{
+  4 0 0 2 \phantom-1;
+  1 2 2 1 1;
+  1 -1 1 -1 1;
+  4 2 -1 -2 1;
+  1 -3 -3 1 1}
+\vec{A B C D E} = \vec[r]{0 -4 -1 -1 -9}. \]
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Application}
+\framesubtitle{Best fit ellipse, continued}
+
+\small
+\vskip-3mm
+\[ A = \mat[r]{
+  4 0 0 2 \phantom-1;
+  1 2 2 1 1;
+  1 -1 1 -1 1;
+  4 2 -1 -2 1;
+  1 -3 -3 1 1}
+\qquad b = \vec[r]{0 -4 -1 -1 -9}. \]
+
+\pause
+\[ A^T A = \mat[r]{
+  35 6 -4 1 11;
+  6 18 10 -4 0;
+  -4 10 15 0 -1;
+  1 -4 0 11 1;
+  11 0 -1 1 5
+} \qquad
+A^T b = \vec[r]{-18 18 19 -10 -15} \]
+\pause
+Row reduce:
+\[ \amat{
+  35 6 -4 1 11 -18;
+  6 18 10 -4 0 18;
+  -4 10 15 0 -1 19;
+  1 -4 0 11 1 -10;
+  11 0 -1 1 5 -15
+}
+\;\longsquiggly\;
+\amat{
+  1 0 0 0 0 16/7;
+  0 1 0 0 0 -8/7;
+  0 0 1 0 0 15/7;
+  0 0 0 1 0 -6/7;
+  0 0 0 0 1 -52/7
+}
+\]
+\pause\normalsize
+Best fit ellipse:
+\displayskips{3pt}
+\[ x^2 + \frac{16}7 y^2 -\frac87 xy + \frac{15}7x - \frac67y - \frac{52}7 = 0 \]
+\pause
+or
+\[ 7 x^2 + 16 y^2 - 8 xy + 15 x - 6y - 52 = 0. \]
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Application}
+\framesubtitle{Best fit ellipse, picture}
+
+\begin{center}
+\vskip-3mm
+\begin{tikzpicture}[scale=.8,decoration={brace,raise=1mm},
+    thin border nodes, whitebg nodes]
+  \draw[grid lines] (-6,-4) grid (6,4);
+  \draw[->] (-6,0) -- (6,0);
+  \draw[->] (0,-4) -- (0,4);
+  
+  \point["{$(0,2)$}" below] at (0,2);
+  \point["{$(2,1)$}" right] at (2,1);
+  \point["{$(1,-1)$}" right] at (1,-1);
+  \point["{$(-1,-2)$}" {above,xshift=-2mm}] at (-1,-2);
+  \point["{$(-3,1)$}" {above,xshift=-1.5mm}] at (-3,1);
+
+  \draw<2->[thick, seq-red]
+    (-1.125,-.09375) ellipse[x radius=3.31346, y radius=1.85295, rotate=31.4296];
+  \node<2->[text=seq-red, font=\normalsize] at (-1.125, -3.3)
+    {$7 x^2 + 16 y^2 - 8 xy + 15 x - 6y - 52 = 0$};
+\end{tikzpicture}
+\end{center}
+
+\pause[3]\vskip-1mm
+\alert{Remark:} Gauss invented the method of least squares to do exactly this:
+he predicted the (elliptical) orbit of the asteroid Ceres as it passed behind
+the sun in 1801.
+%
+\note{Ask: what does the best fit ellipse minimize?}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Application}
+\framesubtitle{Best fit parabola}
+
+What least squares problem $Ax=b$ finds the best parabola through the points
+$(-1,0.5)$, $(1,-1)$, $(2,-0.5)$, $(3,2)$?
+
+\medskip
+\begin{webonly}
+  The general equation for a parabola is
+  \[ y = Ax^2 + Bx + C. \]
+  So we want to solve:
+  \[\spalignsysdelims..\syseq{
+    0.5  = A(-1)^2 + B(-1) + C;
+    -1   = A(1)^2  + B(1)  + C;
+    -0.5 = A(2)^2  + B(2)  + C;
+    2    = A(3)^2  + B(3)  + C
+  }
+  \]
+  In matrix form:
+  \[\mat[r]{
+    1 -1 1;
+    1  1 1;
+    4  2 1;
+    9  3 1}
+  \vec{A B C} = \vec[r]{0.5 -1 -0.5 2}.
+  \]
+
+\end{webonly}
+
+\pause
+\hbox to \linewidth{
+  \rlap{\alert{Answer:}}\hss
+  $\displaystyle 88y = 53x^2 - \frac{379}5x - 82$  \hss
+}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Application}
+\framesubtitle{Best fit parabola, picture}
+
+\begin{center}
+\vfill
+\begin{tikzpicture}[scale=1,decoration={brace,raise=1mm},
+    thin border nodes, whitebg nodes]
+  \draw[grid lines] (-4,-2) grid (5,5);
+  \draw[->] (-4,0) -- (5,0);
+  \draw[->] (0,-2) -- (0,5);
+  
+  \point["{$(-1,0.5)$}" {right,yshift=2mm}] at (-1,0.5);
+  \point["{$(1,-1)$}" {above,xshift=-2mm}] at (1,-1);
+  \point["{$(2,-0.5)$}" right] at (2,-0.5);
+  \point["{$(3,2)$}" {above,xshift=-4mm}] at (3,2);
+
+  \clip (-4,-2) rectangle (5,5);
+
+  \draw<2->[thick, seq-red, domain=-6:6, samples=50, smooth]
+    plot (\x, 53/88*\x*\x - 379/440*\x - 41/44);
+  \node<2->[text=seq-red, font=\normalsize] at (.8, 3.3)
+    {$\displaystyle 88y = 53x^2 - \frac{379}5x - 82$};
+\end{tikzpicture}
+\vfill
+\end{center}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Application}
+\framesubtitle{Best fit linear function}
+
+\begin{columns}[onlytextwidth]
+\column[t]{.7\linewidth}
+What least squares problem $Ax=b$ finds the best linear function $f(x,y)$
+fitting the following data?
+
+\medskip\webonlycmd{
+The general equation for a linear function in two variables is
+\[ f(x,y) = Ax + By + C. \]
+}
+\column[t]{.3\linewidth}
+\vskip-1cm
+\[\begin{array}{r|r|c}
+  x & y & f(x,y) \\\hline
+  1 & 0 & 0 \\
+  0 & 1 & 1 \\
+  -1 & 0 & 3 \\
+  0 & -1 & 4
+\end{array}\]
+\end{columns}
+
+\begin{webonly}
+  So we want to solve
+  \[\spalignsysdelims..\syseq{
+    A(1) + B(0) + C = 0;
+    A(0) + B(1) + C = 1;
+    A(-1) + B(0) + C = 3;
+    A(0) + B(-1) + C = 4
+  }\]
+  In matrix form:
+  \[\mat[r]{
+    1 0 1;
+    0 1 1;
+    -1 0 1;
+    0 -1 1
+  }\vec{A B C} = \vec{0 1 3 4}.
+  \]
+
+\end{webonly}
+
+\pause
+\hbox to \linewidth{
+  \rlap{\alert{Answer:}}\hss
+  $\displaystyle f(x,y) = -\frac32 x -\frac 32y + 2$
+  \hss
+}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Application}
+\framesubtitle{Best fit linear function, picture}
+
+\begin{center}
+\vfill
+\begin{tikzpicture}[scale=.5, myxyz, thin border nodes,
+    vert lines/.style={very thin, black!40}]
+
+  \begin{scope}[xshift=-8cm, yshift=1cm, scale=2, overlay]
+    \draw<2->[->] (0,0,0) -- (1,0,0) node[right] {$x$};
+    \draw<2->[->] (0,0,0) -- (0,1,0) node[left] {$y$};
+    \draw<2->[->] (0,0,0) -- (0,0,1) node[above] {$f(x,y)$};
+  \end{scope}
+
+  \begin{scope}[xshift=8cm,, yshift=2cm, overlay]
+    \node<2->[align=center]
+      {Graph of\\[2mm]
+        $\displaystyle\color{red}f(x,y) = -\frac32 x -\frac 32y + 2$};
+  \end{scope}
+
+  \begin{scope}[transformxy]
+    \draw[help lines, black!90] (-2,-2) grid (2,2);
+  \end{scope}
+
+  \tikzmath {
+    int \x, \y;
+    function f(\x,\y) {
+      return -3/2*\x-3/2*\y+2;
+    };
+    for \x in {-2,...,1}{
+      for \y in {-2,...,1}{
+        { \filldraw<2->[help lines, seq-red!70, fill=seq-red!40, fill opacity=.5]
+             (\x,\y,{f(\x,\y)}) 
+             -- (\x+1,\y,{f(\x+1,\y)}) 
+             -- (\x+1,\y+1,{f(\x+1,\y+1)})
+             -- (\x,\y+1,{f(\x,\y+1)}) 
+             -- cycle;
+          % \draw<2->[vert lines] (\x,\y,{f(\x,\y)}) -- (\x,\y,0);
+          % \draw<2->[vert lines] (\x+1,\y,{f(\x+1,\y)}) -- (\x+1,\y,0);
+          % \draw<2->[vert lines] (\x+1,\y+1,{f(\x+1,\y+1)}) -- (\x+1,\y+1,0);
+          % \draw<2->[vert lines] (\x,\y+1,{f(\x,\y+1)}) -- (\x,\y+1,0);
+        };
+      };
+    };
+  }
+  
+  \draw<2->[vert lines] (-2,-2,{f(-2,-2)}) -- (-2,-2,0);
+  \draw<2->[vert lines] (-2, 2,{f(-2, 2)}) -- (-2, 2,0);
+  \draw<2->[vert lines] ( 2,-2,{f( 2,-2)}) -- ( 2,-2,0);
+  \draw<2->[vert lines] ( 2, 2,{f( 2, 2)}) -- ( 2, 2,0);
+
+  \begin{scope}[every node/.style={font=\footnotesize, inner sep=1pt}]
+    \draw<2->[thick,seq-blue] (1,0,0)
+      -- (1,0,{f(1,0)})
+      node[point,seq-red,"${f(1,0)}$" text=seq-red] {};
+    \point["${(1,0,0)}$" below] at (1,0,0);
+    \draw[densely dotted] (0,1,1) -- (0,1,0);
+    \draw<2->[thick,seq-blue] (0,1,1) 
+      -- (0,1,{f(0,1)}) 
+      node[point,seq-red,"${f(0,1)}$" {text=seq-red, below}] {};
+    \point["${(0,1,1)}$"] at (0,1,1);
+    \draw[densely dotted] (-1,0,3) -- (-1,0,0);
+    \draw<2->[thick,seq-blue] (-1,0,3)
+      -- (-1,0,{f(-1,0)}) 
+      node[point,seq-red,"${f(-1,0)}$" text=seq-red] {};
+    \point["${(-1,0,3)}$" below] at (-1,0,3);
+    \draw[densely dotted] (0,-1,4) -- (0,-1,0);
+    \draw<2->[thick,seq-blue] (0,-1,4) 
+      -- (0,-1,{f(0,-1)}) 
+      node[point,seq-red,"${f(0,-1)}$" {text=seq-red, below}] {};
+    \point["${(0,-1,4)}$"] at (0,-1,4);
+  \end{scope}
+
+  \point[scale=.75, black!50] at (0,0,0);
+
+  \useasboundingbox (2,2,{f(2,2)}) (-2,-2,{f(-2,-2)});
+  
+\end{tikzpicture}
+\vfill
+\end{center}
+
+\end{frame}
+
+
+%%% Local Variables:
+%%% TeX-master: "../slides"
+%%% End:

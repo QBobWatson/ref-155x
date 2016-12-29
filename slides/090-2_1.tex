@@ -1,0 +1,735 @@
+
+\usetikzlibrary{matrix,shapes.geometric,angles}
+
+\titleframe{Chapter 2}{Matrix Algebra}
+\titleframe{Section 2.1}{Matrix Operations}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Motivation}
+
+\alert{Recall:} we can turn any system of linear equations into a matrix
+equation
+\[ Ax = b. \]
+\pause
+This notation is suggestive.  Can we solve the equation by ``dividing by A''?
+\[ x \overset{??}= \frac bA \]
+\pause
+\alert{Answer:} Sometimes, but you have to know what you're doing.
+
+\pause\bigskip
+Today we'll study \emph{matrix algebra}: adding and multiplying matrices.
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\long\def\row#1#2{\hbox to \linewidth{\hss%
+    \begin{minipage}[t]{.5\linewidth}#1\end{minipage}\hskip 1em plus 1fill%
+    \begin{minipage}[t]{.45\linewidth}\centering#2\end{minipage}\hss}%
+  \vskip 1.5ex%
+}
+
+\tikzstyle{circle entry} = [draw,rounded corners,thick,blue!50]
+
+\begin{frame}
+\frametitle{More Notation for Matrices}
+
+Let $A$ be an $m\times n$ matrix.
+
+\pause\medskip
+\row{
+  We write $a_{ij}$ for the entry in the $i$th row and the $j$th
+  column.  It is called the \textbf{$ij$th entry} of the matrix.
+  % NB: A_{ij} is the i,j *minor*
+}{
+  \begin{tikzpicture}[picture align top]
+    \matrix[math matrix]  (aij)
+      {
+        a_{11} \& \cdots \& a_{1j} \& \cdots \& a_{1n} \\
+        \spvdots \&        \& \spvdots \&        \& \spvdots \\
+        a_{i1} \& \cdots \& a_{ij} \& \cdots \& a_{in} \\
+        \spvdots \&        \& \spvdots \&        \& \spvdots \\
+        a_{m1} \& \cdots \& a_{mj} \& \cdots \& a_{mn} \\
+      };
+      \node[fit=(aij-1-3) (aij-5-3), inner sep=0pt,
+          draw=blue!50, thick, rounded corners,
+          label={[text=blue!50]below:\small$j$th column}] {};
+      \node[fit=(aij-3-1) (aij-3-5), inner sep=0pt,
+          draw=green!70!black, thick, rounded corners] (row) {};
+      \node[text=green!70!black, rotate=90, anchor=north, yshift=1mm, font=\small]
+        at (row.east) {$i$th row};
+  \end{tikzpicture}
+}\pause
+\row{The entries $a_{11},a_{22},a_{33},\ldots$ are the
+  \textbf{diagonal entries}; they form the \textbf{main diagonal} of the matrix.
+}{
+  \begin{tikzpicture}[picture align top]
+    \matrix[math matrix]  (aij2)
+      {
+        \node[circle entry]{a_{11}}; \& a_{12} \& a_{13} \\
+        a_{21} \& \node[circle entry]{a_{22}}; \& a_{23} \\
+      };
+    \matrix[math matrix, right=20pt of aij2] 
+      {
+        \node[circle entry]{a_{11}}; \& a_{12} \\
+        a_{21} \& \node[circle entry]{a_{22}}; \\
+        a_{31} \& a_{32} \\
+      };
+  \end{tikzpicture}
+}\pause\vskip 1ex
+\row{
+  A \textbf{diagonal matrix} is a \emph{square} matrix whose only nonzero
+  entries are on the main diagonal.
+}{
+  \vskip-\aboveheight
+  $\mat{a_{11} 0 0; 0 a_{22} 0; 0 0 a_{33}}$
+}\pause
+\row{
+  The $n\times n$ \textbf{identity matrix} $I_n$ is the diagonal matrix with all
+  diagonal entries equal to $1$.  It is special because
+  $\color{red}I_nv = \blankuntil{6}{v}$ for \emph{all} $v$ in $\R^n$.
+}{
+  \vskip-\aboveheight
+  \uncover<4->{$I_3 = \mat{1 0 0; 0 1 0; 0 0 1}$}
+}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{More Notation for Matrices}
+\framesubtitle{Continued}
+
+\row{
+  The \textbf{zero matrix} (of size $m\times n$) is the $m\times n$ matrix $0$
+  with all zero entries.
+}{
+  \vskip-\aboveheight
+  $0 = \mat{0 0 0; 0 0 0}$
+}\pause
+\row{
+  The \textbf{transpose} of an $m\times n$ matrix $A$ is the $n\times m$ matrix
+  $A^T$ whose rows are the columns of $A$.  In other words, the $ij$ entry of
+  $A^T$ is $a_{ji}$.
+}{
+  \begin{tikzpicture}[
+      picture align top,
+      every matrix/.append style={nodes={shape=regular polygon,regular polygon sides=4,
+        inner sep=-.8pt}}
+      ]
+    \matrix[math matrix, label={[yshift=1mm]above:$A$}] (aij)
+      {
+        a_{11} \& a_{12} \& a_{13} \\
+        a_{21} \& a_{22} \& a_{23} \\
+      };
+    \matrix[math matrix, right=15mm of aij,
+        label={[yshift=1mm]above:$A^T$}] (aijT)
+      {
+        a_{11} \& a_{21} \\
+        a_{12} \& a_{22} \\
+        a_{13} \& a_{23} \\
+      };
+    \draw[->, decorate,
+        decoration={
+          snake, amplitude=.5mm, segment length=1mm, post length=1mm}] 
+      ($(aij.east) + (3mm,0)$) -- ($(aijT.west) - (3.2mm,0)$);
+    \draw[green!50!black, opacity=.5, shorten >=-4mm]
+      (aij-1-1.north west) -- (aij-2-2.south east)
+      coordinate[pos=1.3, below left=3mm] (left)
+      coordinate[pos=1.3, above right=3mm] (right)
+      node[pos=1.2, below right, opaque] {\small flip};
+    \draw[<->, green!50!black] (left) to[bend left] (right);
+    \draw[green!50!black, opacity=.5, shorten >=-4mm]
+      (aijT-1-1.north west) -- (aijT-2-2.south east);
+      
+  \end{tikzpicture}
+}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Addition and Scalar Multiplication}
+
+You add two matrices component by component, like with vectors.
+\[ \loopmat23{\append{a_{\i\j}}} + \loopmat23{\append{b_{\i\j}}}
+= \loopmat23{\append{a_{\i\j}+b_{\i\j}}} \]
+\pause
+Note you can only add two matrices \emph{of the same size}.
+
+\pause\bigskip
+You multiply a matrix by a scalar by multiplying each component, like with
+vectors.
+\[ \def\r{\textcolor{red}}
+\r c\loopmat23{\append{a_{\i\j}}}
+= \loopmat23{\appendnoexp{\textcolor{red}c}\append{a_{\i\j}}}. \]
+
+\pause\bigskip
+These satisfy the expected rules, like with vectors:
+\begin{webonly}
+\[\syseq{A+B = B+A\hfill, \qquad,
+  (A+B)+C = A+(B+C);
+  c(A+B) = cA+cB \qquad,
+  (c+d)A = cA+dA\hfill ;
+  (cd)A = c(dA)\hfill, \qquad,
+  A+0 = A\hfill}
+\]
+\end{webonly}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Matrix Multiplication}
+
+\alert{Beware:} matrix multiplication is more subtle than addition and scalar
+multiplication.
+
+\pause\bigskip
+Let $A$ be an $m\times\namedbox{cols}{\color<4->{red}n}$ matrix and let $B$ be an
+$\namedbox{rows}{\color<4->{red}n}\times p$ matrix with
+columns $v_1,v_2\ldots,v_p$:
+\[ B = \mat{| | ,, |; v_1 v_2 \cdots, v_p; | | ,, |}. \]
+The \textbf{product} $AB$ is the $m\times p$ matrix with columns
+$Av_1,Av_2,\ldots,Av_p$: 
+\[ AB \namedbox{def}{{}\overset{\rm def}={}}
+\mat{| | ,, |; Av_1 Av_2 \cdots, Av_p; | | ,, |}. \]
+\begin{tikzpicture}[remember picture, overlay]
+  \path (def.west) ++ (-1cm,0)
+    node[blue!50, inner sep=0pt, left, align=center] (expl)
+      {The equality is\\a definition};
+  \draw[->, blue!50] (expl.north) to[bend left] (def.north west);
+\end{tikzpicture}%
+\pause
+In order for $Av_1,Av_2,\ldots,Av_p$ to make sense, the number of
+\blankuntil{4}{\textcolor{red}{columns}} of $A$ has to be the same as the number of
+\blankuntil{4}{\textcolor{red}{rows}} of $B$.
+
+\begin{tikzpicture}[overlay, remember picture]
+  \draw<4->[<->, red, shorten=1.5pt, rounded corners] 
+    (cols.north) |- ($(rows.north) + (0,6mm)$) 
+    node[below, pos=.75, thin border] {\small must be equal} -- (rows.north) ;
+\end{tikzpicture}
+
+\pause[5]\vskip-.3cm
+\begin{eg}
+  \null
+  \vskip-1cm
+  \small\[\begin{aligned} \mat{1 2 3; 4 5 6} \mat{1 -3; 2 -2; 3 -1}
+    &= \webonlycmd{\mat{\mat{1 2 3; 4 5 6}\cdot\vec{1 2 3}
+      \mat{1 2 3; 4 5 6}\cdot\vec{-3 -2 -1}}}\\
+    &\webonlycmd{= \mat{14 -10; 32 -28}}
+  \end{aligned}\]
+\end{eg}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Composition of Transformations}
+
+\alert{Why} is this the correct definition of matrix multiplication?
+\pause
+
+\begin{defn}
+  Let $T\colon\R^n\to\R^m$ and $U\colon\R^p\to\R^n$ be transformations.  The
+  \textbf{composition} is the transformation
+  \[ T\circ U\colon\R^p\to\R^m \sptxt{defined by}
+  T\circ U(x) = T(U(x)). \]
+\end{defn}
+\pause
+This makes sense because $U(x)$ (the output of $U$) is in \blankuntil{4}{$\R^n$},
+which is the domain of $T$ (the inputs of $T$).
+
+\pause[5]
+\begin{center}
+\begin{tikzpicture}[scale=.3, every label/.append style={text=black, thin border}]
+  \draw[grid lines] (-3,-3) grid (3,3)
+    (0,-4) node[black] {$\R^p$}
+    (2,1)  node[point, "$x$" left] (x) {};
+  \draw[grid lines,xshift=12cm] (-3,-3) grid (3,3)
+    (0,-4) node[black] {$\R^n$}
+    (-1,-2) node[point, "$U(x)$" above] (Ux) {};
+  \draw[grid lines,xshift=24cm] (-3,-3) grid (3,3)
+    (0,-4) node[black] {$\R^m$}
+    (-2,2) node[point, "$T\circ U(x)$" below right] (TUx) {};
+  \draw[|->, shorten=1.5pt, out=0, in=180]
+    (x) to node[below,midway] {$U$} (Ux);
+  \draw[|->, shorten=1.5pt, out=0, in=180]
+    (Ux) to node[below,midway] {$T$} (TUx);
+  \draw[shorten=1.5pt, out=0, in=180]
+    (x) to node[above=2pt,midway,thin border] {$T\circ U$} (TUx);
+\end{tikzpicture}
+\end{center}
+
+\pause
+\alert{Fact:}
+If $T$ and $U$ are linear then so is $T\circ U$.  
+% We have to check:\pause
+% \small
+% \[\begin{split}
+%   T\circ U(v+w) &\webonlycmd{= T(U(v+w)) = T(U(v)+U(w)) 
+%   = T(U(v))+T(U(w))} \\
+%   &= T\circ U(v) + T\circ U(w) \\
+%   T\circ U(cv) &\webonlycmd{= T(U(cv)) = T(cU(v)) = cT(U(v))} = cT\circ U(v)
+% \end{split}\]
+
+\pause\medskip
+\alert{Guess:}
+If $A$ is the matrix for $T$, and $B$ is the matrix for $U$, what is the matrix
+for $T\circ U$?
+
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Composition of Linear Transformations}
+
+Let $T\colon\R^n\to\R^m$ and $U\colon\R^p\to\R^n$ be \emph{linear}
+transformations.  Let $A$ and $B$ be their matrices:
+\pause
+\[ A = \mat{| | ,, |; T(e_1) T(e_2) \cdots, T(e_n); | | ,, |}
+\quad
+B = \mat{| | ,, |; U(e_1) U(e_2) \cdots, U(e_p); | | ,, |} \]
+
+\pause
+\begin{ques}
+  What is the matrix for $T\circ U$?
+\end{ques}
+
+\pause
+\begin{webonly}
+We find the matrix for $T\circ U$ by plugging in the unit coordinate vectors:
+\[ T\circ U(e_1) = T(U(e_1)) \mathbin{\namedbox{whyeq}{=}} T(Be_1) = A(Be_1) = (AB)e_1 \]
+\namedbox{because}{because} $Be_1$ is the first column of $B$, which is $U(e_1)$.
+\tikz[remember picture, overlay]
+  \draw[<-,blue!50] (because) to[out=90,in=-90,looseness=.5] (whyeq);
+For any other $i$, the same works:
+\[ T\circ U(e_i) = T(U(e_i)) = T(Be_i) = A(Be_i) = (AB)e_i. \]
+This says that the $i$th column of the matrix for $T\circ U$ is the $i$th column
+of $AB$.
+\end{webonly}
+
+\begin{bluebox}{.8\linewidth}
+  The matrix of the composition is the product of the matrices!
+\end{bluebox}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Composition of Linear Transformations}
+\framesubtitle{Example}
+
+Let $T\colon\R^2\to\R^2$ be rotation by $45^\circ$, and let $U\colon\R^2\to\R^2$
+be projection onto the $x$-axis.  Let's compute their standard matrices
+$A$ and~$B$:\\[1.5mm]
+\begin{webonly}\hfill
+\begin{tikzpicture}[picture align center, thin border nodes, scale=1.5]
+  \draw[grid lines, step=.5] (-1.1,-.3) grid (1.1,1.1);
+  \draw[grid lines] (1,0) arc[start angle=0, end angle=180, radius=1];
+  \draw[vector] (0,0) to["$T(e_1)$"] ++(45:1) node[coordinate] (y) {};
+  \point (o) at (0,0);
+  \draw (o) -| 
+     node[pos=.5,coordinate] (z) {}
+     node[pos=.25,below] {$\frac 1{\sqrt 2}$} 
+     node[pos=.75,right] {$\frac 1{\sqrt 2}$} 
+     (y);
+  \pic[draw] {right angle=(o)--(z)--(y)};
+  \pic[draw, "$45$" font=\tiny, angle eccentricity=.7] {angle=z--o--y};
+\end{tikzpicture}\hfill
+\hbox to 3cm{\hss$\displaystyle
+\begin{aligned}[c]
+T(e_1) &= \frac 1{\sqrt 2}\vec{1 1}\\
+T(e_2) &= \frac 1{\sqrt 2}\vec{-1 1}\\
+\end{aligned}$\hss}\hfill
+\begin{tikzpicture}[picture align center, thin border nodes, scale=1.5]
+  \draw[grid lines, step=.5] (-1.1,-.3) grid (1.1,1.1);
+  \draw[grid lines] (1,0) arc[start angle=0, end angle=180, radius=1];
+  \draw[vector] (0,0) to["$T(e_2)$"'] ++(135:1) node[coordinate] (y) {};
+  \point (o) at (0,0);
+  \draw (o) -| 
+     node[pos=.5,coordinate] (z) {}
+     node[pos=.25,below] {$\frac 1{\sqrt 2}$} 
+     node[pos=.75,left] {$\frac 1{\sqrt 2}$} 
+     (y);
+  \pic[draw] {right angle=(o)--(z)--(y)};
+  \pic[draw, "$45$" font=\tiny, angle eccentricity=.7] {angle=y--o--z};
+\end{tikzpicture}\hfill\null
+
+\medskip
+\hfill
+\begin{tikzpicture}[picture align center, thin border nodes, scale=1.5]
+  \draw[grid lines, step=.5] (-1.1,-.3) grid (1.1,1.1);
+  \draw (-1.1,0) -- (1.1,0);
+  \draw[vector] (0,0) to["$U(e_1)$"] (1,0) node[coordinate] (x) {};
+  \point (o) at (0,0);
+\end{tikzpicture}\hfill
+\hbox to 3cm{\hss$\displaystyle
+\begin{aligned}[c]
+U(e_1) &= \vec{1 0}\\
+U(e_2) &= \vec{0 0}\\
+\end{aligned}$\hss}\hfill
+\begin{tikzpicture}[picture align center, thin border nodes, scale=1.5]
+  \draw[grid lines, step=.5] (-1.1,-.3) grid (1.1,1.1);
+  \draw (-1.1,0) -- (1.1,0);
+  \point["$U(e_2)$"] (o) at (0,0);
+\end{tikzpicture}\hfill\null
+\end{webonly}
+
+\pause\medskip
+\[ \implies\quad
+A = \frac 1{\sqrt 2}\mat{1 -1; 1 1} \qquad
+B = \mat{1 0; 0 0} \]
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Composition of Linear Transformations}
+\framesubtitle{Example, continued}
+
+So the matrix $C$ for $T\circ U$ is
+\webonlycmd{
+\[\begin{split} C = AB &= \frac 1{\sqrt 2}\mat{1 -1; 1 1}\mat{1 0; 0 0} \\
+&= \mat{
+  \frac 1{\sqrt 2}\mat{1 -1; 1 1}\vec{1 0}
+  \frac 1{\sqrt 2}\mat{1 -1; 1 1}\vec{0 0}
+} 
+= \frac 1{\sqrt 2}\mat{1 0; 1 0}.
+\end{split}\]
+}
+
+\pause
+\alert{Check:}\\[1.5mm]
+\begin{webonly}
+\hbox to \linewidth{\hss
+\begin{tikzpicture}[picture align center, thin border nodes, scale=1]
+  \draw[grid lines, step=.5] (-1.1,-.3) grid (1.1,1.1);
+  \draw[grid lines] (1,0) arc[start angle=0, end angle=180, radius=1];
+  \draw[vector] (0,0) to["$e_1$"] (1,0);
+  \point (o) at (0,0);
+\end{tikzpicture}\;\longsquiggly\;
+\begin{tikzpicture}[picture align center, thin border nodes, scale=1]
+  \draw[grid lines, step=.5] (-1.1,-.3) grid (1.1,1.1);
+  \draw[grid lines] (1,0) arc[start angle=0, end angle=180, radius=1];
+  \draw[vector] (0,0) to["$U(e_1)$"] (1,0);
+  \point (o) at (0,0);
+\end{tikzpicture}\;\longsquiggly\;
+\begin{tikzpicture}[picture align center, thin border nodes, scale=1]
+  \draw[grid lines, step=.5] (-1.1,-.3) grid (1.1,1.1);
+  \draw[grid lines] (1,0) arc[start angle=0, end angle=180, radius=1];
+  \draw[vector] (0,0) to["$T(U(e_1))$"] ++(45:1) node[coordinate] (y) {};
+  \point (o) at (0,0);
+  \coordinate (z) at (1,0);
+\end{tikzpicture}
+\hbox to 3cm{$\displaystyle T\circ U(e_1)= \frac 1{\sqrt 2}\vec{1 1}$\hss}\hss}
+  
+\smallskip\hbox to \linewidth{\hss
+\begin{tikzpicture}[picture align center, thin border nodes, scale=1]
+  \draw[grid lines, step=.5] (-1.1,-.3) grid (1.1,1.1);
+  \draw[grid lines] (1,0) arc[start angle=0, end angle=180, radius=1];
+  \draw[vector] (0,0) to["$e_2$"] (0,1);
+  \point (o) at (0,0);
+\end{tikzpicture}\;\longsquiggly\;
+\begin{tikzpicture}[picture align center, thin border nodes, scale=1]
+  \draw[grid lines, step=.5] (-1.1,-.3) grid (1.1,1.1);
+  \draw[grid lines] (1,0) arc[start angle=0, end angle=180, radius=1];
+  \point["$U(e_2)$"] at (0,0);
+\end{tikzpicture}\;\longsquiggly\;
+\begin{tikzpicture}[picture align center, thin border nodes, scale=1]
+  \draw[grid lines, step=.5] (-1.1,-.3) grid (1.1,1.1);
+  \draw[grid lines] (1,0) arc[start angle=0, end angle=180, radius=1];
+  \point["$T(U(e_2))$"] at (0,0);
+\end{tikzpicture}
+\hbox to 3cm{$\displaystyle T\circ U(e_2)= \vec{0 0}$\hss}\hss}
+\end{webonly}
+
+\pause\medskip
+\[ \implies C = \frac 1{\sqrt 2}\mat{1 0; 1 0} \bigcheck[\quad] \]
+
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% JDR: probably skip this slide in class for time
+
+\begin{frame}
+\frametitle{Composition of Linear Transformations}
+\framesubtitle{Another example}
+
+Let 
+\[ A = \mat{1 2 3; 4 5 6} \qquad B = \mat{1 -3; 2 -2; 3 -1}. \]
+Let $T(x) = Ax$ and $U(y) = By$, so
+\[ T\colon\R^{\blankuntil{2}{3}}\To\R^{\blankuntil{2}{2}}
+\qquad
+U\colon\R^{\blankuntil{3}{2}}\To\R^{\blankuntil{3}{3}}
+\qquad
+T\circ U\colon\R^{\blankuntil{4}{2}}\To\R^{\blankuntil{4}{2}}. \]
+\pause[5]%
+Let's find the matrix for $T\circ U$:
+\[\begin{split} T\circ U(e_1) &=\webonlycmd{ T(U(e_1)) = T(Be_1) = T\vec{1 2 3}
+= A\vec{1 2 3} = \vec{14 32}} \\
+T\circ U(e_2) &=\webonlycmd{ T(U(e_2)) = T(Be_2) = T\vec{-3 -2 -1}
+= A\vec{-3 -2 -1} = \vec{-10 -28}} 
+\end{split}\]
+\pause
+Before we computed $AB = \mat{14 -10; 32 -28}$, so $AB$ is the matrix of $T\circ U$.
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{pollframe}
+
+\vskip 5mm
+
+\begin{bluebox}[Poll]{.8\textwidth}
+  Do there exist \emph{nonzero} matrices $A$ and $B$ with $AB=0$?
+\end{bluebox}
+
+\pause\bigskip
+
+Yes!  Here's an example:
+\[ \mat{1 0; 1 0}\mat{0 0; 1 1} 
+= \mat{\mat{1 0; 1 0}\vec{0 1} \mat{1 0;1 0}\vec{0 1}}
+= \mat{0 0; 0 0}. \]
+
+
+\end{pollframe}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{The Row-Column Rule for Matrix Multiplication}
+
+\alert{Recall:} A row vector of length $n$ times a column vector of length $n$
+is a scalar:
+\[ \mat{a_1 \cdots, a_n}\vec{b_1 \vdots, b_n} = a_1b_1 + \cdots + a_nb_n. \]
+\pause
+Another way of multiplying a matrix by a vector is:
+\[ Ax = 
+\mat[c]{ \matrow{r_1};
+     \vdots ;
+     \matrow{r_m}}
+     x
+= \vec{r_1x \vdots, r_mx}.
+\]
+\pause
+On the other hand, you multiply two matrices by
+\[ AB = A\mat{| ,, |; c_1 \cdots, c_p; | ,, |} =
+\mat{| ,, |; Ac_1 \cdots, Ac_p; | ,, |}. \]
+\pause
+It follows that
+\[ AB = 
+\mat[c]{ \matrow{r_1};
+     \vdots ;
+     \matrow{r_m}} \mat{ | ,, |; c_1 \cdots, c_p; | ,, |}
+= \mat{ r_1c_1 r_1c_2 \cdots, r_1c_p;
+        r_2c_1 r_2c_2 \cdots, r_2c_p;
+         \vdots, \vdots, , \vdots;
+        r_mc_1 r_mc_2 \cdots, r_mc_p}
+ \]
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{The Row-Column Rule for Matrix Multiplication}
+
+\begin{bluebox}{.9\textwidth}
+  The $ij$ entry of $C = AB$ is the $i$th row of $A$ times the $j$th column of $B$:
+  \abovedisplayskip=2pt
+  \[ c_{ij} = (AB)_{ij} = a_{i1}b_{1j} + a_{i2}b_{2j} + \cdots + a_{in}b_{nj}. \]
+\end{bluebox}
+
+\pause
+This is how everybody on the planet actually computes $AB$.
+\pause
+Diagram ($AB=C$):
+\[
+\begin{tikzpicture}[baseline]
+  \matrix[math matrix]  (aij)
+    {
+      a_{11} \& \cdots \& a_{1k} \& \cdots \& a_{1n} \\
+      \spvdots \&        \& \spvdots \&        \& \spvdots \\
+      a_{i1} \& \cdots \& a_{ik} \& \cdots \& a_{in} \\
+      \spvdots \&        \& \spvdots \&        \& \spvdots \\
+      a_{m1} \& \cdots \& a_{mk} \& \cdots \& a_{mn} \\
+    };
+  \node[fit=(aij-3-1) (aij-3-5), inner sep=0pt,
+      draw=green!70!black, thick, rounded corners] (row) {};
+  \node[text=green!70!black, rotate=90, anchor=north, yshift=1.1mm, font=\small]
+      at (row.east) {$i$th row};
+\end{tikzpicture}\cdot
+\begin{tikzpicture}[baseline]
+  \matrix[math matrix]  (bij)
+    {
+      b_{11} \& \cdots \& b_{1j} \& \cdots \& b_{1p} \\
+      \spvdots \&        \& \spvdots \&        \& \spvdots \\
+      b_{k1} \& \cdots \& b_{kj} \& \cdots \& b_{kp} \\
+      \spvdots \&        \& \spvdots \&        \& \spvdots \\
+      b_{n1} \& \cdots \& b_{nj} \& \cdots \& b_{np} \\
+    };
+  \node[fit=(bij-1-3) (bij-5-3), inner sep=0pt,
+      draw=blue!50, thick, rounded corners,
+      label={[text=blue!50]below:\small$j$th column}] {};
+\end{tikzpicture}=
+\begin{tikzpicture}[baseline]
+  \matrix[math matrix,
+      label=below:$\textcolor{green!70!black}i\textcolor{blue!50}j$ entry]
+        (cij)
+    {
+      c_{11} \& \cdots \& c_{1j} \& \cdots \& c_{1p} \\
+      \spvdots \&        \& \spvdots \&        \& \spvdots \\
+      c_{i1} \& \cdots \& c_{ij} \& \cdots \& c_{ip} \\
+      \spvdots \&        \& \spvdots \&        \& \spvdots \\
+      c_{m1} \& \cdots \& c_{mj} \& \cdots \& c_{mp} \\
+    };
+  \draw[thick, green!70!black]
+    (cij-3-3.center) circle[radius=1.3ex];
+  \draw[thick, blue!50]
+    (cij-3-3.center) circle[radius=1.3ex+\pgflinewidth];
+\end{tikzpicture}
+\]
+
+\pause\vskip -.3cm
+\begin{eg}
+  \null
+  \vskip-.8cm
+  \begin{webonly}
+  \small\[\fboxsep=0pt
+  \def\g{\textcolor{green!70!black}}
+  \def\b{\textcolor{blue!50}}
+  \begin{aligned}
+    \mat{\g1 \g2 \g3; 4 5 6}
+    \mat{\b1 -3; \b2 -2; \b3 -1}
+    &= \mat{\g1\cdot\b1+\g2\cdot\b2+\g3\cdot\b3 \fbox{\phantom 8};
+      \fbox{\phantom 8} \fbox{\phantom 8}}
+    = \mat{14 \fbox{\phantom 8}; \fbox{\phantom 8} \fbox{\phantom 8}} \\
+    \mat{1 2 3; \g4 \g5 \g6}
+    \mat{\b1 -3; \b2 -2; \b3 -1}
+    &= \mat{\fbox{\phantom 8} \fbox{\phantom 8};
+      \g4\cdot\b1+\g5\cdot\b2+\g6\cdot\b3 \fbox{\phantom 8}}
+    = \mat{\fbox{\phantom 8} \fbox{\phantom 8}; 32 \fbox{\phantom 8}}
+  \end{aligned}\]
+  \end{webonly}
+\end{eg}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Properties of Matrix Multiplication}
+
+Mostly matrix multiplication works like you'd expect.  Suppose $A$ has size
+$m\times n$, and that the other matrices below have the right size to make
+multiplication work. 
+\webonlycmd{
+  \[\syseq{A(BC) = (AB)C\hfill, \qquad,
+    A(B+C) = ({AB+AC});
+    (B+C)A = BA+CA \qquad,
+    c(AB) = (cA)B\hfill ;
+    c(AB) = A(cB)\hfill, \qquad,
+    I_nA = A\hfill;
+    AI_m = A\hfill}
+\]}\pause
+Most of these are easy to verify.  
+
+\pause\medskip
+\textbf{Associativity} is $A(BC) = (AB)C$.  It is a pain to verify using the row-column
+rule!
+\pause
+Much easier: use associativity of linear transformations:
+\[ S\circ(T\circ U) = (S\circ T)\circ U. \]
+
+\pause\medskip
+This is a good example of an instance where having a conceptual viewpoint saves
+you a lot of work.
+
+\pause\medskip
+\alert{Recommended:} Try to verify all of them on your own.
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Properties of Matrix Multiplication}
+\framesubtitle{Caveats}
+
+\alert{\large Warnings!}
+\begin{itemize}
+\item $AB$ is usually not equal to $BA$.
+  \webonlycmd{
+  \[ \mat{0 -1; 1 0}\mat{2 0; 0 1} = \mat{0 -1; 2 0} \qquad
+  \mat{2 0; 0 1}\mat{0 -1; 1 0} = \mat{0 -2; 1 0} \]
+  }\pause
+  In fact, $AB$ may be defined when $BA$ is not.
+
+\pause\medskip
+\item $AB = AC$ does not imply $B = C$, even if $A\neq 0$.
+  \webonlycmd{
+  \[ \mat{1 0; 0 0}\mat{1 2; 3 4} = \mat{1 2; 0 0}
+     = \mat{1 0; 0 0}\mat{1 2; 5 6} \]
+   }%
+
+\pause
+\item $AB = 0$ does not imply $A=0$ or $B=0$.
+  \webonlycmd{
+  \[ \mat{1 0; 1 0}\mat{0 0; 1 1} 
+  = \mat{0 0; 0 0} \]
+}
+
+\end{itemize}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Other Reading}
+
+\vfill
+
+\begin{bluebox}{.8\linewidth}
+  Read about powers of a matrix and multiplication of transposes in \S2.1.
+\end{bluebox}
+
+\vfill
+
+\end{frame}
+
+
+
+%%% Local Variables:
+%%% TeX-master: "../slides"
+%%% End:

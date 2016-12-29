@@ -1,0 +1,681 @@
+
+\titleframe{Section 6.4}{The Gram--Schmidt Process}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Motivation}
+
+All of the procedures we learned in \S\S6.2--6.3 require an \emph{orthogonal}
+basis $\{u_1,u_2,\ldots,u_m\}$.
+\pause
+\begin{itemize}
+\item Finding the $\cB$-coordinates of a vector $x$ using dot products:
+  \[ x = \sum_{i=1}^m \frac{x\cdot u_i}{u_i\cdot u_i}\,u_i \]
+\pause
+\item Finding the orthogonal projection of a vector $x$ onto the span $W$ of
+  $u_1,u_2,\ldots,u_m$:
+  \[ \proj_W(x) = \sum_{i=1}^m \frac{x\cdot u_i}{u_i\cdot u_i}\,u_i. \]
+\end{itemize}
+
+\pause\medskip
+\alert{Problem:} What if your basis isn't orthogonal?
+
+\pause\medskip
+\alert{Solution:} The Gram--Schmidt process: take any basis and make it
+orthogonal.
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{The Gram--Schmidt Process}
+\framesubtitle{Procedure}
+
+\vskip-3mm
+\begin{oneoffthm}{The Gram--Schmidt Process}
+  Let $\{v_1,v_2,\ldots,v_m\}$ be a basis for a subspace $W$ of $\R^n$.  Define:
+  \begin{enumerate}
+  \item $u_1 = v_1$
+    \pause
+  \item $\displaystyle 
+    \hbox to 5cm{$u_2 = v_2 - \proj_{\Span\{u_1\}}(v_2)$\hss}
+    = v_2 - \frac{v_2\cdot u_1}{u_1\cdot u_1}\,u_1$
+    \pause
+  \item $\displaystyle 
+    \hbox to 5cm{$u_3 = v_3 -\proj_{\Span\{u_1,u_2\}}(v_3)$\hss}
+    = v_3 - \frac{v_3\cdot u_1}{u_1\cdot u_1}\,u_1
+    - \frac{v_3\cdot u_2}{u_2\cdot u_2}\,u_2$
+    \pause
+  \item[\vdots]
+  \item[m.] $\displaystyle 
+    \hbox to 5cm{$u_m = v_m -\proj_{\Span\{u_1,u_2,\ldots,u_{m-1}\}}(v_m)$\hss}
+    = v_m - \sum_{i=1}^{m-1}\frac{v_m\cdot u_i}{u_i\cdot u_i}\,u_i$
+  \end{enumerate}
+  \pause
+  Then $\{u_1,u_2,\ldots,u_m\}$ is an \emph{orthogonal} basis for the same
+  subspace $W$.
+\end{oneoffthm}
+
+\pause\smallskip
+\begin{rem}
+  In fact, for every $i$ between $1$ and $n$, the set
+  $\{u_1,u_2,\ldots,u_i\}$ is an orthogonal basis for 
+  $\Span\{v_1,v_2,\ldots,v_i\}$.
+\end{rem}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{The Gram--Schmidt Process}
+\framesubtitle{Two vectors}
+
+Find an orthogonal basis $\{u_1,u_2\}$ for $W = \Span\{v_1,v_2\}$, where
+\displayskips{3pt}
+\[ v_1 = \vec{1 1 0} \sptxt{and} v_2 = \vec{1 1 1}. \]
+
+\medskip
+\begin{webonly}
+Run Gram--Schmidt:\vskip-5mm
+\[
+  \text{\alert{1. }}\;
+  u_1 = v_1 \qquad
+  \text{\alert{2. }}\;
+  u_2 = v_2 - \frac{v_2\cdot u_1}{u_1\cdot u_1}\,u_1 
+  = \vec{1 1 1} - \frac{2}{2}\vec{1 1 0}
+  = \vec{0 0 1}.
+\]\vskip-3mm
+Why does this work?
+\end{webonly}%
+
+\begin{columns}[onlytextwidth]
+\column[c]{.6\linewidth}
+\begin{webonly}%
+  \begin{itemize}
+  \item First we take $u_1 = v_1$.
+  \item Now we're sad because $u_1\cdot v_2\neq 0$, so we can't take $u_2 =
+    v_2$.
+  \item Fix: let $L_1 = \Span\{u_1\}$, and let
+    $u_2 = (v_2)_{L_1^\perp} = v_2 - \proj_{L_1}(v_2)$.
+  \item By construction, $u_1\cdot u_2=0$, because $L_1\perp u_2$.
+  \end{itemize}
+\end{webonly}
+\pause
+%
+\column[c]{.4\linewidth}\hbox to \linewidth{
+\begin{tikzpicture}[x={(1cm,.3cm)}, y={(.8cm,-.5cm)}, z={(0cm,1cm)},
+    scale=.75, thin border nodes]
+  \coordinate (v1) at (1,1,0);
+  \coordinate (v2) at (1,1,1);
+  \coordinate (u2) at (0,0,1);
+
+  \begin{scope}[x=(v1), y=(u2), transformxy]
+    \fill[seq-violet!50, opacity=.7] (-1,-1) rectangle (2.3,2);
+    \draw[seq-blue] (-1,0) -- node[auto, very near end, swap] {$L_1$} (2.3,0);
+    \node[seq-violet] at (-.5,1.5) {$W$};
+  \end{scope}
+
+  \point (o) at (0,0,0);
+  \draw[vector] (o) -- node[midway,sloped,below] {$v_1=u_1\mathstrut$} (v1);
+  \draw[vector] (o) -- node[auto] {$v_2$} (v2);
+  \draw[vector] (v1) -- node[auto,swap] {$u_2 = (v_2)_{L_1^\perp}$} ($(v2)$) ;
+  \pic[draw] {right angle=(v2)--(v1)--(o)};
+\end{tikzpicture}\hss}
+\end{columns}
+
+\pause\medskip
+\alert{Important:} $\Span\{u_1,u_2\} = \Span\{v_1,v_2\} = W$: this is an
+\emph{orthogonal} basis for the \emph{same\/} subspace.
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{The Gram--Schmidt Process}
+\framesubtitle{Three vectors}
+
+Find an orthogonal basis $\{u_1,u_2,u_3\}$ for $W = \Span\{v_1,v_2,v_3\} = \R^3$, where
+\[ v_1 = \vec{1 1 0} \qquad v_2 = \vec{1 1 1} \qquad v_3 = \vec{3 1 1}. \]
+
+\medskip
+\begin{webonly}
+Run Gram--Schmidt:
+\begin{enumerate}
+\item $u_1 = v_1$
+\item $\displaystyle 
+  u_2 = v_2 - \frac{v_2\cdot u_1}{u_1\cdot u_1}\,u_1 
+  = \vec{1 1 1} - \frac{2}{2}\vec{1 1 0}
+  = \vec{0 0 1}$
+\item $\displaystyle\begin{aligned}[t]
+    u_3 &= v_3 
+    - \frac{v_3\cdot u_1}{u_1\cdot u_1}\,u_1
+    - \frac{v_3\cdot u_2}{u_2\cdot u_2}\,u_2 \\
+    &\qquad= \vec{3 1 1} 
+    - \frac{4}{2}\vec{1 1 0}
+    - \frac{1}{1}\vec{0 0 1} = \vec{1 -1 0}
+  \end{aligned}$
+\end{enumerate}
+\end{webonly}
+
+\pause
+\alert{Important:} $\Span\{u_1,u_2,u_3\} = \Span\{v_1,v_2,v_3\} = W$: this is an
+\emph{orthogonal} basis for the \emph{same} subspace.
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{The Gram--Schmidt Process}
+\framesubtitle{Three vectors, continued}
+
+\vskip-5mm
+\[ \hss v_1 = \vec{1 1 0},\; v_2 = \vec{1 1 1},\; v_3 = \vec{3 1 1} 
+\;\longsquiggly[G--S]\;
+u_1 = \vec{1 1 0},\; u_2 = \vec{0 0 1},\; u_3 = \vec{1 -1 0} \hss \]
+
+\begin{columns}[onlytextwidth]
+\column[c]{.6\linewidth}
+\begin{webonly}
+  Why does this work?  
+  \begin{itemize}
+  \item Once we have $u_1$ and $u_2$, then we're sad because $v_3$ is not
+    orthogonal to $u_1$ and $u_2$.
+  \item Fix: let $W_2 = \Span\{u_1,u_2\}$, and let
+    $u_3 = (v_3)_{W_2^\perp} = v_3 - \proj_{W_3}(u_3)$.
+  \item By construction, $u_1\cdot u_3 = 0 = u_2\cdot u_3$ because
+    $W_2\perp u_3$.
+  \end{itemize}
+  
+  \smallskip
+  \alert{Check:}
+  \[\begin{aligned}
+    u_1\cdot u_2 &= 0 \bigcheck \\
+    u_1\cdot u_3 &= 0 \bigcheck \\
+    u_2\cdot u_3 &= 0 \bigcheck
+  \end{aligned}\]
+\end{webonly}
+
+\pause
+\column[c]{.4\linewidth}\centering
+\begin{tikzpicture}[x={(.4cm,-.8cm)}, y={(-1cm,0cm)}, z={(0cm,1cm)},
+    scale=1, thin border nodes]
+  \coordinate (v1) at (1,1,0);
+  \coordinate (v2) at (1,1,1);
+  \coordinate (v3) at (3,1,1);
+  \coordinate (u1) at (v1);
+  \coordinate (u2) at (0,0,1);
+  \coordinate (u3) at (1,-1,0);
+  \coordinate (p3) at (2,2,1);
+
+  \begin{scope}[xshift=1.75cm, scale=.5, overlay]
+    \draw[->] (0,0,0) -- (1,0,0) node[below right] {$x$};
+    \draw[->] (0,0,0) -- (0,1,0) node[left] {$y$};
+    \draw[->] (0,0,0) -- (0,0,1) node[above] {$z$};
+  \end{scope}
+
+  \begin{scope}[x=(v1), y=(u2), transformxy]
+    \fill[seq-violet!50, opacity=.7] (-1,-1) rectangle (2.3,2);
+    \node[seq-violet] at (-.5,1.5) {$W_2$};
+    \draw[seq-blue] (-1,0) -- node[auto, very near end] {$L_1$} (2.3,0);
+    \coordinate (p31) at (2,0);
+    \coordinate (p32) at (0,1);
+  \end{scope}
+
+  \point (o) at (0,0,0);
+  \draw[vector, black!50] (o) -- node[auto] {$u_1$} (u1);
+  \draw[vector, black!50] (o) -- node[auto,swap] {$u_2$} (u2);
+  \pic[draw] {right angle=(u1)--(o)--(u2)};
+
+  \draw[vector] (o) -- node[auto] {$v_3$} (v3);
+  \draw[vector] (p3) -- node[auto,swap,near end] {$u_3$} (v3);
+  \draw[vector] (o) -- node[sloped,midway,above,font=\footnotesize]
+    {$\proj_{W_2}(v_3)$} (p3);
+  \pic[draw] {right angle=(o)--(p3)--(v3)};
+  \draw[very thin, black!50] (p3) -- (p31);
+  \draw[very thin, black!50] (p3) -- (p32);
+
+\end{tikzpicture}
+\end{columns}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{The Gram--Schmidt Process}
+\framesubtitle{Three vectors in $\R^4$}
+
+Find an orthogonal basis $\{u_1,u_2,u_3\}$ for $W = \Span\{v_1,v_2,v_3\}$, where
+\[ v_1 = \vec[r]{1 1 1 1} \qquad v_2 = \vec[r]{-1 4 4 -1} \qquad
+v_3 = \vec[r]{4 -2 -2 0}. \]
+
+\begin{webonly}
+Run Gram--Schmidt:
+\begin{enumerate}
+\item $u_1 = v_1$
+\item $\displaystyle u_2 = v_2 - \frac{v_2\cdot u_1}{u_1\cdot u_1}\,u_1
+  = \vec[r]{-1 4 4 -1} - \frac{6}{4}\vec[r]{1 1 1 1}
+  = \vec[r]{-5/2 5/2 5/2 -5/2}$
+\item $\displaystyle\begin{aligned}[t] u_3 &= v_3
+  - \frac{v_3\cdot u_1}{u_1\cdot u_1}\,u_1
+  - \frac{v_3\cdot u_2}{u_2\cdot u_2}\,u_2 \\
+  &= \vec[r]{4 -2 -2 0}
+  - \frac{0}{24}\vec[r]{1 1 1 1}
+  - \frac{-20}{25}\vec[r]{-5/2 5/2 5/2 -5/2}
+  = \vec[r]{2 0 0 -2}
+  \end{aligned}$
+
+\end{enumerate}
+\end{webonly}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{pollframe}
+
+\begin{bluebox}[Poll]{.8\linewidth}
+  What happens if you try to run Gram--Schmidt on a linearly
+  \emph{de\/}pendent set of vectors $\{v_1,v_2,\ldots,v_m\}$?
+  \smallskip
+  \begin{eAlpherate}
+  \item You get an inconsistent equation.
+  \item For some $i$ you get $u_i = u_{i-1}$.
+  \item For some $i$ you get $u_i = 0$.
+  \item You create a rift in the space-time continuum.
+  \end{eAlpherate}
+\end{bluebox}
+
+\pause\bigskip
+If $\{v_1,v_2,\ldots,v_m\}$ is linearly dependent, then some $v_i$ is in
+$\Span\{v_1,v_2,\ldots,v_{i-1}\} = \Span\{u_1,u_2,\ldots,u_{i-1}\}$.  
+
+\pause\medskip
+This means\displayskips{1pt}
+\[\begin{aligned} &v_i = \proj_{\Span\{u_1,u_2,\ldots,u_{i-1}\}}(v_i) \\
+&\qquad\implies u_i = v_i - \proj_{\Span\{u_1,u_2,\ldots,u_{i-1}\}}(v_i) = 0. 
+\end{aligned}\]
+
+\pause\medskip
+In this case, you can simply discard $u_i$ and $v_i$ and continue: so
+Gram--Schmidt produces an orthogonal basis from any spanning set!
+
+\end{pollframe}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{$QR$ Factorization}
+
+\vskip-3mm
+\begin{oneoffthm}{$QR$ Factorization Theorem}
+  Let $A$ be a matrix with linearly independent columns.  Then
+  \[ A = QR \]
+  where $Q$ has orthonormal columns and $R$ is upper-triangular with positive
+  diagonal entries.
+\end{oneoffthm}
+
+\pause\smallskip
+\alert{Recall:} A set of vectors $\{v_1,v_2,\ldots,v_m\}$ is
+\textbf{orthonormal} if they are orthogonal unit vectors: $v_i\cdot v_j = 0$
+when $i\neq j$, and $v_i\cdot v_i = 1$.
+
+\pause\medskip
+\alert{Check:} A matrix $Q$ has orthonormal columns if and only if $Q^TQ = I$.
+
+\pause\bigskip
+The columns of $A$ are a basis for $W = \Col A$.
+\pause
+The columns of $Q$ come from Gram--Schmidt as applied to the columns of $A$,
+after normalizing to unit vectors.
+\pause
+The columns of $R$ come from the steps in Gram--Schmidt.
+
+\pause\medskip
+Here is the procedure for producing a $QR$ factorization.
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{$QR$ Factorization}
+\framesubtitle{Example}
+
+Find the $QR$ factorization of
+$A = \mat{1 1 0; 1 1 1; 0 1 1}$.
+
+\pause\medskip
+(The columns of $A$ are the vectors $v_1,v_2,v_3$ from a previous example.)
+
+\pause\medskip
+\alert{Step 1:} Run Gram--Schmidt
+\uncover<4->{and solve for $v_1,v_2,v_3$ in terms of $u_1,u_2,u_3$.}
+\[\begin{aligned}
+  u_1 &= v_1 = \vec{1 1 0} & \uncover<4->{v_1 &= u_1} \\
+  u_2 &= v_2 - \frac{v_2\cdot u_1}{u_1\cdot u_1}\,u_1
+  = v_2 - \namedbox{a12}{1}\,u_1
+  = \vec{0 0 1}
+  & \uncover<4->{v_2 &= u_1 + u_2} \\
+  u_3 &= v_3 - \frac{v_3\cdot u_1}{u_1\cdot u_1}\,u_1
+    - \frac{v_3\cdot u_2}{u_2\cdot u_2}\,u_2 \\
+    &= v_3 - \namedbox{a13}{2}\,u_1 - \namedbox{a23}{1}\,u_2
+    = \vec{1 -1 0}
+    & \uncover<4->{v_3 &= 2u_1 + u_2 + u_3}
+\end{aligned}\]
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{$QR$ Factorization}
+\framesubtitle{Example, continued}
+
+\def\g{\color<3->{seq-green}}\def\b{\color<4->{seq-blue}}\def\v{\color<5->{seq-violet}}
+\vskip-3mm
+\displayskips{3pt}
+\[ v_1 = \namedbox{a11}{\g1}\,u_1 \qquad
+v_2 = \namedbox{a12}{\b1}\,u_1 + \namedbox{a22}{\b1}\,u_2 \qquad
+v_3 = \namedbox{a13}{\v2}\,u_1 + \namedbox{a23}{\v1}\,u_2 + \namedbox{a33}{\v1}\,u_3 \]
+
+\medskip
+\alert{Step 2:} Write $A = \hat Q\hat R$, where $\hat Q$ has
+\emph{orthogonal\/} columns $u_1,u_2,u_3$ and $\hat R$ is upper-triangular with
+$1$s on the diagonal.
+
+\pause\medskip
+Do this by putting the above equations in matrix form:
+\[\begin{aligned} \namedbox{A}{\mathstrut}\mat{| | |; v_1 v_2 v_3; | | |}
+&= \namedbox{Q}{\mat{| | |; u_1 u_2 u_3; | | |}}
+\mat{\namedbox{b11}{\g1} \namedbox{b12}{\b1} \namedbox{b13}{\v2};
+  0 \namedbox{b22}{\b1} \namedbox{b23}{\v1};
+  0 \namedbox{R}{0} \namedbox{b33}{\v1}} \\[2ex]
+\uncover<3->{
+\text{first column of $A$} &=
+\mat{| | |; u_1 u_2 u_3; | | |}\vec{\g1 0 0} = {\g1}u_1 = v_1 \\
+}
+\uncover<4->{
+\text{second column of $A$} &=
+\mat{| | |; u_1 u_2 u_3; | | |}\vec{\b1 \b1 0} = {\b1}u_1 + {\b1}u_2 = v_2 \\
+}
+\uncover<5->{
+\text{third column of $A$} &=
+\mat{| | |; u_1 u_2 u_3; | | |}\vec{\v2 \v1 \v1} = {\v2}u_1 + {\v1}u_2 + {\v1}u_3 = v_3
+}
+\end{aligned}\]
+\begin{tikzpicture}[remember picture, overlay,
+    every node/.style={draw, inner sep=.5pt, circle}]
+  \node<3->[fit=(a11), seq-green] (a11') {};
+  \node<3->[fit=(b11), seq-green] (b11') {};
+  \draw<3->[seq-green, ->]
+    (a11'.-45) .. controls +(1,-1) and +(-.5,.5) .. (b11'.115);
+  \node<4->[fit=(a12), seq-blue] (a12') {};
+  \node<4->[fit=(b12), seq-blue] (b12') {};
+  \draw<4->[seq-blue, ->]
+    (a12'.south east) .. controls +(.5,-.5) and +(0,1) .. (b12'.north);
+  \node<4->[fit=(a22), seq-blue] (a22') {};
+  \node<4->[fit=(b22), seq-blue] (b22') {};
+  \draw<4->[seq-blue, ->]
+    (a22'.south) .. controls +(0,-1) and +(-1,0) .. (b22'.west);
+  \node<5->[fit=(a13), seq-violet] (a13') {};
+  \node<5->[fit=(b13), seq-violet] (b13') {};
+  \draw<5->[seq-violet, ->]
+    (a13') to[out=-90,in=90] (b13');
+  \node<5->[fit=(a23), seq-violet] (a23') {};
+  \node<5->[fit=(b23), seq-violet] (b23') {};
+  \draw<5->[seq-violet, ->]
+    (a23'.south) .. controls +(0,-.5) and +(.5,.5) .. (b23'.45);
+  \node<5->[fit=(a33), seq-violet] (a33') {};
+  \node<5->[fit=(b33), seq-violet] (b33') {};
+  \draw<5->[seq-violet, ->]
+    (a33'.south) .. controls +(0,-1.1) and +(1.5,1) .. (b33'.30);
+    
+  \begin{scope}[every node/.style={seq-red}, draw=seq-red]
+    \path<2-> (A) ++(-1cm,0)
+      node[font=\large, inner sep=3pt] (A') {$A$};
+    \draw<2->[->] (A') -- (A);
+    \path<2-> (Q.190) ++(-.75cm,-.75cm)
+      node[font=\large, inner sep=1pt] (Q') {$\hat Q$};
+    \draw<2->[->] (Q') -- (Q);
+    \path<2-> (R.south) ++(.75cm,-.5cm)
+      node[font=\large, inner sep=1pt] (R') {$\hat R$};
+    \draw<2->[->, shorten=1mm] (R'.west) to[out=180, in=-90] (R.south);
+  \end{scope}
+\end{tikzpicture}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{$QR$ Factorization}
+\framesubtitle{Example, continued}
+
+\vskip-3mm
+\[ A = \hat Q\hat R \qquad 
+\mat{1 1 0; 1 1 1; 0 1 1} = \mat[r]{1 0 1; 1 0 -1; 0 1 0} \mat{1 1 2; 0 1 1; 0 0 1} \]
+
+\alert{Step 3:} Scale the columns of $\hat Q$ to get unit vectors, and scale the
+rows of $\hat R$ by the opposite factor, to get $Q$ and $R$.
+\pause
+\[\def\g{\color{seq-green}}\def\b{\color{seq-blue}}\def\v{\color{seq-violet}}
+\def\da{\g\uncover<3->{/\sqrt{2}}} \def\ta{\g\uncover<3->{\cdot\sqrt{2}}}
+\def\db{\b\uncover<4->{/1}}        \def\tb{\b\uncover<4->{\cdot 1}}
+\def\dc{\v\uncover<5->{/\sqrt{2}}}\def\tc{\v\uncover<5->{\cdot\sqrt{2}}}
+\mat{1 1 0; 1 1 1; 0 1 1} = 
+\mat[l]{1\da, 0\db, \phantom-1\dc; 1\da, 0\db, -1\dc; 0\da, 1\db, \phantom-0\dc}
+\mat[l]{1\ta, 1\ta, 2\ta; 0\tb, 1\tb, 1\tb; 0\tc, 0\tc, 1\tc}. \]
+\pause[6]%
+Note that the entries in the $i$th column of $Q$ multiply by the entries in the
+$i$th row of $R$, so this doesn't change the product.
+
+\pause\medskip
+The final $QR$ decomposition is:
+\[ A = QR \qquad
+Q = \mat[r]{1/\sqrt 2 0 1/\sqrt 2; 1/\sqrt 2 0 -1/\sqrt 2; 0 1 0}
+\qquad
+R = \mat[r]{\sqrt 2 \sqrt 2 2\sqrt 2; 0 1 1; 0 0 \sqrt 2}
+\]
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{$QR$ Factorization}
+\framesubtitle{Another example}
+
+Find the $QR$ factorization of
+$A = \mat{1 -1 4; 1 4 -2; 1 4 -2; 1 -1 0}$.
+
+\pause\smallskip
+(The columns are vectors from a previous example.)
+
+\medskip
+\alert{Step 1:}
+Run Gram--Schmidt and solve
+for $v_1,v_2,v_3$ in terms of $u_1,u_2,u_3$:
+\begin{webonly}
+\[\begin{aligned}
+ u_1 &= v_1 = \vec{1 1 1 1}  & v_1 &= u_1 \\
+ u_2 &= v_2 - \frac{v_2\cdot u_1}{u_1\cdot u_1}\,u_1
+  = v_2 - \frac{3}{2}u_1
+  = \vec[r]{-5/2 5/2 5/2 -5/2}
+  & v_2 &= \frac 32u_1 + u_2 \\
+ u_3 &= v_3
+  - \frac{v_3\cdot u_1}{u_1\cdot u_1}\,u_1
+  - \frac{v_3\cdot u_2}{u_2\cdot u_2}\,u_2 
+  = v_3
+  + \frac{4}{5}u_2
+  = \vec[r]{2 0 0 -2} 
+  & v_3 &= -\frac 45u_2 + u_3
+\end{aligned}\]
+
+\end{webonly}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{$QR$ Factorization}
+\framesubtitle{Another example, continued}
+
+\vskip-3mm
+\displayskips{3pt}
+\def\r{\textcolor{seq-red}}
+\def\g{\textcolor{seq-green}}
+\def\b{\textcolor{seq-blue}}\[ 
+v_1 = \r{1}\,u_1 \qquad
+v_2 = \g{\frac 32}\,u_1 + \g{1}\,u_2 \qquad
+v_3 = \b{0}\,u_1  \b{{}-\frac 45}\,u_2 + \b{1}\,u_3
+ \]
+
+\medskip
+\alert{Step 2:} Write $A = \hat Q\hat R$, where $\hat Q$ has
+\emph{orthogonal} columns $u_1,u_2,u_3$ and $\hat R$ is upper-triangular with
+$1$s on the diagonal.
+\begin{webonly}
+  \[\begin{split}
+    \hat Q &= \mat{| | |; u_1 u_2 u_3; | | |} 
+    = \mat[r]{1 -5/2 2; 1 5/2 0; 1 5/2 0; 1 -5/2 -2} \\
+    \hat R &= \mat{\r1 \g{3/2} \b0; 0 \g{1} \b{-4/5}; 0 0 \b{1}}
+  \end{split}\]
+\end{webonly}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{$QR$ Factorization}
+\framesubtitle{Another example, continued}
+
+\vskip-3mm
+\displayskips{3pt}
+\[ A = \hat Q\hat R 
+\qquad \hat Q = \mat[r]{1 -5/2 2; 1 5/2 0; 1 5/2 0; 1 -5/2 -2}
+\qquad \hat R = \mat{1 3/2 0; 0 1 -4/5; 0 0 1}
+\]
+
+\alert{Step 3:} Normalize the columns of $\hat Q$ and the rows of $\hat R$ to
+get $Q$ and $R$:
+\begin{webonly}
+  \[\begin{split}
+    Q &= \mat{| | |; u_1/\|u_1\| u_2/\|u_2\| u_3/\|u_3\|; | | |} 
+    = \mat[r]{1/2 -1/2 1/\sqrt 2; 1/2 1/2 0; 1/2 1/2 0; 1/2 -1/2 -1/\sqrt 2} \\
+    R &= \mat[r]{
+      1\cdot\|u_1\| 3/2\cdot\|u_1\| 0\cdot\|u_1\|;
+      0  1\cdot\|u_2\|  -4/5\cdot\|u_2\|;
+      0  0  1\cdot\|u_3\|
+    } =
+    \mat{2 3 0; 0 5 -4; 0 0 2\sqrt 2}
+  \end{split}\]
+\end{webonly}
+
+\pause\medskip
+The final $QR$ decomposition is
+\[ A = QR \qquad
+Q = \mat[r]{1/2 -1/2 1/\sqrt 2; 1/2 1/2 0; 1/2 1/2 0; 1/2 -1/2 -1/\sqrt 2}
+\qquad
+R = \mat{2 3 0; 0 5 -4; 0 0 2\sqrt 2}.
+\]
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{$QR$ Factorization}
+\framesubtitle{Application: computing determinants}
+
+\vskip-1mm
+Let $A$ be an \emph{invertible} $n\times n$ matrix.  Consider its $QR$
+factorization
+\[ A = QR. \]
+
+\pause
+\alert{Recall:} Since $Q$ has orthonormal columns, $Q^TQ = I_n$, so
+$Q^T=Q\inv$.
+
+\pause\smallskip
+But $\det(Q^T)=\det(Q)$, so
+\[ 1 = \det(I_n) = \det(Q^TQ) = \det(Q^T)\det(Q) = \det(Q)^2. \]
+\pause
+It follows that $\det(Q)=\pm1$.
+
+\pause\smallskip
+(Since $\det(R)>0$, in fact $\det(Q)$ has the same sign as $\det(A)$.)
+
+\pause\medskip
+Therefore,
+\[ \det(A) = \det(Q)\det(R) = \pm\det(R). \]
+\pause
+But $R$ is upper-triangular, so it's easy to compute its determinant!
+
+\pause\medskip
+In fact, if $v_1,v_2,\ldots,v_n$ are the columns of $A$, and
+$u_1,u_2,\ldots,u_n$ are the vectors you obtain by applying Gram--Schmidt, then
+the $(i,i)$ entry of $R$ is $\|u_i\|$, so
+\[ \det(A) = \pm\|u_1\|\,\|u_2\|\cdots\|u_n\|. \]
+\pause
+So you can use Gram--Schmidt to compute determinants (up to sign)!
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{$QR$ Factorization}
+\framesubtitle{Application: computing eigenvalues}
+
+Let $A$ be an $n\times n$ matrix with real eigenvalues.  Here is an algorithm:
+
+\pause
+\[\begin{aligned}
+  A &= Q_1R_1 && \text{$QR$ factorization} \\
+  \uncover<3->{A_1 &= R_1Q_1 && \text{swap the $Q$ and $R$} \\}
+  \uncover<4->{&= Q_2R_2 && \text{find its $QR$ factorization} \\}
+  \uncover<5->{A_2 &= R_2Q_2 && \text{swap the $Q$ and $R$} \\}
+  \uncover<6->{&= Q_3R_3 && \text{find its $QR$ factorization} \\}
+  \uncover<7->{& && \text{et cetera}}
+\end{aligned}\]
+
+\pause[8]
+\begin{thm}
+  The matrices $A_k$ converge to an upper triangular matrix, and the diagonal
+  entries converge (quickly!) to the eigenvalues of $A$.
+\end{thm}
+
+\pause\medskip
+This gives a computationally efficient way (called the $QR$ algorithm) to
+find the eigenvalues of a matrix.
+
+\end{frame}
+
+
+%%% Local Variables:
+%%% TeX-master: "../slides"
+%%% End:

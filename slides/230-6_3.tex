@@ -1,0 +1,482 @@
+
+% JDR: This is meant to be half a lecture, the other half being 6.2.
+
+\titleframe{Section 6.3}{Orthogonal Projections}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Idea Behind Orthogonal Projections}
+
+If $x$ is not in a subspace $W$, then $y$ in $W$ is the closest to $x$ if
+\pause
+$x-y$ is in $W^\perp$:
+\begin{center}
+\begin{tikzpicture}[myxyz, scale=.5, thin border nodes,
+    right angle len=1.5mm]
+  \coordinate (u) at (1,0,0);
+  \coordinate (v) at (0,1.1,-.2);
+  \coordinate (uxv) at (0,.2,1.1);
+  \coordinate (x) at ($-1.1*(u)+(v)+1.5*(uxv)$);
+  \begin{scope}[x=(u),y=(v),transformxy]
+    \fill[seq-violet!30] (-2,-2) rectangle (2,2);
+    \draw[seq-violet, help lines] (-2,-2) grid (2,2);
+    \node[seq-violet] at (2.6,1) {$W$};
+  \end{scope}
+  \point<-2| handout:0>[seq-blue, "$y$" {below,text=seq-blue}] (y) at ($-1.1*(u)+1*(v)$);
+  \point<3->[seq-blue, "$x_W$" {below,text=seq-blue}] (y) at ($-1.1*(u)+1*(v)$);
+  \point[seq-red, "$x$" {above,text=seq-red}] (xx) at (x);
+  \draw<-2| handout:0>[vector, thin] (y) -- node[auto] {$x-y$} (xx);
+  \draw<3->[vector, thin] (y) -- node[auto] {$x_{W^\perp}$} (xx);
+  \point at (0,0,0);
+  \coordinate (yu) at ($(y)+(u)$);
+  \coordinate (yv) at ($(y)+(v)$);
+  \pic[draw] {right angle=(x)--(y)--(yu)};
+  \pic[draw] {right angle=(x)--(y)--(yv)};
+\end{tikzpicture}
+\end{center}
+
+\pause\medskip
+\alert{Reformulation:}
+Every vector $x$ can be decompsed uniquely as 
+\[ x = x_W + x_{W^\perp} \]
+where $x_W\textcolor{black!50}{{} = y}$ is the closest vector to $x$ in $W$, and
+$x_{W^\perp}\textcolor{black!50}{{} = x-y}$ is in
+$W^\perp$. 
+
+\pause\medskip
+\alert{Example:}
+Let $u = {3\choose 2}$ and let $L = \Span\{u\}$.  Let
+$x = {-6\choose 4}$.
+\pause
+Then the closest point to $x$ in
+$L$ is
+\pause
+$\proj_L(x) = \frac{x\cdot u}{u\cdot u}u$, so
+\displayskips{3pt}
+\[ x_L =\pause \proj_L(x) = -\frac{10}{13}\vec{3 2}
+\qquad
+x_{L^\perp} = \pause x - \proj_L(x) = \vec{-6 4} + \frac{10}{13}\vec{3 2}. \]
+\begin{center}
+\begin{tikzpicture}[scale=.5, thin border nodes,
+    right angle len=1.5mm]
+  \draw[seq-violet] (-3,-2) -- node[below right, very near start] {$L$} (3,2);
+  \draw[vector] (0,0) --  node[below right] {$u$} (1.5,1);
+  \point[seq-red] (x) at (-3,2);
+  \point (o) at (0,0);
+  \draw[vector,seq-red] (o) -- node[auto,swap] {$x$} (x);
+  \point[seq-blue, "$x_L = \proj_L(x)$" {below right,seq-blue}]
+    (p) at (${-2.5/(1.5*1.5+1)}*(1.5,1)$);
+  \draw[vector, seq-green] (p) -- node[below left] {$x_{L^\perp}$} (x);
+  \pic[draw] {right angle=(x)--(p)--(o)};
+\end{tikzpicture}
+\end{center}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Orthogonal Projections}
+
+\vskip-3mm
+\begin{defn}
+  Let $W$ be a subspace of $\R^n$, and let $\{u_1,u_2,\ldots,u_m\}$ be an
+  \emph{orthogonal} basis for $W$.  The \textbf{orthogonal projection} of a
+  vector $x$ onto $W$ is
+  \[ \proj_W(x) \overset{\rm def}= \sum_{i=1}^m \frac{x\cdot u_i}{u_i\cdot u_i}\,u_i. \]
+\end{defn}
+
+\pause
+\alert{Question:} What is the difference between this and the formula for
+$[x]_\cB$ from before?
+
+\pause\medskip
+\begin{thm}
+  Let $W$ be a subspace of $\R^n$, and let $x$ be a vector in $\R^n$.  Then
+  $\proj_W(x)$ is the closest point to $x$ in $W$.
+  \pause
+  Therefore
+  \[ \namedbox{start}{x_W} = \proj_W(x) \qquad x_{W^\perp}
+  = \namedbox{end}{x-\proj_W(x)}. \]
+\end{thm}%
+\begin{tikzpicture}[remember picture, overlay]%
+  \node[fit=(start) (end), inner sep=1mm, thick, rounded corners, seq-red, draw] {};
+\end{tikzpicture}%
+
+\vskip-5mm
+\begin{webonly}
+\alert{Why?}
+Let $y = \proj_W(x)$.  We need to show that $x-y$ is in $W^\perp$.
+In other words, $u_i\cdot(x-y)=0$ for each $i$.
+Let's do $u_1$:
+\[ u_1\cdot(x-y)
+= u_1\cdot\left( x-\sum_{i=1}^m\frac{x\cdot u_i}{u_i\cdot u_i}\,u_i \right)
+= u_1\cdot x - \frac{x\cdot u_1}{u_1\cdot u_1}(u_1\cdot u_1) - 0 - \cdots
+= 0. \]
+\end{webonly}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Orthogonal Projections}
+\framesubtitle{Easy example}
+
+What is the projection of $x = \vec{1 2 3}$ onto the $xy$-plane?
+
+\medskip
+\begin{webonly}
+\alert{Answer:}
+The $xy$-plane is $W=\Span\{e_1,e_2\}$, and $\{e_1,e_2\}$ is an orthogonal basis.
+\[ x_W = \proj_W\vec{1 2 3}
+= \frac{x\cdot e_1}{e_1\cdot e_1}e_1 + \frac{x\cdot e_2}{e_2\cdot e_2}e_2
+= \frac{1\cdot 1}{1^2} e_1 + \frac{1\cdot 2}{1^2} e_2
+= \vec{1 2 0}.
+ \] 
+\end{webonly}
+\pause
+So this is the same projection as before.
+
+\begin{center}
+\begin{tikzpicture}[myxyz, scale=.75, thin border nodes]
+  \draw (0,0,-2)--(0,0,0);
+  \fill[transformxy, help lines, seq-violet!20, opacity=.7]
+    (-2.5,-2.5) rectangle (2.5,2.5);
+  \draw[transformxy, help lines, seq-violet!50] (-2.5,-2.5) grid (2.5,2.5);
+  \draw[->] (-2.5,0,0)--(2.5,0,0);
+  \draw[->] (0,-2.5,0)--(0,2.5,0);
+  \draw[->] (0,0,0)--(0,0,2);
+  \point[seq-red, "$x$" {above, text=seq-red}] (x) at (1,2,3);
+  \point[seq-blue, "$x_W$" {below, text=seq-blue}] (xW) at (1,2,0);
+  \point (o) at (0,0,0);
+  \draw[vector, seq-green] (xW) --
+    node[auto, seq-green!80!black] {$x_{W^\perp}$} (x);
+  \coordinate (xWu) at ($(xW)+(1,0,0)$);
+  \coordinate (xWv) at ($(xW)+(0,1,0)$);
+  \pic[draw] {right angle=(x)--(xW)--(xWu)};
+  \pic[draw] {right angle=(x)--(xW)--(xWv)};
+  \node[seq-violet] at (3,1,0) {$W$};
+    
+\end{tikzpicture}
+\end{center}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Orthogonal Projections}
+\framesubtitle{More complicated example}
+
+\hbox to \linewidth{
+What is the projection of $x = \vec[r]{-1.1\phantom0 1.4\phantom0 1.45}$ onto
+$W = \Span\left\{ \vec{1 0 0},\;\vec{0 1.1 -.2} \right\}$?\hss}
+
+\medskip
+\begin{webonly}
+\alert{Answer:}
+The basis is orthogonal, so
+\[\begin{split}
+  x_W 
+  &= \proj_W\vec[r]{-1.1\phantom0 1.4\phantom0 1.45}
+  = \frac{x\cdot u_1}{u_1\cdot u_1}u_1 + \frac{x\cdot u_2}{u_2\cdot u_2}u_2 \\
+  &= \frac{(-1.1)(1)}{1^2}\vec{1 0 0} + 
+  \frac{(1.4)(1.1)+(1.45)(-.2)}{1.1^2+(-.2)^2}\vec{0 1.1 -.2} \\
+\end{split}\]
+This turns out to be equal to $u_2-1.1u_1$.
+\end{webonly}
+\vfill\pause
+\begin{center}
+\begin{tikzpicture}[myxyz, scale=.5, thin border nodes,
+    right angle len=1.5mm]
+  \coordinate (u) at (1,0,0);
+  \coordinate (v) at (0,1.1,-.2);
+  \coordinate (uxv) at (0,.2,1.1);
+  \coordinate (x) at ($-1.1*(u)+(v)+1.5*(uxv)$);
+  \begin{scope}[x=(u),y=(v),transformxy]
+    \fill[seq-violet!30] (-2,-2) rectangle (2,2);
+    \draw[seq-violet, help lines] (-2,-2) grid (2,2);
+    \node[seq-violet] at (2.6,1) {$W$};
+    \draw[vector] (0,0) -- (1,0) node[right] {$u_1$};
+    \draw[vector] (0,0) -- (0,1) node[below] {$u_2$};
+  \end{scope}
+  \point[seq-blue, "$x_W$" {below,text=seq-blue}] (y) at ($-1.1*(u)+1*(v)$);
+  \point[seq-red, "$x$" {above,text=seq-red}] (xx) at (x);
+  \draw[vector, seq-green] (y) -- node[auto] {$x_{W^\perp}$} (xx);
+  \point at (0,0,0);
+  \coordinate (yu) at ($(y)+(u)$);
+  \coordinate (yv) at ($(y)+(v)$);
+  \pic[draw] {right angle=(x)--(y)--(yu)};
+  \pic[draw] {right angle=(x)--(y)--(yv)};
+\end{tikzpicture}
+\end{center}\vfill
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Orthogonal Projections}
+\framesubtitle{Picture}
+
+Let $W$ be a subspace of $\R^n$, and let $\{u_1,u_2,\ldots,u_m\}$ be an
+orthogonal basis for $W$.  Let $L_i = \Span\{u_i\}$.  Then
+\[ \proj_W(x) = \sum_{i=1}^m \frac{x\cdot u_i}{u_i\cdot u_i}\,u_i
+= \sum_{i=1}^m \proj_{L_i}(x). \]
+\pause
+So the orthogonal projection is formed by adding orthogonal projections onto
+perpendicular lines.
+
+\vfill
+\begin{center}
+\begin{tikzpicture}[myxyz, scale=1, thin border nodes]
+  \coordinate (u) at (1,0,0);
+  \coordinate (v) at (0,1.1,-.2);
+  \coordinate (uxv) at (0,.2,1.1);
+  \coordinate (x) at ($-1.1*(u)+(v)+1.5*(uxv)$);
+  \begin{scope}[x=(u),y=(v),transformxy]
+    \fill[seq-violet!30] (-2,-2) rectangle (2,2);
+    \draw[seq-violet, help lines] (-2,-2) grid (2,2);
+    \node[seq-violet] at (2.6,1) {$W$};
+    \draw (-2,0) -- node[near end, above] {$L_1$} (2,0);
+    \draw (0,-2) -- node[near start, above left] {$L_2$} (0,2);
+    \point (p1) at (-1.1,0);
+    \point["$\proj_{L_2}(x)$" below right] (p2) at (0,1);
+    \pic[draw] {right angle=(p1)--(o)--(p2)};
+  \end{scope}
+  \pgfmathanglebetweenpoints{\pgfpoint{0cm}{0cm}}{\pgfpointanchor{v}{center}}
+  \node[anchor=mid west, inner xsep=1.5mm, rotate={\pgfmathresult+180}] 
+    at (p1) {$\proj_{L_1}(x)$};
+  \draw[densely dashed] (x) -- (p1);
+  \draw[densely dashed] (x) -- (p2);
+  \point (o) at (0,0,0);
+  \coordinate (oo) at (-2,0,0);
+  \pic[draw] {right angle=(x)--(p1)--(oo)};
+  \pic[draw] {right angle=(x)--(p2)--(o)};
+  \point[seq-blue, "$x_W$" {below,text=seq-blue}] (y) at ($-1.1*(u)+1*(v)$);
+  \point[seq-red, "$x$" {above,text=seq-red}] (xx) at (x);
+  \draw[densely dashed] (p1) -- (y);
+  \draw[densely dashed] (p2) -- (y);
+  \draw (xx) -- (y);
+  \pic[draw] {right angle=(p1)--(y)--(xx)};
+  \pic[draw] {right angle=(p2)--(y)--(xx)};
+\end{tikzpicture}
+\end{center}
+
+\vfill
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Orthogonal Projections}
+\framesubtitle{Properties}
+
+First we restate the property we've been using all along.
+
+\begin{oneoffthm}{Best Approximation Theorem}
+  Let $W$ be a subspace of $\R^n$, and let $x$ be a vector in $\R^n$.  Then
+  $y = \proj_W(x)$ is the closest point in $W$ to $x$, in the sense that
+  \[ \dist(x,y') \geq \dist(x,y) \sptxt{for all} y'\text{ in }W. \]
+\end{oneoffthm}
+
+\pause
+We can think of orthogonal projection as a \emph{transformation}:
+\[ \proj_W\colon\R^n\To\R^n \qquad x \mapsto \proj_W(x). \]
+
+\pause
+\begin{thm}
+  Let $W$ be a subspace of $\R^n$.
+  \pause
+  \begin{enumerate}
+  \item $\proj_W$ is a \emph{linear} transformation.
+    \pause
+  \item For every $x$ in $W$, we have $\proj_W(x) = \pause x$.
+    \pause
+  \item For every $x$ in $W^\perp$, we have $\proj_W(x) = \pause 0$.
+    \pause
+  \item The range of $\proj_W$ is
+    \pause
+    $W$.
+  \end{enumerate}
+\end{thm}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{pollframe}
+
+Let $W$ be a subspace of $\R^n$.
+
+\begin{bluebox}[Poll]{.9\linewidth}
+  Let $A$ be the matrix for $\proj_W$.  What is/are the eigenvalue(s) of $A$?
+  \[
+  \text{\alert{A. }} 0 \quad
+  \text{\alert{B. }} 1 \quad
+  \text{\alert{C. }} -1 \quad
+  \text{\alert{D. }} 0,\, 1 \quad
+  \text{\alert{E. }} 1,\,-1 \quad
+  \text{\alert{F. }} 0,\,-1 \quad
+  \text{\alert{G. }} -1,\,0,\,1
+  \]
+\end{bluebox}
+
+\pause\medskip
+The $1$-eigenspace is
+\pause
+$W$.
+
+\pause\medskip
+The $0$-eigenspace is
+\pause
+$W^\perp$.
+
+\pause\medskip
+We have $\dim W+\dim W^\perp = n$, so that gives $n$ linearly independent
+eigenvectors already.
+
+\pause\medskip
+So the answer is \alert{D}.
+
+\end{pollframe}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Orthogonal Projections}
+\framesubtitle{Matrices}
+
+\displayskips{2pt}
+What is the matrix for $\proj_W\colon\R^3\to\R^3$, where 
+\[ W = \Span\left\{ \vec{1 0 -1},\;\vec{1 1 1} \right\}? \]
+
+\footnotesize
+\begin{webonly}%
+\alert{Answer:}
+Recall how to compute the matrix for a linear transformation:
+\[ A = \mat{| | |; \proj_W(e_1) \proj_W(e_2) \proj_W(e_3); | | |}. \]
+We compute:
+\[\begin{split}
+  \proj_W(e_1) &= \frac{e_1\cdot u_1}{u_1\cdot u_1}u_1 +
+  \frac{e_1\cdot u_2}{u_2\cdot u_2}u_2
+  = \frac 12\vec{1 0 -1} + \frac 13\vec{1 1 1}
+  = \vec{5/6 1/3 -1/6} \\
+  \proj_W(e_2) &= \frac{e_2\cdot u_1}{u_1\cdot u_1}u_1 +
+  \frac{e_2\cdot u_2}{u_2\cdot u_2}u_2
+  = 0 + \frac 13\vec{1 1 1}
+  = \vec{1/3 1/3 1/3} \\
+  \proj_W(e_3) &= \frac{e_3\cdot u_1}{u_1\cdot u_1}u_1 +
+  \frac{e_3\cdot u_2}{u_2\cdot u_2}u_2
+  = -\frac 12\vec{1 0 -1} + \frac 13\vec{1 1 1}
+  = \vec{-1/6 1/3 5/6}
+\end{split}\]
+Therefore $A = \mat{5/6 1/3 -1/6; 1/3 1/3 1/3; -1/6 1/3 5/6}$.
+  
+\end{webonly}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Orthogonal Projections}
+\framesubtitle{Matrix facts}
+
+Let $W$ be an $m$-dimensional subspace of $\R^n$, let $\proj_W\colon\R^n\to W$
+be the projection, and let $A$ be the matrix for $\proj_L$.
+
+\pause\medskip
+\alert{Fact 1:} $A$ is diagonalizable with eigenvalues $0$ and $1$; it is
+similar to the diagonal matrix with $m$ ones and $n-m$ zeros on the diagonal.
+
+\medskip
+\begin{webonly}
+  \alert{Why?} Let $v_1,v_2,\ldots,v_m$ be a basis for $W$, and let
+  $v_{m+1},v_{m+2},\ldots,v_n$ be a basis for $W^\perp$.  These are (linearly
+  independent) eigenvectors with eigenvalues $1$ and $0$, respectively, and they
+  form a basis for $\R^n$ because there are $n$ of them.
+
+  \medskip
+  \alert{Example:} If $W$ is a plane in $\R^3$, then $A$ is similar
+  to projection onto the $xy$-plane:
+  \[ \mat{1 0 0; 0 1 0; 0 0 0}. \]
+\end{webonly}
+
+\pause\medskip
+\alert{Fact 2:} $A^2 = A$.
+
+\medskip
+\begin{webonly}
+  \alert{Why?} Projecting twice is the same as projecting once:
+  \[ \proj_W\circ\proj_W = \proj_W \implies A\cdot A = A. \]
+\end{webonly}
+
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Orthogonal Projections}
+\framesubtitle{Minimum distance}
+
+What is the distance from $e_1$ to 
+$W = \Span\left\{ \vec{1 0 -1},\;\vec{1 1 1} \right\}$? 
+
+\medskip
+\begin{webonly}%
+\alert{Answer:}
+The closest point on $W$ to $e_1$ is 
+$\proj_W(e_1) = \vec{5/6 1/3 -1/6}$.\\[1mm]
+The distance from $e_1$ to this point is\\[2mm]
+$\;\displaystyle\begin{aligned}[c] \dist&\bigl(e_1,\proj_W(e_1)\bigr) 
+= \|(e_1)_{W^\perp}\| \\
+&= \left\|\vec{1 0 0}-\vec{5/6 1/3 -1/6}\right\| \\
+&= \left\|\vec{1/6 -1/3 -1/6}\right\| \\
+&= \sqrt{(1/6)^2+(-1/3)^2+(-1/6)^2}  \\
+&= \frac 1{\sqrt 6}.
+\end{aligned}$
+\end{webonly}\hfill\pause
+\begin{tikzpicture}[myxyz, scale=2, thin border nodes,
+    right angle len=1.5mm, baseline=-.5cm]
+  \coordinate (u) at (1,0,-1);
+  \coordinate (v) at (1,1,1);
+  \coordinate (x) at (1,0,0);
+  \coordinate (y) at (5/6,1/3,-1/6);
+  \begin{scope}[x=(u),y=(v),transformxy]
+    \fill[seq-violet!30] (0,0) rectangle (1,1);
+    \draw[seq-violet, help lines, step=.25] (0,0) grid (1,1);
+    \node[seq-violet] at (1.1,.5) {$W$};
+  \end{scope}
+  \draw[vector] (0,0,0) to["$\vec{1 0 -1}$"'] (u);
+  \draw[vector] (0,0,0) to["$\vec{1 1 1}$"] (v);
+  \draw (x) to["$(e_1)_{W^\perp}$", "$\frac 1{\sqrt 6}$"' pos=.4] (y);
+  \point[seq-red, "$e_1$" seq-red] at (x);
+  \point[seq-blue, "$y$" {left,seq-blue}] at (y);
+  \coordinate (yu) at ($(y)+(u)$);
+  \coordinate (yv) at ($(y)+(v)$);
+  \pic[draw] {right angle=(x)--(y)--(yu)};
+  \pic[draw] {right angle=(x)--(y)--(yv)};
+  \point at (0,0,0);
+\end{tikzpicture}\hfill\null
+
+\end{frame}
+
+
+%%% Local Variables:
+%%% TeX-master: "../slides"
+%%% End:

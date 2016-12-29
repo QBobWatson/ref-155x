@@ -1,0 +1,892 @@
+
+% JDR: This can probably be done in 50 minutes.  The PageRank stuff goes by
+%   pretty quick--there are no computations, and I don't test my students
+%   on it. 
+
+\usetikzlibrary{bending,matrix}
+
+\titleframe{Application}{Stochastic Matrices and PageRank}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Stochastic Matrices}
+
+\vskip-3mm
+\begin{defn}
+  A square matrix $A$ is \textbf{stochastic} if all of its entries are
+  nonnegative, and the sum of the entries of each column is $1$.
+
+  \pause\smallskip
+  We say $A$ is \textbf{positive} if all of its entries are positive.
+\end{defn}
+
+\pause\medskip
+These arise very commonly in modeling of probabalistic phenomena (Markov
+chains).
+
+\pause\vfill
+\begin{bluebox}{.7\linewidth}
+  You'll be responsible for knowing basic facts about stochastic matrices and
+  the Perron--Frobenius theorem, but we will not cover them in depth.  These
+  slides are the primary reference; see also~\S4.9 in Lay.
+
+  \medskip
+  The specifics of the PageRank algorithm are just for fun.
+\end{bluebox}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Stochastic Matrices}
+\framesubtitle{Example}
+
+Red Box has kiosks all over where you can rent movies.  You can return them to
+any other kiosk.
+\pause
+Let $A$ be the matrix whose $ij$ entry is the probability that a customer
+renting a movie from location $j$ returns it to location $i$.
+\pause
+For example, if there are three locations, maybe
+\[ A = \mat{.3 .4 .5; .3 .4 \namedbox{entry}{.3}; .4 .2 .2}. \]
+\begin{tikzpicture}[remember picture, overlay]
+  \path (entry) ++(1cm,3mm)
+    node[blue!50, font=\small, right, text width=4cm, align=left] (expl)
+      {$30\%$ probability a movie rented from location $3$ gets returned to
+        location $2$};
+  \draw[->, blue!50] (expl.west) to[out=180,in=0] (entry.east);
+\end{tikzpicture}%
+\pause
+The columns sum to $1$ because
+\pause
+there is a $100\%$ chance that the movie will get returned to \emph{some}
+location.
+\pause
+This is a positive stochastic matrix.
+
+\pause\medskip
+Note that, if $v = (x, y, z)$ represents the number of movies at the three
+locations, then (assuming the number of movies is large), Red Box will have
+approximately
+\pause
+\[ Av = A\vec{x y z} = 
+\vec{.3x+.4y+.5z{\;} \namedbox{probs}{.3x+.4y+.3z}{\,} .4x+.2y+.2z{\,}}
+\hskip5cm \]
+movies in its three locations the next day.
+\pause
+\begin{tikzpicture}[remember picture, overlay]
+  \path (probs.east) ++(5mm,1mm)
+    node[blue!50, align=left, anchor=west, inner sep=0pt] (expl2) {%
+      ``The number of movies returned to location $2$\\
+      \qquad will be (on average):\\[.5mm]
+      \quad 30\% of the movies from location $1$; \\
+      \quad 40\% of the movies from location $2$; \\
+      \quad 30\% of the movies from location $3$''
+    };
+  \node[blue!50, draw, rounded corners, inner sep=2pt, fit=(probs)] (probsbox) {};
+  \draw[->, blue!50]  ($(expl2.west)+(1.5mm,0)$) to[out=180,in=0] (probsbox.east);
+\end{tikzpicture}%
+\pause
+The \emph{total number} of movies doesn't change because
+\pause
+the columns sum to $1$.
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Stochastic Matrices and Difference Equations}
+
+If $x_n,y_n,z_n$ are the numbers of movies in locations~$1,2,3$, respectively,
+on day $n$, and $v_n = (x_n,y_n,z_n)$, then:
+\[ v_n = Av_{n-1} = A^2v_{n-2} = \cdots = A^nv_0. \]
+\pause
+\alert{Recall:} This is an example of a \textbf{difference equation}.
+
+\pause\medskip
+Red Box probably cares about what $v_n$ is as $n$ gets large: it tells them
+where the movies will end up \emph{eventually}.
+\pause
+This seems to involve computing $A^n$ for large $n$, but as we will see, they
+actually only have to compute one eigenvector.
+
+\pause\bigskip
+\alert{In general:} A difference equation $v_{n+1}=Av_n$ is used to model a
+state change controlled by a matrix: 
+\pause
+\begin{itemize}
+\item $v_n$ is the ``state at time $n$'',
+\pause
+\item $v_{n+1}$ is the ``state at time $n+1$'', and
+\pause
+\item $v_{n+1} = Av_n$ means that $A$ is the ``change of state matrix.''
+\end{itemize}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+
+\begin{frame}
+\frametitle{Eigenvalues of Stochastic Matrices}
+
+\alert{Fact:} $1$ is an eigenvalue of a stochastic matrix.
+
+\pause\medskip
+\alert{Why?} If $A$ is stochastic, then $1$ is an eigenvalue of $A^T$:
+\[ \mat{.3 .3 .4; .4 .4 .2; .5 .3 .2}\uncover<3->{\vec{1 1 1}} 
+= 1\cdot\uncover<3->{\vec{1 1 1}}. \]
+
+\pause[4]
+\begin{lem}
+  $A$ and $A^T$ have the same eigenvalues.
+\end{lem}
+
+\pause
+\alert{Proof:} $\det(A-\lambda I) = \det\bigl( (A-\lambda I)^T \bigr)
+= \det(A^T-\lambda I)$, so they have the same characteristic polynomial.
+
+\pause\bigskip
+\alert{Note:} This doesn't give a new procedure for finding an eigenvector with
+eigenvalue $1$; it only shows one exists.
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Eigenvalues of Stochastic Matrices}
+\framesubtitle{Continued}
+
+\alert{Fact:} if $\lambda$ is an eigenvalue of a stochastic matrix, then
+$|\lambda|\leq 1$.  Hence $1$ is the \emph{largest} eigenvalue (in absolute value).
+
+\medskip
+\begin{webonly}
+\alert{Why?} If $\lambda$ is an eigenvalue of $A$ then it is an eigenvalue of $A^T$.
+\[ \text{eigenvector } v = \vec{x_1 x_2 \vdots, x_n} 
+\qquad \lambda v = A^Tv
+\implies \lambda x_j =\;
+\namedbox{entry}{\sum_{i=1}^n a_{ij} x_i}. \]
+\begin{tikzpicture}[remember picture, overlay]
+  \node[blue!50, draw, inner sep=1mm, fit=(entry)] (entrybox) {};
+  \path (entrybox.east) ++(5mm,5mm)
+     node[blue!50, above] (expl1) {$j$th entry of $A^Tv$};
+  \draw[blue!50, ->, shorten >=1pt] (expl1) to[out=-90, in=20] (entrybox);
+\end{tikzpicture}%
+Choose $x_j$ with the largest absolute value, so $|x_i|\leq|x_j|$ for all $i$.
+\[ |\lambda|\cdot|x_j| = \left\vert \sum_{i=1}^n a_{ij} x_i \right\vert
+\leq \sum_{i=1}^n \namedbox{pos}{a_{ij}}\cdot |x_i|
+\leq \sum_{i=1}^n a_{ij}\cdot \namedbox{xj}{|x_j|} 
+= \namedbox{one}{1}\cdot|x_j|,  \]
+so $|\lambda|\leq 1$.
+\begin{tikzpicture}[remember picture, overlay]
+  \path (pos.north) ++(2mm,4mm)
+     node[blue!50, right] (expl2) {positive};
+  \draw[blue!50, ->, shorten >=1mm] (expl2) to[out=180, in=90] (pos);
+  \path (xj.south) ++(3mm,-3mm)
+     node[blue!50, right] (expl3) {$\geq|x_i|$};
+  \draw[blue!50, ->, shorten >=1mm] (expl3) to[out=180, in=-90] (xj);
+  \path (one.north) ++(2mm,4mm)
+     node[blue!50, right] (expl4) {$=\sum_i a_{ij}$};
+  \draw[blue!50, ->, shorten >=1mm] (expl4) to[out=180, in=90] (one);
+\end{tikzpicture}
+\end{webonly}
+
+\pause\bigskip
+\alert{Better fact:} if $\lambda\neq 1$ is an eigenvalue of a \emph{positive}
+stochastic matrix, then $|\lambda|<1$.
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Diagonalizable Stochastic Matrices}
+\framesubtitle{Example from \S5.3}
+
+\displayskips{3pt}%
+Let $A = \mat{3/4 1/4; 1/4 3/4}$. This is a positive stochastic matrix.  
+
+\pause\medskip
+We saw last time that $A$ is diagonalizable (and $1$ is the largest eigenvalue):
+\[ A = PDP\inv \sptxt{for} P = \mat{1 1; 1 -1} \qquad D = \mat{1 0; 0 1/2}. \]
+\pause
+Let $w_1 = {1\choose 1}$ and $w_2 = {1\choose -1}$ be the columns of $P$, and
+let $\cB = \{w_1,w_2\}$.
+
+\pause\medskip
+\alert{Recall:} $A^n$ acts on the usual coordinates of a vector in the same way that
+$D$ acts on the $\cB$-coordinates: $[A^nx]_\cB = D^n[x]_\cB$.
+\begin{webonly}
+\[\begin{split}
+  [x]_\cB = \vec{c_1 c_2} 
+  \implies [A^nx]_\cB &= D^n[x]_\cB \\
+  &= \mat{1 0; 0 1/2^n}\vec{c_1 c_2}
+  = \vec{c_1 c_2/2^n} \\
+  \implies A^nx &= c_1w_1 + \frac{c_2}{2^n}w_2.
+\end{split}\]
+\end{webonly}%
+\pause
+When $n$ is large, the second term disappears, so $A^nx$ approaches $c_1w_1$,
+which is an
+\emph{eigenvector with eigenvalue $1$} (assuming $c_1\neq 0$).
+
+\pause\medskip
+So all vectors get ``sucked into the $1$-eigenspace,'' which is spanned by
+\rlap{$w_1 = {1\choose 1}$.}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Diagonalizable Stochastic Matrices}
+\framesubtitle{Example, continued}
+
+\alert{Recall:} $A^n = PD^nP\inv$ acts on the usual coordinates of $v_0$ in the
+same way that $D^n$ acts on the $\cB$-coordinates, where $\cB=\{w_1,w_2\}$.
+\smallskip
+
+\begin{center}
+\begin{tikzpicture}[scale=.3, thin border nodes]
+  \begin{scope}
+    \clip (-9,-9) rectangle (9,9);
+    \draw[grid lines, cm={1,1,1,-1,(0,0)}] (-9,-9) grid (9,9);
+  \end{scope}
+  \begin{scope}[cm={1,1,1,-1,(0,0)}]
+    \draw[thin] (-9,0) -- (9,0) (0,-9) -- (0,9);
+    \draw[<-] (4.5,0) to[out=90,in=225] ++(.5,.8)
+      node[right, font=\scriptsize] {1-eigenspace};
+    \draw[<-] (0,-4.5) to[out=180,in=45] ++(-.8,-.5)
+      node[left, font=\scriptsize] {$1/2$-eigenspace};
+
+    \draw[vector] (0,0) -- (1,0) node[anchor=-30] {$w_1$};
+    \draw[vector] (0,0) -- (0,1) node[anchor=30] {$w_2$};
+
+    \point[seq1] (p1) at (.5, 3);
+    \point[seq1] (p2) at (2, -4);
+    \point[seq1] (p3) at (3.5, 3.5);
+    \point[seq1] (p4) at (3, -3);
+    \point[seq1] (p5) at (-1.5, -2);
+    \point[seq1] (p6) at (-3.33, 3);
+    \point[seq1] (p7) at (-4.5, 4.5);
+    \point[seq1] (p8) at (-3, -4);
+  
+    \foreach \i in {1,...,8} 
+      \foreach \j in {2,...,5} {
+        \point<\j->[seq\j] at ($(-5,0)!(p\i)!(5,0)!{.5^(\j-1)}!(p\i)$);
+      }
+      
+    \point at (0,0);
+  \end{scope}
+
+  \node at (-10,0) {
+    \begin{minipage}{1cm}
+      \foreach \j in {1,...,5} {
+        \pgfmathtruncatemacro{\i}{\j-1}
+        \uncover<\j->{\color{seq\j}$v_{\i}$}\par
+      }
+    \end{minipage}
+  };
+ 
+\end{tikzpicture}
+\end{center}
+\pause[6]%
+All vectors get ``sucked into the $1$-eigenspace.''
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Diagonalizable Stochastic Matrices}
+
+The Red Box matrix $A = \mat{.3 .4 .5; .3 .4 .3; .4 .2 .2}$ has characteristic
+polynomial
+\[ f(\lambda) = -\lambda^3 + 0.12\lambda - 0.02 =
+-(\lambda-1)(\lambda+0.2)(\lambda-0.1). \]
+\pause
+So $1$ is indeed the largest eigenvalue.
+\pause
+Since $A$ has $3$ distinct eigenvalues, it is diagonalizable:
+\[ A = P\mat{1 0 0; 0 .1 0; 0 0 -.2}P\inv = PDP\inv. \]
+\pause
+Hence it is easy to compute the powers of $A$:
+\[ A^n = P\mat{1 0 0; 0 (.1)^n 0; 0 0 (-.2)^n}P\inv = PD^nP\inv. \]
+\pause
+Let $w_1,w_2,w_3$ be the columns of $P$, i.e.\ the eigenvectors of $P$ with
+respective eigenvalues $1,.1,-.2$.  Let $\cB = \{w_1,w_2,w_3\}$.
+
+\pause\medskip
+\alert{Recall:} $A^n$ acts on the usual coordinates of a vector in the same way
+that $D$ acts on the $\cB$-coordinates: $[A^nx]_\cB = D^n[x]_\cB$.
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Diagonalizable Stochastic Matrices}
+\framesubtitle{Continued}
+
+\alert{Recall:} $A^n$ acts on the usual coordinates of a vector in the same way
+that $D$ acts on the $\cB$-coordinates: $[A^nx]_\cB = D^n[x]_\cB$.
+\begin{webonly}
+\[\begin{split}
+  [x]_\cB = \vec{c_1 c_2 c_3} 
+  \implies [A^nx]_\cB &= D^n[x]_\cB \\
+  &= \mat{1 0 0; 0 (.1)^n 0; 0 0 (-.2)^n}\vec{c_1 c_2 c_3}
+  = \vec{c_1 (.1)^nc_2 (-.2)^nc_3} \\
+  \implies A^nx &= c_1w_1 + (.1)^nc_2w_2 + (-.2)^nc_3w_3.
+\end{split}\]
+\end{webonly}%
+\pause
+As $n$ becomes large, this approaches $c_1w_1$, which is an
+\emph{eigenvector with eigenvalue $1$} (assuming $c_1\neq 0$).
+
+\pause\medskip
+So all vectors get ``sucked into the $1$-eigenspace,'' which (I computed) is spanned
+by
+\[ w = w_1 = \frac 1{18}\vec{7 6 5}. \]
+\pause
+(We'll see in a moment why I chose that eigenvector.)
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Diagonalizable Stochastic Matrices}
+\framesubtitle{Picture}
+
+Start with a vector $\color{seq1}v_0$ (the number of movies on the first day),
+let $\textcolor{seq2}{v_1} = A\color{seq1}v_0$ (the number of movies on the second day),
+let $\textcolor{seq3}{v_2} = A\color{seq2}v_1$, etc.
+
+\medskip
+\begin{center}
+\begin{tikzpicture}[myxyz, scale=2, 
+    every label/.style={inner sep=1pt, fill=none, font=\scriptsize}]
+  \draw[->] (-1,0,0) -- (1,0,0);
+  \draw[->] (0,-1,0) -- (0,1,0);
+  \draw[->] (0,0,-1) -- (0,0,1);
+  
+  \begin{scope}[transformxy]
+    \draw[help lines, step=.25] (-1,-1) grid (1,1);
+  \end{scope}
+
+  \def\v{(0.667424, 0.572078, 0.476731)}
+  %\def\w{(0.3889, 0.3333, 0.2778)}
+  \def\w{(7/18,6/18,5/18)}
+  \node (v) at \v {};
+  \node (w) at \w {};
+  \draw[seq6, thick] ($-6*(v)$) --
+    node[pos=.9,font=\small,auto,swap,inner sep=1pt] {$1$-eigenspace} ($6*(v)$);
+  \point[scale=.5,"$w$" above] at (w);
+  \draw[thin, densely dotted] (w) -- \projxy\w node[point, scale=.5] {};
+
+  \point at (0,0,0);
+
+  \begin{scope}[x=(w),
+    y={(0.707107, 0, -0.707107)},
+    z={(0.267261, -0.801784, 0.534522)}]
+    \foreach \j in {0,...,4} {
+      \pgfmathtruncatemacro{\jj}{\j+1}
+      \path<\jj->
+        let \p1=(1.5,    2*.1^\j,   {2*(-.2)^\j}),
+            \p2=( -3,    2*.1^\j, {2.5*(-.2)^\j}),
+            \p3=(4.5,    1*.1^\j,  {-1*(-.2)^\j}),
+            \p4=( -5, -1.5*.1^\j, {-.5*(-.2)^\j}) in
+          foreach \i in {1,...,4} {
+            node[point,seq\jj] (p\i-\jj) at (\p\i) {}
+        };
+      \ifnum\j>0\ifnum\j<3
+        \foreach \i in {1,...,4} {
+          \draw<\jj->[->, very thin, black!30] (p\i-\j) to (p\i-\jj);
+        }
+      \fi\fi
+      }
+  \end{scope}
+
+  \begin{scope}[resetxy]
+    \node at (-2,0) {
+      \begin{minipage}{\widthof{WW}}
+        \foreach \j in {0,...,4} {
+          \pgfmathtruncatemacro{\jj}{\j+1}
+          \uncover<\jj->{\color{seq\jj}$v_\j$}
+        }
+      \end{minipage}
+    };
+  \end{scope}
+
+\end{tikzpicture}
+\end{center}
+
+\pause[6]%
+We see that $v_n$ approaches an eigenvector with eigenvalue $1$ as $n$ gets
+large: all vectors get ``sucked into the $1$-eigenspace.''
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Diagonalizable Stochastic Matrices}
+\framesubtitle{Interpretation}
+
+If $A$ is the Red Box matrix, and $v_n$ is the vector 
+representing the number of movies in the three locations on day $n$, then
+\[ v_{n+1} = Av_n. \]
+\pause
+For any starting distribution $v_0$ of videos in red boxes, after enough
+days, the distribution $v$ ($= v_n$ for $n$ large) is an eigenvector with
+eigenvalue $1$:
+\[ Av = v. \]
+\pause
+In other words, eventually each kiosk has the same number of movies, every day.
+
+\pause\medskip
+Moreover, we know exactly what $v$ is:
+\pause
+it is the multiple of
+$w \sim (0.39, 0.33, 0.28)$ that represents the same number of videos
+as in $v_0$.
+\pause
+(Remember the total number of videos never changes.)
+
+\pause\bigskip
+Presumably, Red Box really does have to do this kind of analysis to determine how many
+videos to put in each box.
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Perron--Frobenius Theorem}
+
+\vskip-3mm
+\begin{defn}
+  A \emph{steady state} for a stochastic matrix $A$ is an eigenvector $w$ with
+  eigenvalue $1$, such that all entries are \emph{positive} and sum to $1$.
+\end{defn}
+
+\pause
+\begin{oneoffthm}{Perron--Frobenius Theorem}
+  If $A$ is a positive stochastic matrix, then it admits a unique steady state
+  vector $w$, which spans the $1$-eigenspace.
+
+  \pause\smallskip
+  Moreover, for any vector $v_0$ with entries summing to some number
+  $c$, the iterates $v_1 = Av_0$, $v_2 = Av_1$, \ldots, $v_n = Av_{n-1}$,
+  \ldots, approach $cw$ as $n$ gets large.
+\end{oneoffthm}
+
+\pause\medskip
+\alert{Translation:} The Perron--Frobenius Theorem says the following:
+\pause
+\begin{itemize}
+\item The $1$-eigenspace of a positive stochastic matrix $A$ is a line.
+  \pause
+\item To compute the steady state, find any $1$-eigenvector (as usual), then
+  divide by the sum of the entries; the resulting vector $w$ has entries that
+  sum to $1$, and are \emph{automatically} positive.
+  \pause
+\item Think of $w$ as a vector of steady state \emph{percentages}: if the movies
+  are distributed according to these percentages today, then they'll be in
+  the same distribution tomorrow.
+\pause
+\item The sum $c$ of the entries of $v_0$ is the total number of movies;
+  eventually, the movies arrange themselves according to the steady state
+  percentage, i.e., $v_n \to c w$.
+\end{itemize}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Steady State}
+\framesubtitle{Red Box example}
+
+Consider the Red Box matrix 
+$A = \mat{.3 .4 .5; .3 .4 .3; .4 .2 .2}$.\\
+\begin{webonly}\displayskips{3pt}
+I computed $\Nul(A-I)$ and found that 
+\[ w' = \vec{7 6 5} \]
+is an eigenvector with eigenvalue $1$.
+
+\medskip
+To get a steady state, I divided by $18=7+6+5$ to get
+\[ w = \frac 1{18}\vec{7 6 5} \sim (0.39, 0.33, 0.28). \]
+\end{webonly}%
+\pause
+This says that eventually, 39\% of the movies will be in location $1$, 
+33\% will be in location $2$, and 28\% will be in location $3$, every day.
+
+\pause\medskip
+So if you start with $100$ total movies, eventually you'll have
+$100w = (39, 33, 28)$ movies in the three locations, every day.
+
+\pause\medskip
+The Perron--Frobenius Theorem says that our analysis of the Red Box matrix works
+for \emph{any} positive stochastic matrix---whether or not it is diagonalizable!
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Google's PageRank}
+
+Internet searching in the 90's was a pain.  Yahoo or AltaVista would scan pages
+for your search text, and just list the results with the most occurrences of
+those words. 
+
+\pause\medskip
+Not surprisingly, the more unsavory websites soon learned that by putting the
+words ``Alanis Morissette'' a million times in their pages, they could show up first 
+every time an angsty teenager tried to find \textit{Jagged Little Pill\/} on Napster.
+
+\pause\medskip
+Larry Page and Sergey Brin invented a way to rank pages by \emph{importance}.
+\pause
+They founded Google based on their algorithm.
+
+\pause\medskip
+Here's how it works.
+\pause
+(roughly)
+
+\pause\vfill
+Reference:
+\begin{center}
+  \scriptsize
+  \url{http://www.math.cornell.edu/~mec/Winter2009/RalucaRemus/Lecture3/lecture3.html}
+\end{center}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{The Importance Rule}
+
+Each webpage has an associated importance, or \textbf{rank}.  
+This is a positive number.
+
+\pause\smallskip
+\begin{bluebox}[The Importance Rule]{.7\linewidth}
+  If page $P$ links to $n$ other pages $Q_1,Q_2,\ldots,Q_n$, then each $Q_i$
+  should inherit $\frac 1n$ of $P$'s importance.
+\end{bluebox}
+\pause
+\begin{itemize}
+\item So if a very important page links to your webpage, your webpage is
+  considered important.
+  \pause
+\item And if a ton of unimportant pages link to your webpage, then it's still
+  important.
+  \pause
+\item But if only one crappy site links to yours, your page isn't important.
+\end{itemize}
+
+\pause\medskip
+\alert{Random surfer interpretation:} 
+a ``random surfer'' just sits at his computer all day, randomly clicking on
+links.
+\pause
+The pages he spends the most time on should be the most important.
+\pause
+This turns out to be equivalent to the rank.
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{The Importance Matrix}
+
+Consider the following Internet with only four pages.  Links are indicated by
+arrows.
+\begin{center}
+\begin{tikzpicture}
+  \matrix[matrix of nodes,
+      nodes={draw, circle, thick, anchor=center, font=\large},
+      row sep={1.5cm,between origins}, column sep={2.5cm,between origins}] 
+    (pages)
+  {
+    |[seq1] (A)| A \& |[seq2] (B)| B \\
+    |[seq3] (C)| C \& |[seq4] (D)| D \\
+  };
+  \begin{scope}[->, shorten=2pt,
+      every node/.style={midway, auto, thin border},
+      every to/.style={bend left=10}]
+    \draw[seq1] (A) to node {$\uncover<2->{\frac 13}$} (B);
+    \draw[seq1] (A) to node {$\uncover<2->{\frac 13}$} (C);
+    \draw[seq1] (A) to node[near start] {$\uncover<2->{\frac 13}$} (D);
+    \draw[seq2] (B) to node[near end] {$\uncover<3->{\frac 12}$} (C);
+    \draw[seq2] (B) to node {$\uncover<3->{\frac 12}$} (D);
+    \draw[seq3] (C) to node {$\uncover<4->{1}$} (A);
+    \draw[seq4] (D) to node[near end] {$\uncover<5->{\frac 12}$} (A);
+    \draw[seq4] (D) to node {$\uncover<5->{\frac 12}$} (C);
+  \end{scope}
+\end{tikzpicture}
+\end{center}
+
+\pause
+Page $\color{seq1}A$ has $3$ links, so it passes $\frac 13$ of its importance to pages
+$B,C,D$.\\[1.5pt]
+\pause
+Page $\color{seq2}B$ has $2$ links, so it passes $\frac 12$ of its importance to pages
+$C,D$.\\[1.5pt]
+\pause
+Page $\color{seq3}C$ has one link, so it passes all of its importance to page $A$.\\[1.5pt]
+\pause
+Page $\color{seq4}D$ has $2$ links, so it passes $\frac 12$ of its importance to pages
+$A,C$. 
+
+\pause\medskip
+In terms of matrices, if $v = (a,b,c,d)$ is the vector containing the ranks
+$a,b,c,d$ of the pages $A,B,C,D$, then
+\[\def\r{\color{seq1}}\def\b{\color{seq2}}\def\g{\color{seq3}}\def\p{\color{seq4}}
+ \namedbox{im}{}
+ \mat{
+  \r0 \b0 \g1 \p\frac 12; 
+  \r\frac 13 \b0 \g0 \p0;
+  \r\frac 13 \b\frac 12 \g0 \p\frac 12;
+  \r\frac 13 \b\frac 12 \g0 \p0}
+\vec{a b c d}
+= \vec{c+\frac 12d
+  \frac 13a
+  \frac 13a+\frac 12b+\frac 12d
+  \frac 13a+\frac 12b}
+\pause
+\namedbox{ir}= \vec{a b c d} \]
+\begin{tikzpicture}[remember picture, overlay]
+  \path (ir.north) ++(0mm,9mm) 
+    node[blue!50, above, inner sep=0pt] (expl) {Importance Rule};
+  \draw[->, shorten >=1pt, blue!50] (expl.south) -- (ir.north);
+  \pause
+  \node[text width=2.3cm, align=center, blue!50, left] at (im)
+  {\textbf{importance matrix:}
+    $ij$ entry is importance page $j$ passes to page $i$
+  };
+\end{tikzpicture}
+\note{Why is this not a circular definition of the rank?}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{The $25$ Billion Dollar Eigenvector}
+
+\alert{Observations:}
+\begin{itemize}
+\item The importance matrix is a stochastic matrix!
+  \pause
+  The columns each contain $1/n$ ($n=$ number of links), $n$ times.
+  \pause
+\item The rank vector is an eigenvector with eigenvalue $1$!
+\end{itemize}
+
+\pause\medskip
+\alert{Random surfer interpretation:} 
+If a random surfer has probability $(a,b,c,d)$ to be on page $A,B,C,D$,
+respectively, then after clicking on a random link, the probability he'll be on
+each page is 
+\pause
+\[\def\r{\color{seq1}}\def\b{\color{seq2}}\def\g{\color{seq3}}\def\p{\color{seq4}}
+ \mat{
+  \r0 \b0 \g1 \p\frac 12; 
+  \r\frac 13 \b0 \g0 \p0;
+  \r\frac 13 \b\frac 12 \g0 \p\frac 12;
+  \r\frac 13 \b\frac 12 \g0 \p0}
+\vec{a b c d}
+= \vec{c+\frac 12d
+  \frac 13a
+  \frac 13a+\frac 12b+\frac 12d
+  \frac 13a+\frac 12b}.
+ \]
+\pause
+The rank vector is a \emph{steady state} for the importance matrix: it's the
+probability vector $(a,b,c,d)$ such that, after clicking on a random link, the
+random surfer will have the \emph{same probability} of being on each page.
+
+\pause\medskip
+So, the important (high-ranked) pages are those where a random surfer will end
+up most often.
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Problems with the Importance Matrix}
+\framesubtitle{Dangling pages}
+
+\alert{Observation:} the importance matrix is \emph{not} positive: it's only
+nonnegative.
+\pause
+So we can't apply the Perron--Frobenius theorem.
+\pause
+Does this cause problems?
+\pause
+Yes!
+
+\pause\medskip
+Consider the following Internet:
+\begin{center}
+\begin{tikzpicture}
+  \matrix[matrix of nodes,
+      nodes={draw, circle, thick, anchor=center, font=\large},
+      row sep={.75cm,between origins}, column sep={2.5cm,between origins}] 
+  {
+    |[seq1] (A)| A \\ \& |[seq3] (C)| C \\
+    |[seq2] (B)| B \\
+  };
+  \begin{scope}[->, shorten=2pt,
+      every node/.style={midway, auto, thin border}]
+    \draw[seq1] (A) to node {$1$} (C);
+    \draw[seq2] (B) to[swap] node {$1$} (C);
+  \end{scope}
+\end{tikzpicture}
+\end{center}
+\pause
+The importance matrix is
+\pause
+$\def\r{\color{seq1}}\def\b{\color{seq2}}\def\g{\color{seq3}}
+\mat{\r0 \b0 \g0; \r0 \b0 \g0; \r1 \b1 \g0}$.
+\pause
+This has characteristic polynomial
+\[ f(\lambda) = \det\mat{-\lambda, 0 0; 0 -\lambda, 0; 1 1 -\lambda}
+= -\lambda^3. \]
+\pause
+So $1$ is not an eigenvalue at all: there is no rank vector!
+(It is not stochastic.)
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Problems with the Importance Matrix}
+\framesubtitle{Disconnected internet}
+
+Consider the following Internet:
+\begin{center}
+\begin{tikzpicture}
+  \matrix[matrix of nodes,
+      nodes={draw, circle, thick, anchor=center, font=\large},
+      row sep={.75cm,between origins}, column sep={2.5cm,between origins}] 
+  {
+    \& \& \& |[seq4] (D)| D \\
+    |[seq1] (A)| A \& |[seq2] (B)| B \& |[seq3] (C)| C \\
+    \& \& \& |[seq5] (E)| E \\
+  };
+  \begin{scope}[->, shorten=2pt,
+      every node/.style={midway, auto, thin border},
+      every to/.style={bend left=10}]
+    \draw[seq1] (A) to node {$1$} (B);
+    \draw[seq2] (B) to node {$1$} (A);
+    \draw[seq3] (C) to node {$\frac 12$} (D);
+    \draw[seq4] (D) to node[pos=.3] {$\frac 12$} (C);
+    \draw[seq3] (C) to node[pos=.5] {$\frac 12$} (E);
+    \draw[seq5] (E) to node {$\frac 12$} (C);
+    \draw[seq4] (D) to node {$\frac 12$} (E);
+    \draw[seq5] (E) to node {$\frac 12$} (D);
+  \end{scope}
+\end{tikzpicture}
+\end{center}
+\pause
+The importance matrix is
+\pause
+$\def\r{\color{seq1}}\def\b{\color{seq2}}\def\g{\color{seq3}}
+\def\p{\color{seq4}}\def\o{\color{seq5}}
+\mat{\r0 \b1 0 0 0; \r1 \b0 0 0 0;
+  0 0 \g0 \p\frac 12 \o\frac 12;
+  0 0 \g\frac 12 \p0 \o\frac 12;
+  0 0 \g\frac 12 \p\frac 12 \o0}.$
+\pause
+This has linearly independent eigenvectors
+\pause
+$\vec{1 1 0 0 0}$ and 
+\pause
+$\vec{0 0 1 1 1}$,
+\pause
+both with eigenvalue $1$.
+\pause
+So there is more than one rank vector!
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{The Google Matrix}
+
+Here is Page and Brin's solution.
+\pause
+Fix $p$ in $(0,1)$, called the \textbf{damping factor}.  (A typical value is
+$p=0.15$.) 
+\pause
+The \textbf{Google Matrix} is
+\[ M = (1-p)\cdot A + p\cdot B
+\sptxt{where}
+B = \frac 1N\mat{1 1 \cdots, 1; 1 1 \cdots, 1;
+  \vdots, \vdots, \ddots, \vdots; 1 1 \cdots, 1}, \]
+$N$ is the total number of pages, and $A$ is the importance matrix.
+
+\pause\medskip
+In the random surfer interpretation, this matrix $M$ says: with probability $p$,
+our surfer will surf to a completely random page; otherwise, he'll click a
+random link.
+
+\pause
+\begin{lem}
+  The Google matrix is a positive stochastic matrix.
+\end{lem}
+
+\pause\medskip
+\begin{bluebox}{.8\linewidth}\centering
+  The PageRank vector is the steady state for the Google Matrix.
+\end{bluebox}
+
+\pause
+This exists and has positive entries by the Perron--Frobenius theorem.
+\pause
+The hard part is calculating it: the Google matrix has
+1 gazillion rows.
+
+\medskip
+
+\end{frame}
+
+
+%%% Local Variables:
+%%% TeX-master: "../slides"
+%%% End:

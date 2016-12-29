@@ -1,0 +1,715 @@
+
+% JDR: These are mostly topics the students asked me about, plus extra review on
+%   chapter 6.  This is probably more than 50 minutes worth of slides; the
+%   students can review the rest online.
+
+\titleframe{Review for the Final Exam}{Selected Topics}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Orthogonal Sets}
+
+\vskip-3mm
+\begin{defn}
+  A set of \emph{nonzero} vectors is \textbf{orthogonal} if each pair of vectors
+  is orthogonal.
+  \pause
+  It is \textbf{orthonormal} if, in addition, each vector is a unit vector.
+\end{defn}
+
+\pause\medskip
+\alert{Example:} $\cB_1 = \left\{\vec{1 1 1},\;\vec{1 -2 1},\;\vec{1 0 1}\right\}$
+is not orthogonal.
+
+\pause\medskip
+\alert{Example:} $\cB_2 = \left\{\vec{1 1 1},\;\vec{1 -2 1},\;\vec{1 0 -1}\right\}$
+is orthogonal but not orthonormal.
+
+\pause\medskip
+\alert{Example:} 
+$\displaystyle\cB_3 = \left\{\frac 1{\sqrt 3}\vec{1 1 1},\;
+  \frac 1{\sqrt 6}\vec{1 -2 1},\;
+  \frac 1{\sqrt 2}\vec{1 0 -1}\right\}$
+is orthonormal.
+
+\pause\medskip
+To go from an orthogonal set $\{u_1,u_2,\ldots,u_m\}$ to an orthonormal set,
+replace each $u_i$ with $u_i/\|u_i\|$.
+
+\pause\medskip
+\begin{thm}
+  An orthogonal set is linearly independent.  In particular, it is a basis for
+  its span.
+\end{thm}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Orthogonal Projection}
+
+Let $W$ be a subspace of $\R^n$, and let $\cB = \{u_1,u_2,\ldots,u_m\}$ be an
+\emph{orthogonal} basis for $W$.  The \textbf{orthogonal projection} of a vector $x$
+onto $W$ is
+\[ \proj_W(x) \overset{\rm def}=
+\sum_{i=1}^m \frac{x\cdot u_i}{u_i\cdot u_i}\,u_i
+= \frac{x\cdot u_1}{u_1\cdot u_1}\,u_1 + \frac{x\cdot u_2}{u_2\cdot u_2}\,u_2 
++ \cdots + \frac{x\cdot u_m}{u_m\cdot u_m}\,u_m. \]
+\pause
+This is the closest vector to $x$ that lies on $W$.
+\pause
+In other words, the difference $x-\proj_W(x)$ is perpendicular to $W$: it is in
+$W^\perp$.  
+\pause
+Notation:
+\[ \namedbox{start}{x_W} = \proj_W(x) \qquad x_{W^\perp}
+= \namedbox{end}{x-\proj_W(x).} \]
+\begin{tikzpicture}[remember picture, overlay]%
+  \node[fit=(start) (end), inner sep=1mm, thick, rounded corners, seq-red, draw] {};
+\end{tikzpicture}%
+\pause
+So $x_W$ is in $W$,  $x_{W^\perp}$ is in $W^\perp$, and
+$x = x_W + x_{W^\perp}$.
+
+\vskip 8mm
+\begin{center}
+\begin{tikzpicture}[myxyz, scale=.5, thin border nodes,
+    right angle len=1.5mm]
+  \coordinate (u) at (1,0,0);
+  \coordinate (v) at (0,1.1,-.2);
+  \coordinate (uxv) at (0,.2,1.1);
+  \coordinate (x) at ($-1.1*(u)+(v)+1.5*(uxv)$);
+  \begin{scope}[x=(u),y=(v),transformxy]
+    \fill[seq-violet!30] (-2,-2) rectangle (2,2);
+    \draw[seq-violet, help lines] (-2,-2) grid (2,2);
+    \node[seq-violet] at (2.6,1) {$W$};
+  \end{scope}
+  \point[seq-blue] (y) at ($-1.1*(u)+1*(v)$);
+  \point (xx) at (x);
+  \draw[vector, thin, seq-green] (y) -- node[auto] {$x_{W^\perp}$} (xx);
+  \point (o) at (0,0,0);
+  \draw[vector, thin, seq-blue] (o) -- node[auto]{$x_W$} (y);
+  \draw[vector, thin] (o) -- node[auto,swap] {$x$} (xx);
+  \coordinate (yu) at ($(y)+(u)$);
+  \coordinate (yv) at ($(y)+(v)$);
+  \pic[draw] {right angle=(x)--(y)--(yv)};
+\end{tikzpicture}
+%
+\begin{tikzpicture}[myxyz, scale=.5, thin border nodes,
+    right angle len=1.5mm]
+  \coordinate (u) at (1,0,0);
+  \coordinate (v) at (0,1.1,-.2);
+  \coordinate (uxv) at (0,.2,1.1);
+  \coordinate (x) at ($-1.1*(u)+(v)+1.5*(uxv)$);
+  \begin{scope}[x=(u),y=(v),transformxy]
+    \fill[seq-violet!30] (-2,-2) rectangle (2,2);
+    \draw[seq-violet, help lines] (-2,-2) grid (2,2);
+    \node[seq-violet] at (2.6,1) {$W$};
+  \end{scope}
+  \point[seq-blue, "$\proj_W(x)$" {below,text=seq-blue}] (y) at ($-1.1*(u)+1*(v)$);
+  \point["$x$"] (xx) at (x);
+  \draw[vector, thin, seq-green] (y) -- node[auto] {$x-\proj_W(x)$} (xx);
+  \point at (0,0,0);
+  \coordinate (yu) at ($(y)+(u)$);
+  \coordinate (yv) at ($(y)+(v)$);
+  \pic[draw] {right angle=(x)--(y)--(yu)};
+  \pic[draw] {right angle=(x)--(y)--(yv)};
+\end{tikzpicture}
+\end{center}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Orthogonal Projection}
+\framesubtitle{Special cases}
+
+\alert{Special case:} If $x$ is in $W$, then $x = \proj_W(x)$, so
+\[ x = \frac{x\cdot u_1}{u_1\cdot u_1}\,u_1
++ \frac{x\cdot u_2}{u_2\cdot u_2}\,u_2 + \cdots
++ \frac{x\cdot u_m}{u_m\cdot u_m}\,u_m. \]
+\pause
+In other words, the $\cB$-coordinates of $x$ are
+\[ \left( \frac{x\cdot u_1}{u_1\cdot u_1},\;
+\frac{x\cdot u_2}{u_1\cdot u_2},\;\ldots,
+\frac{x\cdot u_m}{u_1\cdot u_m}\right), \]
+where $\cB = \{u_1,u_2,\ldots,u_m\}$, an orthogonal basis for $W$.
+
+\pause\medskip
+\alert{Special case:} 
+If $W = L$ is a line, then $L = \Span\{u\}$ for some nonzero vector $u$, and
+\[ \proj_L(x) = \frac{x\cdot u}{u\cdot u}\,u \]
+\begin{center}
+\begin{tikzpicture}[scale=.5, thin border nodes,
+    right angle len=1.5mm]
+  \draw[seq-violet] (-3,-2) -- node[below right, very near start] {$L$} (3,2);
+  \draw[vector] (0,0) --  node[below right] {$u$} (1.5,1);
+  \point (x) at (-3,2);
+  \point (o) at (0,0);
+  \draw[vector] (o) -- node[auto,swap] {$x$} (x);
+  \point[seq-blue, "$x_L = \proj_L(x)$" {below right,seq-blue}]
+    (p) at (${-2.5/(1.5*1.5+1)}*(1.5,1)$);
+  \draw[vector, seq-blue] (o) -- (p);
+  \draw[vector, seq-green] (p) -- node[below left] {$x_{L^\perp}$} (x);
+  \coordinate (mu) at (-1.5, -1);
+  \pic[draw] {right angle=(x)--(p)--(mu)};
+\end{tikzpicture}
+\end{center}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Orthogonal Projection}
+\framesubtitle{And matrices}
+
+Let $W$ be a subspace of $\R^n$.
+
+\begin{thm}
+  The orthogonal projection $\proj_W$ is a \emph{linear} transformation from
+  $\R^n$ to $\R^n$.  Its range is $W$.
+\end{thm}
+
+\pause\medskip
+If $A$ is the matrix for $\proj_W$, then $A^2 = A$ because projecting twice is
+the same as projecting once: $\proj_W\circ\proj_W = \proj_W$.
+
+\pause\medskip
+\begin{thm}
+  The only eigenvalues of $A$ are
+  \pause
+  $1$ and $0$.  
+\end{thm}
+
+\medskip\alert{Why?}%
+\begin{webonly}
+\[ Av = \lambda v \implies A^2v = A(Av) = A(\lambda v) = \lambda(Av) = \lambda^2v. \]
+So if $\lambda$ is an eigenvalue of $A$, then $\lambda^2$ is an eigenvalue of
+$A^2$.
+But $A^2 = A$, so $\lambda^2 = \lambda$, and hence $\lambda = 0$ or $1$.
+\end{webonly}%
+
+\pause\medskip
+The $1$-eigenspace of $A$ is
+\pause
+$W$, and the $0$-eigenspace is
+\pause
+$W^\perp$.
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{The Gram--Schmidt Process}
+
+\vskip-3mm
+\begin{oneoffthm}{The Gram--Schmidt Process}
+  Let $\{v_1,v_2,\ldots,v_m\}$ be a basis for a subspace $W$ of $\R^n$.  Define:
+  \begin{enumerate}
+  \item $u_1 = v_1$
+    \pause
+  \item $\displaystyle 
+    \hbox to 5cm{$u_2 = v_2 - \proj_{\Span\{u_1\}}(v_2)$\hss}
+    = v_2 - \frac{v_2\cdot u_1}{u_1\cdot u_1}\,u_1$
+    \pause
+  \item $\displaystyle 
+    \hbox to 5cm{$u_3 = v_3 -\proj_{\Span\{u_1,u_2\}}(v_3)$\hss}
+    = v_3 - \frac{v_3\cdot u_1}{u_1\cdot u_1}\,u_1
+    - \frac{v_3\cdot u_2}{u_2\cdot u_2}\,u_2$
+    \pause
+  \item[\vdots]
+  \item[m.] $\displaystyle 
+    \hbox to 5cm{$u_m = v_m -\proj_{\Span\{u_1,u_2,\ldots,u_{m-1}\}}(v_m)$\hss}
+    = v_m - \sum_{i=1}^{m-1}\frac{v_m\cdot u_i}{u_i\cdot u_i}\,u_i$
+  \end{enumerate}
+  \pause
+  Then $\{u_1,u_2,\ldots,u_m\}$ is an \emph{orthogonal} basis for the same
+  subspace $W$.
+\end{oneoffthm}
+
+\pause\medskip
+In fact, for each $i$, 
+\[ \Span\{u_1,u_2,\ldots,u_i\} = \Span\{v_1,v_2,\ldots,v_i\}. \]
+\pause
+Note if $v_i$ is in
+$\Span\{v_1,v_2,\ldots,v_{i-1}\} = \Span\{u_1,u_2,\ldots,u_{i-1}\}$,
+then $v_i = \proj_{\Span\{u_1,u_2,\ldots,u_{i-1}\}}(v_i)$,
+so $u_i = 0$.
+\pause
+So this also detects linear dependence.
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{$QR$ Factorization}
+
+\vskip-3mm
+\begin{oneoffthm}{$QR$ Factorization Theorem}
+  Let $A$ be a matrix with linearly independent columns.  Then
+  \[ A = QR \]
+  where $Q$ has orthonormal columns and $R$ is upper-triangular with positive
+  diagonal entries.
+\end{oneoffthm}
+
+\pause\medskip
+\alert{Step 1:} Let $v_1,v_2,\ldots,v_m$ be the columns of $A$.
+Run Gram--Schmidt on $\{v_1,v_2,\ldots,v_m\}$ to get an orthogonal
+basis $\{u_1,u_2,\ldots,u_m\}$, and solve for each $v_i$
+in terms of $u_1,u_2,\ldots,u_i$.
+
+\pause\medskip
+\alert{Step 2:} Put the resulting equations in matrix form to get
+$A = \hat Q\hat R$ where
+\displayskips{2pt}
+\[ A = \mat{| | ,, |; v_1 v_2 \cdots, v_m; | | ,, |}
+\qquad
+\hat Q = \mat{| | ,, |; u_1 u_2 \cdots, u_m; | | ,, |} \]
+and $\hat R$ contains the coefficients from
+$v_i =$ (linear combination of $u_1,u_2,\ldots,u_{i-1}$) in the columns.
+
+\pause\medskip
+\alert{Step 3}: Scale each column of $\hat Q$ by its length to get a matrix with
+orthonormal columns, and scale each row of $\hat R$ by the opposite factor to
+get $Q$ and $R$, respectively.
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{$QR$ Factorization}
+\framesubtitle{Example}
+
+Find the $QR$ factorization of
+$A = \mat{1 -1 4; 1 4 -2; 1 4 -2; 1 -1 0}$.
+
+\pause\smallskip\alert{Step 1:}
+Let $v_1,v_2,v_3$ be the columns.
+Run Gram--Schmidt and solve
+for $v_1,v_2,v_3$ in terms of $u_1,u_2,u_3$:
+\begin{webonly}
+\[\begin{aligned}
+ u_1 &= v_1 = \vec{1 1 1 1}  & v_1 &= u_1 \\
+ u_2 &= v_2 - \frac{v_2\cdot u_1}{u_1\cdot u_1}\,u_1
+  = v_2 - \frac{3}{2}u_1
+  = \vec[r]{-5/2 5/2 5/2 -5/2}
+  & v_2 &= \frac 32u_1 + u_2 \\
+ u_3 &= v_3
+  - \frac{v_3\cdot u_1}{u_1\cdot u_1}\,u_1
+  - \frac{v_3\cdot u_2}{u_2\cdot u_2}\,u_2 
+  = v_3
+  + \frac{4}{5}u_2
+  = \vec[r]{2 0 0 -2} 
+  & v_3 &= -\frac 45u_2 + u_3
+\end{aligned}\]
+
+\end{webonly}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{$QR$ Factorization}
+\framesubtitle{Example, continued}
+
+\vskip-3mm
+\displayskips{3pt}
+\def\r{\textcolor{seq-red}}
+\def\g{\textcolor{seq-green}}
+\def\b{\textcolor{seq-blue}}\[ 
+v_1 = \r{1}\,u_1 \qquad
+v_2 = \g{\frac 32}\,u_1 + \g{1}\,u_2 \qquad
+v_3 = \b{0}\,u_1  \b{{}-\frac 45}\,u_2 + \b{1}\,u_3
+ \]
+\alert{Step 2:} write $A = \hat Q\hat R$, where $\hat Q$ has
+\emph{orthogonal} columns $u_1,u_2,u_3$ and $\hat R$ is upper-triangular with
+$1$s on the diagonal.
+\begin{webonly}
+  \[\begin{split}
+    \hat Q &= \mat{| | |; u_1 u_2 u_3; | | |} 
+    = \mat[r]{1 -5/2 2; 1 5/2 0; 1 5/2 0; 1 -5/2 -2} \\
+    \hat R &= \mat{\r1 \g{3/2} \b0; 0 \g{1} \b{-4/5}; 0 0 \b{1}}
+  \end{split}\]
+\end{webonly}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{$QR$ Factorization}
+\framesubtitle{Example, continued}
+
+\vskip-3mm
+\displayskips{3pt}
+\[ A = \hat Q\hat R 
+\qquad \hat Q = \mat[r]{1 -5/2 2; 1 5/2 0; 1 5/2 0; 1 -5/2 -2}
+\qquad \hat R = \mat{1 3/2 0; 0 1 -4/5; 0 0 1}
+\]
+
+\alert{Step 3:} normalize the columns of $\hat Q$ and the rows of $\hat R$ to
+get $Q$ and $R$:
+\begin{webonly}
+  \[\begin{split}
+    Q &= \mat{| | |; u_1/\|u_1\| u_2/\|u_2\| u_3/\|u_3\|; | | |} 
+    = \mat[r]{1/2 -1/2 1/\sqrt 2; 1/2 1/2 0; 1/2 1/2 0; 1/2 -1/2 -1/\sqrt 2} \\
+    R &= \mat[r]{
+      1\cdot\|u_1\| 3/2\cdot\|u_1\| 0\cdot\|u_1\|;
+      0  1\cdot\|u_2\|  -4/5\cdot\|u_2\|;
+      0  0  1\cdot\|u_3\|
+    } =
+    \mat{2 3 0; 0 5 -4; 0 0 2\sqrt 2}
+  \end{split}\]
+\end{webonly}
+
+\pause\medskip
+The final $QR$ decomposition is
+\[ A = QR \qquad
+Q = \mat[r]{1/2 -1/2 1/\sqrt 2; 1/2 1/2 0; 1/2 1/2 0; 1/2 -1/2 -1/\sqrt 2}
+\qquad
+R = \mat{2 3 0; 0 5 -4; 0 0 2\sqrt 2}.
+\]
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Subspaces}
+
+\vskip-3mm
+\begin{defn}
+  A \textbf{subspace} of $\R^n$ is a subset $V$ of $\R^n$ satisfying:
+  \begin{enumerate}
+  \item The zero vector is in $V$.
+    \hfill \textcolor{blue}{``not empty''}
+  \item If $u$ and $v$ are in $V$, then $u+v$ is also in $V$.
+    \hfill \textcolor{blue}{``closed under addition''}
+  \item If $u$ is in $V$ and $c$ is in $\R$, then $cu$ is in $V$.
+    \hfill \textcolor{blue}{``closed under $\times$ scalars''}
+  \end{enumerate}
+\end{defn}
+
+\pause\medskip
+\alert{Examples:}
+\begin{itemize}
+\item Any $\Span\{v_1,v_2,\ldots,v_m\}$.
+  \pause
+\item The \emph{column space} of a matrix: 
+  $\Col A = \Span\{\text{columns of $A$}\}$.
+  \pause
+\item The range of a linear transformation (same as above).
+  \pause
+\item The \emph{null space} of a matrix:
+  $\Nul A = \bigl\{ x\mid Ax = 0 \bigr\}$.
+  \pause
+\item The \emph{row space} of a matrix:
+  $\Row A = \Span\{\text{rows of $A$}\}$.
+  \pause
+\item The $\lambda$-eigenspace of a matrix, where $\lambda$ is an eigenvalue.
+  \pause
+\item The orthogonal complement $W^\perp$ of a subspace $W$.
+  \pause
+\item The zero subspace $\{0\}$.
+  \pause
+\item All of $\R^n$.
+
+\end{itemize}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Subspaces and Bases}
+
+\vskip -.3cm
+\begin{defn}
+  Let $V$ be a subspace of $\R^n$.  A \textbf{basis} of $V$ is a set of vectors
+  $\{v_1,v_2,\ldots,v_m\}$ in $\R^n$ such that:
+  \begin{enumerate}
+  \item $V = \Span\{v_1,v_2,\ldots,v_m\}$, and
+  \item $\{v_1,v_2,\ldots,v_m\}$ is linearly independent.
+  \end{enumerate}
+  \pause
+  The number of vectors in a basis is the \textbf{dimension} of $V$, and is
+  written $\dim V$.
+\end{defn}
+
+\pause\medskip
+Every subspace has a basis, so every subspace is a span.
+\pause
+But subspaces have many different bases, and some might be better than others.
+\pause
+For instance, Gram--Schmidt takes a basis and produces an \emph{orthogonal}
+basis.
+\pause
+Or, diagonalization produces a basis of \emph{eigenvectors} of a matrix.
+
+\pause\medskip
+\alert{How do I know if a subset $V$ is a subspace or not?}
+\pause
+\begin{itemize}
+\item Can you write $V$ as one of the examples on the previous slide?
+\pause
+\item If not, does it satisfy the three defining properties?
+\end{itemize}
+
+\pause\medskip
+\alert{Note on subspaces versus subsets:}
+A \textbf{subset} of $\R^n$ is any collection of vectors whatsoever.
+\pause
+Like, the unit circle in $\R^2$, or all vectors with whole-number coefficients.
+\pause
+A \emph{subspace} is a subset that satisfies three additional properties.
+\pause
+Most subsets are not subspaces.
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Similarity}
+
+\vskip-3mm
+\begin{defn}
+  Two $n\times n$ matrices $A$ and $B$ are \textbf{similar} if there is an
+  invertible $n\times n$ matrix $P$ such that
+  \[ A = PBP\inv. \]
+\end{defn}
+
+\pause
+\alert{Important Facts:}
+\pause
+\begin{enumerate}
+\item Similar matrices have the same characteristic polynomial.
+\pause
+\item It follows that similar matrices have the same eigenvalues.
+\pause
+\item If $A$ is similar to $B$ and $B$ is similar to $C$, then $A$ is similar to
+  $C$. 
+\end{enumerate}
+
+\pause\medskip
+\alert{Caveats:}
+\pause
+\begin{enumerate}
+\item Matrices with the same characteristic polynomial need not be similar.
+\pause
+\item Similarity has nothing to do with row equivalence.
+\pause
+\item Similar matrices usually do not have the same eigenvectors.
+\end{enumerate}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Similarity}
+\framesubtitle{Geometric meaning}
+
+Let $A = PBP\inv$, and let $v_1,v_2,\ldots,v_n$ be the columns of $P$.
+\pause
+These form a basis $\cB$ for $\R^n$ because $P$ is invertible.
+\pause
+\emph{Key relation:} for any vector $x$ in $\R^n$,
+\[ [Ax]_\cB = B[x]_\cB. \]
+\pause
+This says:
+\begin{center}
+  $A$ acts on the usual coordinates of $x$\\
+  in the same way that\\
+  $B$ acts on the $\cB$-coordinates of $x$.
+\end{center}
+
+\pause\smallskip
+\alert{Example:}
+\vskip-2mm
+\[ A = \frac 14\mat{5 3; 3 5} \qquad
+B = \mat{2 0; 0 1/2} \qquad
+P = \mat{1 1; 1 -1}. \]
+\pause
+Then $A=PBP\inv$.
+\pause
+$B$ acts on the usual coordinates by
+\pause
+scaling the first coordinate by $2$, and the second by $1/2$:
+\displayskips{3pt}
+\[ B\vec{x_1 x_2} = \vec{2x_1, x_2/2}. \]
+\pause
+The unit coordinate vectors are eigenvectors: $e_1$ has eigenvalue
+\pause
+$2$, and $e_2$ has eigenvalue
+\pause
+$1/2$.
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Similarity}
+\framesubtitle{Example}
+
+\vskip-5mm
+\[\hss A = \frac 14\mat{5 3; 3 5} \qquad
+B = \mat{2 0; 0 1/2} \qquad
+P = \mat{1 1; 1 -1} \qquad
+[Ax]_\cB = B[x]_\cB.\hss \]
+In this case, $\cB = \bigl\{{1 \choose 1}, {1 \choose -1}\bigr\}$.
+Let $v_1 = {1\choose 1}$ and $v_2 = {1\choose -1}$.
+
+\pause\medskip
+\begin{columns}[onlytextwidth]
+\column{.5\textwidth}
+To compute $y = Ax$: $\phantom{1\choose 1}$
+\begin{enumerate}
+\item<3-> Find $[x]_\cB$. $\phantom{1\choose 1}$
+\item<5-> $[y]_\cB = B[x]_\cB$. $\phantom{1\choose 1}$
+\item<7-> Compute $y$ from $[y]_\cB$. $\phantom{1\choose 1}$
+\end{enumerate}
+\column{.5\textwidth}
+Say $x = {2\choose 0}$.
+\begin{enumerate}
+\item<4-> $x = v_1+v_2$ so $[x]_\cB = {1\choose 1}$.
+\item<6-> $[y]_\cB = B{1\choose 1} = {2\choose 1/2}$.
+\item<8-> $y = 2v_1 + \frac 12v_2 = {5/2 \choose 3/2}$.
+\end{enumerate}
+\end{columns}
+
+\pause[9]\smallskip\alert{Picture:}
+\begin{center}
+\begin{tikzpicture}[scale=.5, thin border nodes]
+  \draw[very thin, black!20] (-3,-3) grid (3,3);
+  \draw[->] (-3,0) -- (3,0);
+  \draw[->] (0,-3) -- (0,3);
+  \point (o) at (0,0);
+  \draw[vector] (0,0) -- (1,1) node[above] {$v_1$};
+  \draw[vector] (0,0) -- (1,-1) node[below] {$v_2$};
+  \point[seq-red, "$x$" text=seq-red] (x) at (2,0);
+  \draw[densely dashed, very thin] (1,1) -- (x) (1,-1) -- (x);
+  \coordinate (left) at (3,0);
+
+  \begin{scope}[xshift=12cm]
+  \draw[very thin, black!20] (-3,-3) grid (3,3);
+  \draw[->] (-3,0) -- (3,0);
+  \draw[->] (0,-3) -- (0,3);
+  \point (o) at (0,0);
+  \draw[vector] (0,0) -- (2,2) node[above] {$Av_1$};
+  \draw[vector] (0,0) -- (.5,-.5) node[below] {$Av_2$};
+  \point[seq-red, "$Ax$" {below,text=seq-red}] (Ax) at (2.5,1.5);
+  \draw[densely dashed, very thin] (2,2) -- (Ax) (.5,-.5) -- (Ax);
+  \coordinate (right) at (-3,0);
+  \end{scope}
+
+  \draw[->, shorten=3mm] (left) to[bend left]
+    node[above=1mm] {$A$}
+    node[below=4mm, align=center, text width=2.8cm]
+      {$A$ scales the $v_1$-coordinate by $2$, and
+       the $v_2$-coordinate by $\frac 12$.}
+    (right);
+
+\end{tikzpicture}
+\end{center}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Consistent and Inconsistent Systems}
+
+\vskip-3mm
+\begin{defn}
+  A matrix equation $Ax=b$ is \textbf{consistent} if it has a solution, and
+  \textbf{inconsistent} otherwise.
+\end{defn}
+
+\pause\medskip
+If $A$ has columns $v_1,v_2,\ldots,v_n$, then
+\[ b = Ax = \mat{| | ,, |; v_1 v_2 \cdots, v_m; | | ,, |}\vec{x_1 \vdots, x_n}
+= x_1v_1 + x_2v_2 + \cdots + x_nv_n. \]
+\pause
+So if $Ax=b$ has a solution, then $b$ is a linear combination of
+$v_1,v_2,\ldots,v_n$, and conversely.
+\pause
+Equivalently, $b$ is in $\Span\{v_1,v_2,\ldots,v_n\} = \Col A$.
+
+
+\pause\medskip
+\begin{bluebox}[Important]{.7\linewidth}
+  $Ax = b$ is consistent if and only if $b$ is in $\Col A$.
+\end{bluebox}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Least-Squares Solutions}
+
+Suppose that $Ax=b$ is \emph{in\/}consistent.
+\pause
+Let $\hat b = \proj_{\Col A}(b)$ be the closest vector for which
+$A\hat x=\hat b$ \emph{does} have a solution.
+
+\pause\medskip
+\begin{defn}
+  A solution to $A\hat x = \hat b$ is a \textbf{least squares solution} 
+  to $Ax=b$. 
+  \pause
+  This is the solution $\hat x$ for which $A\hat x$ is \emph{closest} to $b$
+  (with respect to the usual notion of distance in $\R^n$).
+\end{defn}
+
+\pause\medskip
+\begin{thm}
+  The least-squares solutions to $Ax=b$ are the solutions to
+  \[ A^TA\hat x = A^Tb. \]
+\end{thm}
+
+\pause\medskip
+If $A$ has \emph{orthogonal} columns $u_1,u_2,\ldots,u_n$, then the
+least-squares solution is
+\displayskips{3pt}
+\[ \hat x = \left( \frac{x\cdot u_1}{u_1\cdot u_1},\;
+\frac{x\cdot u_2}{u_2\cdot u_2},\; \cdots,\;
+\frac{x\cdot u_m}{u_m\cdot u_m} \right) \]
+because
+\[  A\hat x = \hat b = \frac{x\cdot u_1}{u_1\cdot u_1}\,u_1
++ \frac{x\cdot u_2}{u_2\cdot u_2}\,u_2 + \cdots
++ \frac{x\cdot u_m}{u_m\cdot u_m}\,u_m.
+\]
+
+\end{frame}
+
+
+%%% Local Variables:
+%%% TeX-master: "../slides"
+%%% End:

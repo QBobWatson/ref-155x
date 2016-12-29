@@ -1,0 +1,1412 @@
+
+\documentclass[12pt]{amsart}
+\usepackage{graphicx, url, verbatim, systeme}
+
+\def\styledir{style/}
+\usepackage{\styledir jdr-linalg, \styledir jdr-style}
+
+\title[Definitions and Theorems]%
+  {Important Definitions and Theorems\\\rm\small Reference Sheet}
+
+\newenvironment{oneoffThm}[2][plain]{%
+  \addtocounter{jdrthmtype}{1}%
+  \theoremstyle{#1}%
+  \newtheorem*{oneoff\thejdrthmtype}{#2}%
+  \begin{oneoff\thejdrthmtype}}{%
+  \end{oneoff\thejdrthmtype}}
+
+\theoremstyle{plain}
+\newtheorem*{redthm}{\color{red}Theorem}
+\newtheorem*{fact}{Fact}
+\newtheorem*{redfact}{\color{red}Fact}
+\newtheorem*{Thm}{Theorem}
+\newtheorem*{Cor}{Corollary}
+\newtheorem*{Lem}{Lemma}
+
+\theoremstyle{remark}
+\newtheorem*{proc}{\bf Procedure}
+\newtheorem*{Defn}{\bf Definition}
+\newtheorem*{Rev}{\bf Review}
+\newtheorem*{Notn}{\bf Notation}
+\newtheorem*{Eg}{\bf Example}
+
+\makeatletter
+\renewcommand\section{\@startsection{section}{1}%
+  \z@{.7\linespacing\@plus\linespacing}{.5\linespacing}%
+  {\large\scshape\centering}}
+\renewcommand\subsection{\vskip 1ex\hrule\vskip 1ex%
+  \@startsection{subsection}{2}%
+  \z@{.5\linespacing\@plus.7\linespacing}{-.5em}%
+  {\normalfont\scshape}}
+\makeatother
+
+\begin{document}
+
+\maketitle
+
+\noindent
+This is a (not quite comprehensive) list of definitions and theorems
+given in Math~1553.  Pay particular attention to the ones
+in \textcolor{red}{red}.
+
+\medskip
+\begin{center}
+\begin{tikzpicture}
+  \node[text width=.8\textwidth, align=justify, draw, very thick,
+      rounded corners, inner sep=1em]  (b) {%
+For each definition, find an example of something that 
+satisfies the requirements of the definition, and an example of something that
+does not.  For each theorem, find an example of something that satisfies the
+hypotheses of the theorem, and an example of something that does not satisfy the
+conclusions (or the hypotheses, of course) of the theorem.
+This is \emph{great} conceptual practice.
+    };
+  \node[xshift=1cm, yshift=1mm, font=\bf, draw, thick, fill=white, anchor=west]
+    at (b.north west) {Study Tip};
+\end{tikzpicture}
+\end{center}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Chapter~1}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection*{Section~1.1}\par
+
+\begin{Defn}
+  A \textbf{solution} to a system of linear equations is a list of numbers
+  making \emph{all} of the equations true.
+\end{Defn}
+
+\begin{Defn}
+  The \textbf{elementary row operations} are the following matrix operations:
+  \begin{itemize}
+  \item Multiply all entries in a row by a nonzero number (scale).
+  \item Add (a multiple of) each entry of one row to the corresponding entry in
+    another (row replacement).
+  \item Swap two rows.
+  \end{itemize}
+\end{Defn}
+
+\begin{Defn}
+  Two matrices are called \textbf{row equivalent} if one can be obtained from
+  the other by doing some number of elementary row operations.
+\end{Defn}
+
+\begin{Defn}
+  A system of equations is called \textbf{inconsistent} if it has no solution.
+  It is \textbf{consistent} otherwise.
+\end{Defn}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection*{Section~1.2}\par
+
+\begin{Defn}
+  A matrix is in \textbf{row echelon form} if
+  \begin{enumerate}
+  \item All zero rows are at the bottom.
+  \item Each leading nonzero entry of a row is to the right of the leading entry
+    of the row above.
+  \item Below a leading entry of a row, all entries are zero.
+  \end{enumerate}
+\end{Defn}
+
+\begin{Defn}
+  A \textbf{pivot} is the first nonzero entry of a row of a matrix in row
+  echelon form.
+\end{Defn}
+
+\begin{Defn}
+  A matrix is in \textbf{\color{red}reduced row echelon form} if it is in row
+  echelon form, and in addition,
+  \begin{enumerate}
+    \setcounter{enumi}{3}
+  \item The pivot in each nonzero row is equal to $1$.
+  \item Each pivot is the only nonzero entry in its column.
+  \end{enumerate}
+\end{Defn}
+
+\begin{Thm}
+  Every matrix is row equivalent to one and only one matrix in reduced row
+  echelon form.
+\end{Thm}
+
+\begin{Defn}
+  Consider a \emph{consistent} linear system of equations in the variables
+  $x_1,\ldots,x_n$.  Let $A$ be the reduced row echelon form of the matrix for
+  this system.  We say that $x_i$ is a \textbf{\color{red}free variable} if its
+  corresponding column in $A$ is \emph{not} a pivot column.
+\end{Defn}
+
+\begin{Defn}
+  The \textbf{parametric form} for the general solution to a system of equations
+  is a system of equations for the non-free variables in terms of the free
+  variables.  For instance, if $x_2$ and $x_4$ are free,
+  \[ x_1 = 2 - 3x_4 \qquad x_3 = -1 - 4x_4 \] is a parametric form.
+\end{Defn}
+
+\begin{Thm}
+  Every solution to a consistent linear system is obtained by substituting
+  (unique) values for the free variables in the parametric form.
+\end{Thm}
+
+\begin{fact}
+  There are three possibilities for the solution set of a linear system with
+  augmented matrix $A$:
+  \begin{enumerate}
+  \item The system is inconsistent: it has zero solutions, and the last column
+    of $A$ is a pivot column.
+  \item The system has a unique solution: every column of $A$ except the last
+    is a pivot column.
+  \item The system has infinitely many solutions: the last column isn't a pivot
+    column, and some other column isn't either.  These last columns correspond
+    to free variables.
+  \end{enumerate}
+\end{fact}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection*{Section~1.3}\par
+
+\begin{Defn}
+  $\R^n = \text{all ordered } n\text{-tuples of real numbers }
+  (x_1,x_2,x_3,\ldots,x_n).$
+\end{Defn}
+
+\begin{Defn}
+  A \textbf{vector} is an arrow with a given length and direction.
+\end{Defn}
+
+\begin{Defn}
+  A \textbf{scalar} is another name for a real number (to distinguish it from a
+  vector).
+\end{Defn}
+
+\begin{Rev}
+  Parallelogram law for vector addition.
+\end{Rev}
+
+\begin{Defn}
+  A \textbf{\color{red}linear combination} of vectors $v_1,v_2,\ldots,v_n$ is a
+  vector of the form
+  \[ c_1v_1 + c_2v_2 + \cdots + c_nv_n \]
+  where $c_1,c_2,\ldots,c_n$ are scalars, called the \textbf{weights} or
+  \textbf{coefficients} of the linear combination.
+\end{Defn}
+
+\begin{Defn}
+  A \textbf{vector equation} is an equation involving vectors.  (It is
+  equivalent to a list of equations involving only scalars.)
+\end{Defn}
+
+\begin{Defn}
+  The \textbf{\color{red}span} of a set of vectors $v_1,v_2,\ldots,v_n$ is the
+  set of all linear combinations of these vectors:
+  \[\Span\{v_1,\ldots,v_p\} =
+  \bigl\{ \,x_1v_1+\cdots+x_pv_p \bigm| x_1,\ldots,x_p\text{ in }\R
+  \,\bigr\}. \]
+\end{Defn}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection*{Section~1.4}\par
+
+\begin{Defn}
+  The \textbf{\color{red}product} of an $m\times n$ matrix $A$ with a vector $x$
+  in $\R^{n}$ is the linear combination
+  \[ Ax = 
+  \mat{ 
+  | | {} |;
+  v_1 v_2 \cdots, v_{ n};
+  | | {}   |} 
+  \vec{x_1 x_2 \vdots, x_{ n}}
+  \coloneq
+  x_1v_1 + x_2v_2 + \cdots + x_{ n}v_{ n}.
+ \]
+ The output is a vector in $\R^m$.
+\end{Defn}
+
+\begin{Defn}
+  A \textbf{matrix equation} is a vector equation involving a product of a
+  matrix with a vector.
+\end{Defn}
+
+\begin{redthm}
+  $Ax=b$ has a solution if and only if $b$ is in the span of the columns of $A$.
+\end{redthm}
+
+\begin{redthm}
+  Let $A$ be an $m\times n$ (non-augmented) matrix.  The following are equivalent
+  \begin{enumerate}
+  \item $Ax = b$ has a solution for all $b$ in $\R^m$.
+  \item The span of the columns of $A$ is all of $\R^m$.
+  \item A has a pivot in each row.
+  \end{enumerate}
+\end{redthm}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection*{Section~1.5}\par
+
+\begin{Defn}
+  A system of linear equations of the form $Ax=0$ is called
+  \textbf{homogeneous}.
+\end{Defn}
+
+\begin{Defn}
+  A system of linear equations of the form $Ax=b$ for $b\neq 0$ is called
+  \textbf{inhomogeneous} or \textbf{non-homogeneous}.
+\end{Defn}
+
+\begin{Defn}
+  The \textbf{trivial solution} to a homogeneous equation is the solution $x=0$:
+  $A0=0$.
+\end{Defn}
+
+\begin{redthm}
+  Let $A$ be a matrix.  The following are equivalent:
+  \begin{enumerate}
+  \item $Ax=0$ has a nontrivial solution.
+  \item There is a free variable.
+  \item $A$ has a column with no pivot.
+  \end{enumerate}
+\end{redthm}
+
+\begin{Thm}
+  The solution set of a homogeneous equation $Ax=0$ is a span.
+\end{Thm}
+
+\begin{Defn}
+  The \textbf{\color{red}parametric vector form} for the general solution to a
+  system of equations $Ax=b$ is a vector equation expressing all variables in
+  terms of the free variables.  For instance, if $x_2$ and $x_4$ are free,
+  \[ x = \vec{x_1 x_2 x_3 x_4} = \vec{2 0 -1 0} + x_2\vec{0 1 0 0} +
+  x_4\vec{-3 0 -4 1} \]
+  is a parametric vector form.  The constant vector $(2,0,-1,0)$ is a
+  \textbf{specific solution} or \textbf{particular solution} to $Ax=b$.
+\end{Defn}
+
+\begin{redthm}
+  The solution set of a linear system $Ax=b$ is a translate of the solution set
+  of $Ax=0$ by a specific solution.
+\end{redthm}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection*{Section~1.7}\par
+
+\begin{Defn}
+  A set of vectors $\{v_1,v_2,\ldots,v_p\}$ in $\R^n$ is
+  \textbf{\color{red}linearly independent} if the vector equation
+  \[ x_1v_1 + x_2v_2 + \cdots + x_pv_p = 0 \]
+  has only the trivial solution $x_1=x_2=\cdots=x_p=0$.
+\end{Defn}
+
+\begin{Defn}
+  A set of vectors $\{v_1,v_2,\ldots,v_p\}$ in $\R^n$ is
+  \textbf{\color{red} linearly dependent} if the vector equation
+  \[ x_1v_1 + x_2v_2 + \cdots + x_pv_p = 0 \]
+  has a nontrivial solution (not all $x_i$ are zero).  Such a solution is a
+  \textbf{\color{red} linear dependence relation}.
+\end{Defn}
+
+\begin{Thm}
+  A set of vectors $\{v_1,v_2,\ldots,v_p\}$ is linearly \emph{de}pendent if and only if
+  one of the vectors is in the span of the other ones.
+\end{Thm}
+
+\begin{fact}
+  Say $v_1,v_2,\ldots,v_n$ are in $\R^m$.  If $n > m$ then
+  $\{v_1,v_2,\ldots,v_n\}$ is linearly
+  \emph{de}pendent.
+\end{fact}
+
+\begin{fact}
+  If one of $v_1,v_2,\ldots,v_n$ is zero, then $\{v_1,v_2,\ldots,v_n\}$ is
+  linearly \emph{de}pendent.
+\end{fact}
+
+\begin{redthm}
+  Let $v_1,v_2,\ldots,v_n$ be vectors in $\R^m$, and let $A$ be the
+  $m\times n$ matrix with columns $v_1,v_2,\ldots,v_n$.  The following are
+  equivalent:
+  \begin{enumerate}
+  \item The set $\{v_1,v_2,\ldots,v_n\}$ is linearly independent.
+  \item No one vector is in the span of the others.
+  \item For every $j$ between $1$ and $n$, $v_j$ is not in
+    $\Span\{v_1,v_2,\ldots,v_{j-1}\}$.
+  \item $Ax=0$ only has the trivial solution.
+  \item $A$ has a pivot in every column.
+  \end{enumerate}
+\end{redthm}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection*{Section~1.8}\par
+
+\begin{Defn}
+  A \textbf{transformation} (or \textbf{function} or \textbf{map}) from $\R^n$
+  to $\R^m$ is a rule $T$ that assigns to each vector $x$ in $\R^n$ a vector
+  $T(x)$ in $\R^m$.
+  \begin{itemize}
+  \item $\R^n$ is called the \textbf{\color{red}domain} of $T$.
+  \item $\R^m$ is called the \textbf{\color{red}codomain} of $T$.
+  \item For $x$ in $\R^n$, the vector $T(x)$ in $\R^m$ is the
+    \textbf{\color{red}image} of $x$ under $T$.\\ Notation: $x\mapsto T(x)$.
+  \item The set of all images $\{T(x)\mid x\text{ in }\R^n\}$ is the
+    \textbf{\color{red}range} of $T$.
+  \end{itemize}
+\end{Defn}
+
+\begin{Notn}
+  $\displaystyle T\colon \R^n\To\R^m\sptxt{means}
+  \text{$T$ is a transformation from $\R^n$ to $\R^m$.}$
+\end{Notn}
+
+\begin{Defn}
+  Let $A$ be an $m\times n$ matrix.  The \textbf{matrix transformation}
+  associated to $A$ is the transformation
+  \[ T\colon \R^n \To \R^m \sptxt{defined by} T(x) = Ax. \]
+  \begin{itemize}
+  \item The domain is $\R^n$, where $n$ is the number of columns of $A$.
+  \item The codomain is $\R^m$, where $m$ is the number of rows of $A$.
+  \item The range is the span of the columns of $A$.
+  \end{itemize}
+\end{Defn}
+
+\begin{Rev}
+  Geometric transformations: \textbf{projection}, \textbf{reflection},
+  \textbf{rotation}, \textbf{dilation}, \textbf{shear}.
+\end{Rev}
+
+\begin{Defn}
+  A \textbf{\color{red}linear transformation} is a transformation $T$ satisfying
+  \[ T(u+v) = T(u)+T(v) \sptxt{and} T(cv) = cT(v) \]
+  for all vectors $u,v$ and all scalars $c$.
+\end{Defn}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection*{Section~1.9}\par
+
+\begin{Defn}
+  The \textbf{unit coordinate vectors} in $\R^n$ are
+  \[ e_1 = \vec{1 0 \vdots, 0 0},\quad e_2 =
+  \vec{0 1 \vdots, 0 0},\quad\ldots,\quad e_{n-1} = \vec{0 0 \vdots, 1 0},\quad
+  e_n = \vec{0 0 \vdots, 0 1}. \]
+\end{Defn}
+
+\begin{fact}
+  If $A$ is a matrix, then $Ae_i$ is the $i$th column of $A$.
+\end{fact}
+
+\begin{Defn}
+  Let $T\colon\R^n\to\R^m$ be a linear transformation.  The
+  \textbf{standard matrix} for $T$ is
+  \[ \mat{| | ,, |; T(e_1) T(e_2) \cdots, T(e_n); | | ,, | }. \]
+\end{Defn}
+
+\begin{redthm}
+  If $T$ is a linear transformation, then it is the matrix transformation
+  associated to its standard matrix.
+\end{redthm}
+
+\begin{Defn}
+  A transformation $T\colon\R^n\to\R^m$ is \textbf{\color{red}onto} (or
+  \textbf{surjective}) if the range of $T$ is equal to $\R^m$ (its codomain).
+  In other words, each $b$ in $\R^m$ is the image of \emph{at least one} $x$ in
+  $\R^n$.
+\end{Defn}
+
+\begin{redthm}
+  Let $T\colon\R^n\to\R^m$ be a linear transformation with matrix $A$.  Then the
+  following are equivalent:
+  \begin{itemize}
+  \item $T$ is onto
+  \item $T(x) = b$ has a solution for every $b$ in $\R^m$
+  \item $Ax = b$ is consistent for every $b$ in $\R^m$
+  \item The columns of $A$ span $\R^m$
+  \item $A$ has a pivot in every row.
+  \end{itemize}
+\end{redthm}
+
+\begin{Defn}
+  A transformation $T\colon\R^n\to\R^m$ is \textbf{\color{red}one-to-one} (or
+  \textbf{into}, or \textbf{injective}) if different vectors in $\R^n$ map to
+  different vectors in $\R^m$.  In other words, each $b$ in $\R^m$ is the image
+  of \emph{at most one} $x$ in $\R^n$.
+\end{Defn}
+
+\begin{redthm}
+  Let $T\colon\R^n\to\R^m$ be a linear transformation with matrix $A$.  Then the
+  following are equivalent:
+  \begin{itemize}
+  \item $T$ is one-to-one
+  \item $T(x) = b$ has one or zero solutions for every $b$ in $\R^m$
+  \item $Ax = b$ has a unique solution or is inconsistent for every $b$ in $\R^m$
+  \item $Ax = 0$ has a unique solution
+  \item The columns of $A$ are linearly independent
+  \item $A$ has a pivot in every column.
+  \end{itemize}
+\end{redthm}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Chapter 2}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection*{Section~2.1}
+
+\begin{Defn}
+  The \textbf{$ij$th entry} of a matrix $A$ is the entry in the $i$th row and
+  $j$th column.  Notation: $a_{ij}$.
+\end{Defn}
+
+\begin{Defn}
+  The entries $a_{11},a_{22},a_{33},\ldots$ are the \textbf{diagonal entries};
+  they form the \textbf{main diagonal} of the matrix.
+\end{Defn}
+
+\begin{Defn}
+  A \textbf{diagonal matrix} is a \emph{square} matrix whose only nonzero
+  entries are on the main diagonal.
+\end{Defn}
+
+\begin{Defn}
+  The $n\times n$ \textbf{identity matrix} $I_n$ is the diagonal matrix with all
+  diagonal entries equal to $1$.  It has the property that $I_n A = A$ for any
+  $n\times m$ matrix $A$.
+\end{Defn}
+
+\begin{Defn}
+  The \textbf{zero matrix} (of size $m\times n$) is the $m\times n$ matrix $0$
+  with all zero entries.
+\end{Defn}
+
+\begin{Defn}
+  The \textbf{transpose} of an $m\times n$ matrix $A$ is the $n\times m$ matrix
+  $A^T$ whose rows are the columns of $A$.  In other words, the $ij$ entry of
+  $A^T$ is $a_{ji}$.
+\end{Defn}
+
+\begin{Defn}
+  The \textbf{\color{red}product} of an $m\times n$ matrix $A$ with an
+  $n\times p$ matrix $B$ is the $m\times p$ matrix
+  \[ AB = \mat{| | ,, |; Av_1 Av_2 \cdots, Av_p; | | ,, |}, \]
+  where $v_1,v_2,\ldots,v_p$ are the columns of $B$.
+\end{Defn}
+
+\begin{fact}
+  Suppose $A$ has is an $m\times n$ matrix, and that the other matrices below
+  have the right size to make multiplication work.  Then:  \spalignsysdelims..
+  \[\syseq{A(BC) = (AB)C\hfill, \qquad,
+    A(B+C) = AB+AC;
+    (B+C)A = BA+CA \qquad,
+    c(AB) = (cA)B\hfill ;
+    c(AB) = A(cB)\hfill, \qquad,
+    I_nA = A\hfill;
+    AI_m = A\hfill}
+\]
+\end{fact}
+
+\begin{fact}
+  If $A$, $B$, and $C$ are matrices, then:
+  \begin{enumerate}
+  \item $AB$ is usually not equal to $BA$.
+  \item $AB = AC$ does not imply $B=C$.
+  \item $AB=0$ does not imply $A=0$ or $B=0$.
+  \end{enumerate}
+\end{fact}
+
+\begin{Defn}
+  Let $T\colon\R^n\to\R^m$ and $U\colon\R^p\to\R^n$ be transformations.  The
+  \textbf{composition} is the transformation
+  \[ T\circ U\colon\R^p\to\R^m \sptxt{defined by} T\circ U(x) = T(U(x)). \]
+\end{Defn}
+
+\begin{Thm}
+  Let $T\colon\R^n\to\R^m$ and $U\colon\R^m\to\R^p$ be linear transformations
+  with matrices $A$ and $B$, respectively.  Then the matrix for $T\circ U$ is
+  $AB$.
+\end{Thm}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection*{Section~2.2}
+
+\begin{Defn}
+  A square matrix $A$ is \textbf{\color{red}invertible} (or
+  \textbf{nonsingular}) if there is a matrix $B$ of the same size, such that
+  \[ AB = I_n \sptxt{and} BA = I_n. \]
+  In this case we call $B$ the \textbf{inverse} of $A$, and we write $A\inv=B$.
+\end{Defn}
+
+\begin{Thm}
+  If $A$ is invertible, then $Ax=b$ has exactly one solution for every $b$, namely:
+  \[ x = A\inv b. \]
+\end{Thm}
+
+\begin{fact}
+  Suppose that $A$ and $B$ are invertible $n\times n$ matrices.
+  \begin{enumerate}
+  \item $A\inv$ is invertible and its inverse is
+    $(A\inv)\inv = A$.
+  \item $AB$ is invertible and its inverse is
+    $(AB)\inv = B\inv A\inv$.
+  \item $A^T$ is invertible and $(A^T)\inv = (A\inv)^T$.
+\end{enumerate}
+\end{fact}
+
+\begin{redthm}
+  Let $A$ be an $n\times n$ matrix.  Here's how to compute $A\inv$.
+  \begin{enumerate}
+  \item Row reduce the augmented matrix $(\,A\mid I_n\,)$.
+  \item If the result has the form $(\,I_n\mid B\,)$, then $A$ is invertible and
+    $B=A\inv$.
+  \item Otherwise, $A$ is not invertible.
+  \end{enumerate}
+\end{redthm}
+
+\begin{Thm}
+  An $n\times n$ matrix $A$ is invertible if and only if it is row equivalent to
+  $I_n$.  In this case, the sequence of row operations taking $A$ to $I_n$ also
+  takes $I_n$ to $A\inv$.
+\end{Thm}
+
+\begin{Defn}
+  The \textbf{determinant} of a $2\times 2$ matrix $A=\begin{psmm} a&b\\c&d \end{psmm}$ is
+  \[ \det(A) = \det\mat{a b ; c d} = ad-bc. \]
+\end{Defn}
+
+\begin{fact}
+  If $A$ is a $2\times 2$ matrix, then $A$ is invertible if and only if
+  $\det(A) \neq 0$.  In this case,
+  \[ A\inv = \frac 1{\det(A)}\mat{d -b; -c a}. \]
+\end{fact}
+
+\begin{Defn}
+  A \textbf{elementary matrix} is a square matrix $E$ which differs from the
+  identity matrix by exactly one row operation.
+\end{Defn}
+
+\begin{fact}
+  If $E$ is the elementary matrix for a row operation, and $A$ is a matrix, then
+  $EA$ differs from $A$ by the same row operation.
+\end{fact}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection*{Section~2.3}
+
+\begin{Defn}
+  A transformation $T\colon\R^n\to\R^n$ is \textbf{invertible} if there exists
+  another transformation $U\colon\R^n\to\R^n$ such that
+  \[ T\circ U(x) = x \sptxt{and} U\circ T(x) = x \]
+  for all $x$ in $\R^n$.  In this case we say $U$ is the \textbf{inverse} of
+  $T$, and we write $U = T\inv$.
+\end{Defn}
+
+\begin{fact}
+  A transformation $T$ is invertible if and only if it is both one-to-one and
+  onto.
+\end{fact}
+
+\begin{Thm}
+  If $T$ is an invertible linear transformation with matrix $A$, then $T\inv$ is
+  an invertible linear transformation with matrix $A\inv$.
+\end{Thm}
+
+\noindent
+I'll keep all of the conditions of the IMT right here, even though we don't
+encounter some until later:
+
+\begin{oneoffThm}{\color{red}The Invertible Matrix Theorem}
+  Let $A$ be a square $n\times n$ matrix, and let $T\colon\R^n\to\R^n$ be the
+  linear transformation $T(x) = Ax$.  The following statements are equivalent.
+  \begin{enumerate}
+  \item $A$ is invertible.
+  \item $T$ is invertible.
+  \item $A$ is row equivalent to $I_n$.
+  \item $A$ has $n$ pivots.
+  \item $Ax=0$ has only the trivial solution.
+  \item The columns of $A$ are linearly independent.
+  \item $T$ is one-to-one.
+  \item $Ax = b$ is consistent for all $b$ in $\R^n$.
+  \item The columns of $A$ span $\R^n$.
+  \item $T$ is onto.
+  \item $A$ has a left inverse (there exists $B$ such that $BA = I_n$).
+  \item $A$ has a right inverse (there exists $B$ such that $AB = I_n$).
+  \item $A^T$ is invertible.
+  \item The columns of $A$ form a basis for $\R^n$.
+  \item $\Col A = \R^n$.
+  \item $\dim\Col A = n$.
+  \item $\rank A = n$.
+  \item $\Nul A = \{0\}$.
+  \item $\dim\Nul A = 0$.
+  \item $\det(A)\neq 0$.
+  \item The number $0$ is \emph{not} an eigenvalue of $A$.
+  \end{enumerate}
+\end{oneoffThm}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection*{Section~2.8}
+
+\begin{Defn}
+  A \textbf{subspace} of $\R^n$ is a subset $V$ of $\R^n$ satisfying:
+  \begin{enumerate}
+  \item The zero vector is in $V$.
+  \item If $u$ and $v$ are in $V$, then $u+v$ is also in $V$.
+  \item If $u$ is in $V$ and $c$ is in $\R$, then $cu$ is in $V$.
+  \end{enumerate}
+\end{Defn}
+
+\begin{Defn}
+  If $V = \Span\{v_1,v_2,\ldots,v_n\}$, we say that $V$ is the subspace
+  \textbf{generated by} or \textbf{spanned by} the vectors $v_1,v_2,\ldots,v_n$.
+\end{Defn}
+
+\begin{Thm}
+  A subspace is a span, and a span is a subspace.
+\end{Thm}
+
+\begin{Defn}
+  The \textbf{\color{red}column space} of a matrix $A$ is the subspace spanned
+  by the columns of $A$.  It is written $\Col A$.
+\end{Defn}
+
+\begin{Defn}
+  The \textbf{\color{red}null space} of $A$ is the set of all solutions of the
+  homogeneous equation $Ax=0$:
+  \[ \Nul A = \bigl\{ x\mid Ax=0 \bigr\}. \]
+\end{Defn}
+
+\begin{Eg}
+  The following are the most important examples of subspaces in this class (some
+  won't appear until later):
+  \begin{itemize}
+  \item Any $\Span\{v_1,v_2,\ldots,v_m\}$.
+  \item The column space of a matrix: 
+    $\Col A = \Span\{\text{columns of $A$}\}$.
+  \item The range of a linear transformation (same as above).
+  \item The null space of a matrix:
+    $\Nul A = \bigl\{ x\mid Ax = 0 \bigr\}$.
+  \item The row space of a matrix:
+    $\Row A = \Span\{\text{rows of $A$}\}$.
+  \item The $\lambda$-eigenspace of a matrix, where $\lambda$ is an eigenvalue.
+  \item The orthogonal complement $W^\perp$ of a subspace $W$.
+  \item The zero subspace $\{0\}$.
+  \item All of $\R^n$.
+  \end{itemize}
+\end{Eg}
+
+\begin{Defn}
+  Let $V$ be a subspace of $\R^n$.  A \textbf{\color{red}basis} of $V$ is a set
+  of vectors $\{v_1,v_2,\ldots,v_m\}$ in $V$ such that:
+  \begin{enumerate}
+  \item $V = \Span\{v_1,v_2,\ldots,v_m\}$, and
+  \item $\{v_1,v_2,\ldots,v_m\}$ is linearly independent.
+  \end{enumerate}
+  The number of vectors in a basis is the \textbf{\color{red}dimension} of $V$,
+  and is written $\color{red}\dim V$.
+\end{Defn}
+
+\begin{Thm}
+  Every basis for a gives subspace has the same number of vectors in it.
+\end{Thm}
+
+\begin{fact}
+  The vectors in the parametric vector form of the general
+  solution to $Ax=0$ always form a basis for $\Nul A$.
+\end{fact}
+
+\begin{fact}
+  The pivot columns of $A$ always form a basis for $\Col A$.
+\end{fact}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection*{Section~2.9}
+
+\begin{Defn}
+  Let $\cB = \{v_1,v_2,\ldots,v_m\}$ be a basis of a subspace $V$.  Any vector
+  $x$ in $V$ can be written uniquely as a linear combination
+  $x = c_1v_1 + c_2v_2 + \cdots + c_mv_m$.  The coefficients
+  $c_1,c_2,\ldots,c_m$ are the
+  \textbf{coordinates of $x$ with respect to $\cB$}, and the vector with entries
+  $c_1,c_2,\ldots,c_m$ is the
+  \textbf{$\cB$-coordinate vector of $x$}, denoted $[x]_\cB$.  In summary,
+  \[ [x]_\cB = \vec{c_1 c_2 \vdots, c_m} \sptxt{means}
+  x = c_1v_1 + c_2v_2 + \cdots + c_mv_m. \]
+\end{Defn}
+
+\begin{Defn}
+  The \textbf{\color{red}rank} of a matrix $A$, written $\rank A$, is the
+  dimension of the column space $\Col A$.
+\end{Defn}
+
+\begin{oneoffThm}{\color{red}Rank Theorem}
+  If $A$ is an $m\times n$ matrix, then
+  \[ \rank A + \dim\Nul A = 
+  n = \text{the number of columns of $A$}. \]
+\end{oneoffThm}
+
+\begin{oneoffThm}{\color{red}Basis Theorem}
+  Let $V$ be a subspace of dimension $m$.  Then:
+  \begin{itemize}
+  \item Any $m$ linearly independent vectors in $V$ form a basis for $V$.
+  \item Any $m$ vectors that span $V$ form a basis for $V$.
+  \end{itemize}
+\end{oneoffThm}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Chapter~3}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection*{Section~3.1}
+
+\begin{Defn}
+  The $ij$ \textbf{minor} of an $n\times n$ matrix $A$ is the $(n-1)\times(n-1)$
+  matrix $A_{ij}$ you get by deleting the $ith$ row and the $j$th column from
+  $A$.
+\end{Defn}
+
+\begin{Defn}
+  The $ij$ \textbf{cofactor} of $A$ is $C_{ij} = (-1)^{i+j}\det A_{ij}$.
+\end{Defn}
+
+\begin{Defn}
+  The \textbf{determinant} of an $n\times n$ matrix $A$ can be calculated using
+  \textbf{cofactor expansion} along any row or column:
+  \[\begin{split}
+    \det A &= \sum_{j=1}^n a_{ij} C_{ij} \text{ for any fixed } i \\
+    \det A &= \sum_{i=1}^n a_{ij} C_{ij} \text{ for any fixed } j
+  \end{split}\]
+\end{Defn}
+
+\begin{Thm}
+  There are special formulas for determinants of $2\times 2$ and $3\times 3$
+  matrices:
+  \[\begin{aligned} \det\mat{a b ; c d} &= ad-bc  \\
+    \det\mat{a_{11} a_{12} a_{13}; a_{21} a_{22} a_{23}; a_{31} a_{32} a_{33}}
+    &= \vcenter{$\begin{aligned}&a_{11}a_{22}a_{33} + a_{12}a_{23}a_{31} +
+        a_{13}a_{21}a_{32} \\
+        &\qquad\qquad-a_{13}a_{22}a_{31} - a_{11}a_{23}a_{32} -
+        a_{12}a_{21}a_{33}
+      \end{aligned}$}
+  \end{aligned}\]
+\end{Thm}
+
+\begin{Thm}
+  The determinant of an upper-triangular or lower-triangular matrix is the
+  product of the diagonal entries.
+\end{Thm}
+
+\begin{Thm}
+  If $A$ is an invertible $n\times n$ matrix, then
+  \[  A\inv = \frac 1{\det A}
+\mat{
+  C_{11} C_{21} C_{31} \cdots, C_{n1} ;
+  C_{12} C_{22} C_{32} \cdots, C_{n2} ;
+  C_{13} C_{23} C_{33} \cdots, C_{n3} ;
+  \vdots,\vdots,\vdots,\ddots, \vdots ;
+  C_{1n} C_{2n} C_{3n} \cdots, C_{nn}
+} \]
+\end{Thm}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection*{Section~3.2}
+
+\begin{Defn}
+  The \textbf{determinant} is a function
+  \[ \det\colon \{\text{square matrices}\} \To \R \]
+  with the following \textbf{\color{red}defining properties}:
+  \begin{enumerate}
+  \item $\det(I_n) = 1$
+  \item If we do a row replacement on a matrix (add a multiple of one row to
+    another), the determinant does not change.
+  \item If we swap two rows of a matrix, the determinant scales by $-1$.
+  \item If we scale a row of a matrix by $k$, the determinant scales by $k$.
+  \end{enumerate}
+\end{Defn}
+
+\begin{Thm}
+  You can use the defining properties of the determinant to compute the
+  determinant of any matrix using row reduction.
+\end{Thm}
+
+\smallskip
+
+\begin{oneoffThm}{\color{red}Magical Properties of the Determinant}~
+  \begin{enumerate}
+  \item There is one and only one function
+    $\det\colon\{\text{square matrices}\}\to\R$ satisfying the defining
+    properties~(1)--(4).
+  \item $A$ is invertible if and only if $\det(A) \neq 0$.
+  \item If we row reduce $A$ without row scaling, then
+    \[ \det(A) = (-1)^{\text{\#swaps}} \bigl(
+    \text{product of diagonal entries in REF} \bigr) \]
+  \item The determinant can be computed using any of the $2n$ cofactor
+    expansions.
+  \item $\color{red}\det(AB) = \det(A)\det(B)$ and 
+    $\color{red}\det(A\inv) = \det(A)\inv$
+  \item $\det(A) = \det(A^T)$
+  \item $|\det(A)|$ is the volume of the parallelepiped defined by the columns
+    of $A$.
+  \item If $A$ is an $n\times n$ matrix with transformation $T(x)=Ax$, and $S$
+    is a subset of $\R^n$, then the volume of $T(S)$ is $|\det(A)|$ times the
+    volume of $S$.  (Even for curvy shapes $S$.)
+  \item The determinant is multi-linear in the columns (or rows) of a matrix.
+  \end{enumerate}
+\end{oneoffThm}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Chapter~5}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection*{Section~5.1}
+
+\begin{Defn}
+  Let $A$ be an $n\times n$ matrix.
+  \begin{enumerate}
+  \item An \textbf{\color{red}eigenvector} of $A$ is a nonzero vector $v$ in
+    $\R^n$ such that $Av = \lambda v$, for some $\lambda$ in $\R$.  In other
+    words, $Av$ is a multiple of $v$.
+  \item An \textbf{\color{red}eigenvalue} of $A$ is a number $\lambda$ in $\R$
+    such that the equation $Av=\lambda v$ has a nontrivial solution.
+  \end{enumerate}
+  If $Av = \lambda v$ for $v\neq 0$, we say $\lambda$ is the
+  \textbf{eigenvalue for $v$}, and $v$ is an \textbf{eigenvector for $\lambda$}.
+\end{Defn}
+
+\begin{fact}
+  The eigenvalues of a triangular matrix are the diagonal entries.
+\end{fact}
+
+\begin{fact}
+  A matrix is invertible if and only if zero is not an eigenvalue.
+\end{fact}
+
+\begin{fact}
+  Eigenvectors with distinct eigenvalues are linearly independent.
+\end{fact}
+
+\begin{Defn}
+  Let $A$ be an $n\times n$ matrix and let $\lambda$ be an eigenvalue of $A$.
+  The \textbf{$\lambda$-eigenspace} of $A$ is the set of all eigenvectors of $A$
+  with eigenvalue $\lambda$, plus the zero vector:
+  \[\begin{split} \text{$\lambda$-eigenspace}
+    &= \bigl\{ v\text{ in }\R^n\mid Av = \lambda v \bigr\} \\
+    &= \bigl\{ v\text{ in }\R^n\mid (A-\lambda I)v = 0 \bigr\} \\
+    &= \Nul\bigl( A-\lambda I \bigr).
+  \end{split}\]
+\end{Defn}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection*{Section~5.2}
+
+\begin{Defn}
+  Let $A$ be an $n\times n$ matrix.  The \textbf{characteristic polynomial} of
+  $A$ is
+  \[ f(\lambda) = \det(A-\lambda I). \]
+  The \textbf{characteristic equation} of $A$ is the equation
+  \[ f(\lambda) = \det(A-\lambda I) = 0. \]
+\end{Defn}
+
+\begin{fact}
+  If $A$ is an $n\times n$ matrix, then the characteristic polynomial of $A$ has
+  degree $n$.
+\end{fact}
+
+\begin{redfact}
+  The roots of the characteristic polynomial (i.e., the solutions of the
+  characteristic equation) are the eigenvalues of $A$.
+\end{redfact}
+
+\begin{fact}
+  Similar matrices have the same characteristic polynomial, hence the same
+  eigenvalues (but different eigenvectors in general).
+\end{fact}
+
+\begin{Defn}
+  The \textbf{algebraic multiplicity} of an eigenvalue $\lambda$ is its
+  multiplicity as a root of the characteristic polynomial.
+\end{Defn}
+
+\begin{Defn}
+  Two $n\times n$ matrices $A$ and $B$ are \textbf{similar} if there is an
+  invertible $n\times n$ matrix $C$ such that
+  $A = CBC\inv$.
+\end{Defn}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection*{Section~5.3}
+
+\begin{Defn}
+  An $n\times n$ matrix $A$ is \textbf{diagonalizable} if it is similar to a
+  diagonal matrix:
+  \[ A = PDP\inv \sptxt{for $D$ diagonal.} \]
+\end{Defn}
+
+\begin{fact}
+  If $A = PDP\inv$ for
+  $D = \mat{d_{11} 0 \cdots, 0;
+    0 d_{22} \cdots, 0;
+    \vdots, \vdots, \ddots, \vdots;
+    0 0 \cdots, d_{nn}}$,
+  then
+  \[ A^m = PD^mP\inv = P\mat{d_{11}^m 0 \cdots, 0;
+    0 d_{22}^m \cdots, 0;
+    \vdots, \vdots, \ddots, \vdots;
+    0 0 \cdots, d_{nn}^m}P\inv. \]
+\end{fact}
+
+\begin{oneoffThm}{\color{red}The Diagonalization Theorem}
+  An $n\times n$ matrix $A$ is diagonalizable if and only if $A$ has $n$
+  linearly independent eigenvectors.
+  In this case, $A = PDP\inv$ for
+  \[ P = \mat{| |,, |; v_1 v_2 \cdots, v_n; | |,, |}
+  \qquad
+  D = \mat{\lambda_1 0 \cdots, 0; 0 \lambda_2 \cdots, 0;
+    \vdots, \vdots, \ddots, \vdots; 0 0 \cdots, \lambda_n},
+  \]
+  where $v_1,v_2,\ldots,v_n$ are linearly independent eigenvectors,
+  and $\lambda_1,\lambda_2,\ldots,\lambda_n$ are the corresponding eigenvalues
+  (in the same order).
+\end{oneoffThm}
+
+\begin{Cor}
+  An $n\times n$ matrix with $n$ distinct eigenvalues is diagonalizable.
+\end{Cor}
+
+\begin{proc}
+ \textsl{How to diagonalize a matrix $A$:}
+\begin{enumerate}
+\item Find the eigenvalues of $A$ using the characteristic polynomial. 
+\item For each eigenvalue $\lambda$ of $A$, compute a basis $\cB_\lambda$ for the
+  $\lambda$-eigenspace.
+\item If there are fewer than $n$ total vectors in the union of all of the
+  eigenspaces $\cB_\lambda$, then the matrix is not diagonalizable.
+\item Otherwise, the $n$ vectors $v_1,v_2,\ldots,v_n$ in your eigenspace bases are
+  linearly independent, and $A = PDP\inv$ for
+  \[ P = \mat{| |,, |; v_1 v_2 \cdots, v_n; | | ,, |} \sptxt{and}
+  D = \mat{\lambda_1 0 \cdots, 0;
+    0 \lambda_2 \cdots, 0;
+    \vdots, \vdots, \ddots, \vdots;
+    0 0 \cdots, \lambda_n}, \]
+  where $\lambda_i$ is the eigenvalue for $v_i$.
+
+\end{enumerate}
+  
+\end{proc}
+
+\begin{Defn}
+  Let $\lambda$ be an eigenvalue of a square matrix $A$.  The 
+  \textbf{geometric multiplicity} of $\lambda$ is the dimension of the
+  $\lambda$-eigenspace. 
+\end{Defn}
+
+\begin{Thm}
+  Let $\lambda$ be an eigenvalue of a square matrix $A$.  Then
+  \[ 1 \leq \text{(the geometric multiplicity of $\lambda$)}
+  \leq \text{(the algebraic multiplicity of $\lambda$)}. \]
+\end{Thm}
+
+\begin{Cor}
+  Let $\lambda$ be an eigenvalue of a square matrix $A$.  If the algebraic
+  multiplicity of $\lambda$ is $1$, then the geometric multiplicity is also $1$.
+\end{Cor}
+
+\begin{oneoffThm}{The Diagonalization Theorem (Alternate Form)}
+  Let $A$ be an $n\times n$ matrix.  The following are equivalent:
+  \begin{enumerate}
+  \item $A$ is diagonalizable.
+  \item The sum of the geometric multiplicities of the eigenvalues of $A$ equals
+    $n$.
+  \item The sum of the algebraic multiplicities of the eigenvalues of $A$ equals
+    $n$, and \emph{the geometric multiplicity equals the algebraic multiplicity} of
+    each eigenvalue.
+  \end{enumerate}
+\end{oneoffThm}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection*{Stochastic Matrices}
+
+\begin{Defn}
+  A square matrix $A$ is \textbf{stochastic} if all of its entries are
+  nonnegative, and the sum of the entries of each column is $1$.
+\end{Defn}
+
+\begin{fact}
+  Every stochastic matrix has eigenvalue $1$.
+\end{fact}
+
+\begin{fact}
+  If $\lambda\neq 1$ is an eigenvalue of a stochastic matrix, then
+  $|\lambda|< 1$.
+\end{fact}
+
+\begin{Defn}
+  A square matrix $A$ is \textbf{positive} if all of its entries are positive.
+\end{Defn}
+
+\begin{Defn}
+  A \emph{steady state} for a stochastic matrix $A$ is an eigenvector $w$ with
+  eigenvalue $1$, such that all entries are positive and sum to $1$.
+\end{Defn}
+
+\begin{oneoffThm}{\color{red}Perron--Frobenius Theorem}
+  If $A$ is a positive stochastic matrix, then it admits a unique steady state
+  vector $w$.  Moreover, for any vector $v_0$ with  entries summing to
+  some number $c$, the iterates $v_1 = Av_0$, $v_2 = Av_1$, \ldots, approach
+  $cw$ as $n$ gets large.
+\end{oneoffThm}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection*{Section~5.5}
+
+\begin{Rev}
+  Arithmetic in the complex numbers.
+\end{Rev}
+
+\begin{oneoffThm}{The Fundamental Theorem of Algebra}
+  Every polynomial of degree $n$ has exactly $n$ complex roots, counted with
+  multiplicity.
+\end{oneoffThm}
+
+\begin{fact}
+  Complex roots of real polynomials come in \emph{conjugate pairs}.
+\end{fact}
+
+\begin{fact}
+  If $\lambda$ is an eigenvalue of a real matrix with eigenvector $v$, then
+  $\bar\lambda$ is also an eigenvalue, with eigenvector $\bar v$.
+\end{fact}
+
+\begin{Thm}
+  Let $A$ be a $2\times 2$ matrix with complex (non-real) eigenvalue $\lambda$,
+  and let $v$ be an eigenvector.  Then
+  \[ A = PCP\inv \]
+  where
+  \[ P = \mat{| |; \Re v \Im v; | |}
+  \sptxt{and}
+  C = \mat{\Re\lambda, \Im\lambda; -\Im\lambda, \Re\lambda}. \]
+  The matrix $C$ is a composition of rotation by $-\arg(\lambda)$ and scaling by
+  $|\lambda|$. 
+\end{Thm}
+
+\begin{Thm}
+  Let $A$ be a real $n\times n$ matrix.  Suppose that for each (real or complex)
+  eigenvalue, the dimension of the eigenspace equals the algebraic
+  multiplicity.  Then $A = PCP\inv$, where $P$ and $C$ are as follows:
+  \begin{enumerate}
+  \item $C$ is \textbf{block diagonal}, where the blocks are $1\times 1$ blocks
+    containing the real eigenvalues (with their multiplicities), or $2\times 2$
+    blocks containing the matrices
+    $\mat{\Re\lambda,\Im\lambda;-\Im\lambda,\Re\lambda}$ for each complex eigenvalue
+    $\lambda$ (with multiplicity).
+  \item The columns of $P$ form bases for the eigenspaces for the real
+    eigenvectors, or come in pairs $(\,\Re v\; \Im v\,)$ for the complex
+    eigenvectors. 
+  \end{enumerate}
+
+\end{Thm}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Chapter~6}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection*{Section~6.1}
+
+\begin{Defn}
+\item The \textbf{dot product} of two vectors $x,y$ in $\R^n$ is
+  \[ x\cdot y = \vec{x_1 x_2 \vdots, x_n} \cdot \vec{y_1 y_2 \vdots, y_n}
+  \overset{\rm def}= x_1y_1 + x_2y_2 + \cdots + x_ny_n. \]
+  Thinking of $x,y$ as column vectors, this is the same as the number $x^Ty$.
+\end{Defn}
+
+\begin{Defn}
+  The \textbf{length} or \textbf{norm} of a vector $x$ in $\R^n$ is
+  \[\|x\| = \sqrt{x\cdot x}.\]
+\end{Defn}
+
+\begin{fact}
+  If $x$ is a vector and $c$ is a scalar, then
+  $\|cx\| = |c|\cdot\|x\|$.
+\end{fact}
+
+\begin{Defn}
+  The \textbf{distance} between two points $x,y$ in $\R^n$ is
+  \[ \dist(x,y) = \|y-x\|. \]
+\end{Defn}
+
+\begin{Defn}
+  A \textbf{unit vector} is a vector $v$ with length $\|v\|=1$.
+\end{Defn}
+
+\begin{Defn}
+  Let $x$ be a nonzero vector in $\R^n$.  The
+  \textbf{unit vector in the direction of $x$} is the vector $x/\|x\|$.
+\end{Defn}
+
+\begin{Defn}
+  Two vectors $x,y$ are \textbf{\color{red}orthogonal} or
+  \textbf{\color{red}perpendicular} if
+  $x\cdot y = 0$.  \\
+  \emph{Notation:} $x\perp y$.
+\end{Defn}
+
+\begin{fact}
+  $x\perp y \iff \|x-y\|^2=\|x\|^2+\|y\|^2$
+\end{fact}
+
+\begin{Defn}
+  Let $W$ be a subspace of $\R^n$.  Its \textbf{orthogonal complement} is
+  \[ W^\perp = \bigl\{ \text{$v$ in $\R^n$}\mid v\cdot w=0
+  \text{ for all $w$ in $W$} \bigr\}. \]
+\end{Defn}
+
+\begin{fact}
+  Let $W$ be a subspace of $\R^n$.
+  \begin{enumerate}
+  \item $W^\perp$ is also a subspace of $\R^n$
+  \item $(W^\perp)^\perp = W$
+  \item $\dim W + \dim W^\perp = n$
+  \item If $W = \Span\{v_1,v_2,\ldots,v_m\}$, then
+    \[\begin{split}
+      W^\perp &= \text{all vectors orthogonal to each $v_1,v_2,\ldots,v_m$}\\
+      &= \bigl\{ \text{$x$ in $\R^n$}\mid
+      x\cdot v_i = 0 \text{ for all } i=1,2,\ldots,m \bigr\} \\
+      &=  \Nul\mat{
+        \text{---}\,v_1^T\,\text{---};
+        \text{---}\,v_2^T\,\text{---};
+        \spvdots;
+        \text{---}\,v_m^T\,\text{---}}.
+    \end{split}\]
+  \end{enumerate}
+\end{fact}
+
+\begin{Defn}
+  The \textbf{row space} of an $m\times n$ matrix $A$ is the span of the
+  \emph{rows} of $A$.  It is denoted $\Row A$.  Equivalently, it is the column
+  span of $A^T$:
+  \[ \Row A = \Col A^T. \] It is a subspace of $\R^n$.
+\end{Defn}
+
+\begin{fact}
+  $\Span\{v_1,v_2,\ldots,v_m\}^\perp = \Nul\mat{
+        \text{---}\,v_1^T\,\text{---};
+        \text{---}\,v_2^T\,\text{---};
+        \spvdots;
+        \text{---}\,v_m^T\,\text{---}}.$
+\end{fact}
+
+\begin{fact}
+  Let $A$ be a matrix.
+  \begin{enumerate}
+  \item $(\Row A)^\perp = \Nul A$ and $(\Nul A)^\perp = \Row A$.
+  \item $(\Col A)^\perp = \Nul A^T$ and $(\Nul A^T)^\perp = \Col A$.
+  \end{enumerate}
+\end{fact}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection*{Section~6.2}
+
+\begin{Defn}
+  Let $L = \Span\{u\}$ be a line in $\R^n$, and let $x$ be in $\R^n$.  The
+  \textbf{orthogonal projection of $x$ onto $L$} is the point
+  \[ \proj_L(x) = \frac{x\cdot u}{u\cdot u}\,u. \]
+\end{Defn}
+
+\begin{Defn}
+  A set of \emph{nonzero} vectors is \textbf{\color{red}orthogonal} if each pair
+  of  vectors is orthogonal.
+  It is \textbf{orthonormal} if, in addition, each vector is a unit vector.
+\end{Defn}
+
+\begin{Lem}
+  A set of orthogonal vectors is linearly independent.  Hence it is a basis for
+  its span.
+\end{Lem}
+
+\begin{Thm}
+  Let $\cB = \{u_1,u_2,\ldots,u_m\}$ be an orthogonal set, and let $x$ be a
+  vector in $W = \Span\cB$.  Then
+  \[ x = \sum_{i=1}^m \frac{x\cdot u_i}{u_i\cdot u_i}\,u_i
+  = \frac{x\cdot u_1}{u_1\cdot u_1}\,u_1 + \frac{x\cdot u_2}{u_2\cdot u_2}\,u_2
+  + \cdots + \frac{x\cdot u_m}{u_m\cdot u_m}\,u_m. \]
+  In other words, the $\cB$-coordinates of $x$ are
+  $\displaystyle\left(\frac{x\cdot u_1}{u_1\cdot u_1},\,
+    \frac{x\cdot u_2}{u_2\cdot u_2},\ldots,\,
+    \frac{x\cdot u_m}{u_1\cdot u_m}\right)$.
+\end{Thm}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection*{Section~6.3}
+
+\begin{Defn}
+  Let $W$ be a subspace of $\R^n$, and let $\{u_1,u_2,\ldots,u_m\}$ be an
+  \emph{orthogonal} basis for $W$.  The \textbf{orthogonal projection} of a
+  vector $x$ onto $W$ is
+  \[ \proj_W(x) \overset{\rm def}= \sum_{i=1}^m \frac{x\cdot
+    u_i}{u_i\cdot u_i}\,u_i. \]
+\end{Defn}
+
+\begin{fact}
+  Let $W$ be a subspace of $\R^n$.
+  Every vector $x$ can be decompsed uniquely as 
+  \[ x = x_W + x_{W^\perp} \]
+  where $x_W$ is the closest vector to $x$ in $W$, and
+  $x_{W^\perp}$ is in
+  $W^\perp$. 
+\end{fact}
+
+\begin{Thm}
+  Let $W$ be a subspace of $\R^n$, and let $x$ be a vector in $\R^n$.  Then
+  $\proj_W(x)$ is the closest point to $x$ in $W$.
+  Therefore
+  \[ x_W = \proj_W(x) \sptxt{and} x_{W^\perp}
+  = x-\proj_W(x). \]
+\end{Thm}%
+
+\begin{oneoffThm}{Best Approximation Theorem}
+  Let $W$ be a subspace of $\R^n$, and let $x$ be a vector in $\R^n$.  Then
+  $y = \proj_W(x)$ is the closest point in $W$ to $x$, in the sense that
+  \[ \dist(x,y') \geq \dist(x,y) \sptxt{for all} y'\text{ in }W. \]
+\end{oneoffThm}
+
+\begin{Defn}
+  We can think of orthogonal projection as a \emph{transformation}:
+  \[ \proj_W\colon\R^n\To\R^n \qquad x \mapsto \proj_W(x). \]
+\end{Defn}
+
+\begin{Thm}
+  Let $W$ be a subspace of $\R^n$.
+  \begin{enumerate}
+  \item $\proj_W$ is a \emph{linear} transformation.
+  \item For every $x$ in $W$, we have $\proj_W(x) = x$.
+  \item For every $x$ in $W^\perp$, we have $\proj_W(x) = 0$.
+  \item The range of $\proj_W$ is $W$.
+  \end{enumerate}
+\end{Thm}
+
+\begin{fact}
+  Let $W$ be an $m$-dimensional subspace of $\R^n$, let $\proj_W\colon\R^n\to W$
+  be the projection, and let $A$ be the matrix for $\proj_L$.
+  \begin{enumerate}
+  \item $A$ is diagonalizable with eigenvalues $0$ and $1$; it is
+    similar to the diagonal matrix with $m$ ones and $n-m$ zeros on the
+    diagonal. 
+  \item $A^2 = A$.
+  \end{enumerate}
+\end{fact}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection*{Section~6.4}
+
+\begin{oneoffThm}{\color{red}The Gram--Schmidt Process}
+  Let $\{v_1,v_2,\ldots,v_m\}$ be a basis for a subspace $W$ of $\R^n$.  Define:
+  \begin{enumerate}
+  \item $u_1 = v_1$
+  \item $\displaystyle 
+    \hbox to 6cm{$u_2 = v_2 - \proj_{\Span\{u_1\}}(v_2)$\hss}
+    = v_2 - \frac{v_2\cdot u_1}{u_1\cdot u_1}\,u_1$
+  \item $\displaystyle 
+    \hbox to 6cm{$u_3 = v_3 -\proj_{\Span\{u_1,u_2\}}(v_3)$\hss}
+    = v_3 - \frac{v_3\cdot u_1}{u_1\cdot u_1}\,u_1
+    - \frac{v_3\cdot u_2}{u_2\cdot u_2}\,u_2$
+  \item[\vdots]
+  \item[m.] $\displaystyle 
+    \hbox to 6cm{$u_m = v_m -\proj_{\Span\{u_1,u_2,\ldots,u_{m-1}\}}(v_m)$\hss}
+    = v_m - \sum_{i=1}^{m-1}\frac{v_m\cdot u_i}{u_i\cdot u_i}\,u_i$
+  \end{enumerate}
+  Then $\{u_1,u_2,\ldots,u_m\}$ is an \emph{orthogonal} basis for the same
+  subspace $W$.
+\end{oneoffThm}
+
+\begin{oneoffThm}{$QR$ Factorization Theorem}
+  Let $A$ be a matrix with linearly independent columns.  Then
+  \[ A = QR \]
+  where $Q$ has orthonormal columns and $R$ is upper-triangular with positive
+  diagonal entries.
+\end{oneoffThm}
+
+\begin{Rev}
+  Procedure for computing $Q$ and $R$ given $A$.
+\end{Rev}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection*{Section~6.5}
+
+\begin{Defn}
+  A \textbf{least squares solution} to $Ax=b$ is a vector $\hat x$ in $\R^n$
+  such that
+  \[ \|b-A\hat x\|\leq \|b-Ax\| \] for all $x$ in $\R^n$.
+\end{Defn}
+
+\begin{Thm}
+  The least squares solutions to $Ax=b$ are the solutions to 
+  \[ (A^TA)\hat x = A^Tb. \]
+\end{Thm}
+
+\begin{Thm}
+  If $A$ has orthogonal columns $v_1,v_2,\ldots,v_n$, then the least squares
+  solution to $Ax=b$ is
+  \[ \displaystyle\hat x = \left(
+    \frac{b\cdot v_1}{v_1\cdot v_1},\;
+    \frac{b\cdot v_2}{v_2\cdot v_2},\;
+    \cdots,\;
+    \frac{b\cdot v_n}{v_n\cdot v_n}
+  \right). \]
+\end{Thm}
+
+\begin{Thm}
+  Let $A$ be an $m\times n$ matrix.  The following are equivalent:
+  \begin{enumerate}
+  \item $Ax=b$ has a \emph{unique} least squares solution for all $b$ in $\R^n$.
+  \item The columns of $A$ are linearly independent.
+  \item $A^TA$ is invertible.
+  \end{enumerate}
+  In this case, the least squares solution is $(A^T A)\inv(A^T b)$.
+\end{Thm}
+
+\begin{Rev}
+  Examples of best fit problems using least squares.
+\end{Rev}
+
+\end{document}

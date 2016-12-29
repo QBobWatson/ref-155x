@@ -1,0 +1,425 @@
+
+% JDR: Intro to the course.  Some instructors skip this lecture.
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\titleframe{Introduction to Linear Algebra}{Motivation and Overview}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Linear.  Algebra.}
+What is Linear Algebra?
+
+\vfill
+
+\alert{Linear}
+\begin{itemize}
+  \begin{webonly}
+    \item having to do with lines/planes/etc. 
+    \item For example, $x+y+3z=7$, not $\sin, \log, x^2$, etc.
+  \end{webonly}
+\end{itemize}
+
+\vfill
+
+\pause
+\alert{Algebra}
+\begin{itemize}
+\webonlycmd{\item solving equations involving numbers and symbols}
+\pause
+\item from al-jebr (Arabic), meaning reunion of broken parts
+\item 9$^{th}$ century Abu Ja'far Muhammad ibn Muso al-Khwarizmi
+\end{itemize}
+
+\vfill
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+  \frametitle{Why a whole course?}
+  But these are the easiest kind of equations!  I learned how to solve them in
+  7th grade!
+
+  \bigskip
+  \pause
+  Ah, but engineers need to solve \emph{lots} of equations in \emph{lots} of
+  variables.
+  \[\syseq{
+    3x_1 + 4x_2 + 10x_3 + 19x_4 - 2x_5 - 3x_6 = 141;
+    7x_1 + 2x_2 - 13x_3 - 7x_4 + 21x_5 + 8x_6 = 2567;
+    -x_1 + 9x_2 + \frac 32x_3 + x_4 + 14x_5 + 27x_6 = 26;
+    \frac 12x_1 + 4x_2 + 10x_3 + 11x_4 + 2x_5 + x_6 = -15 
+  }\]
+
+  \bigskip
+  \pause
+  Often, it's enough to know some information about the set of solutions without
+  having to solve the equations at all!
+
+  \bigskip
+  \pause
+  Also, what if one of the coefficients of the $x_i$ is itself a parameter---
+  like an unknown real number $t$?
+
+  \bigskip
+  \pause
+  In real life, the difficult part is often in recognizing that a problem can be
+  solved using linear algebra in the first place: need \emph{conceptual}
+  understanding. 
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Linear Algebra in Engineering}
+
+\vfill
+
+\begin{bluebox}{.5\textwidth}
+  Large classes of engineering problems, no matter how huge, can be reduced to
+  linear algebra:
+  \begin{align*}
+    Ax &= b \quad \text{ or}\\
+    Ax &= \lambda x
+  \end{align*}
+\end{bluebox}
+
+\bigskip
+\pause
+\begin{center}
+  ``\ldots and now it's just linear algebra''
+\end{center}
+
+\note[item]{Linear algebra is extremely well-understood.}
+\note[item]{If you can reduce to a linear algebra problem, you can probably solve it.}  \note[item]{Unlike reducing to solving a PDE\ldots}
+
+ \vfill \vfill
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usetikzlibrary{decorations.markings}
+
+\tikzset{
+  mid arrow/.style={
+    postaction={
+      decoration={
+        markings,
+        mark=at position #1 with {\arrow{Stealth[scale=1]}},
+      },
+      decorate
+    },
+  },
+  rmid arrow/.style={
+    postaction={
+      decoration={
+        markings,
+        mark=at position #1 with {\arrowreversed{Stealth[scale=1]}},
+      },
+      decorate
+    }
+  },
+  mid arrow/.default={0.5},
+  rmid arrow/.default={0.5},
+}
+
+\begin{frame}
+\frametitle{Applications of Linear Algebra}
+\alert{Civil Engineering:} How much traffic flows through the four labeled segments?
+
+\vfill
+\begin{columns}[onlytextwidth]
+  \column[c]{.5\textwidth}
+  \uncover<2->{\longsquiggly~ system of linear equations:}    
+  \begin{webonly}
+    \[\syseq{
+      w + 120 = x + 250;
+      x + 120 = y + 70;
+      y + 630 = z + 390;
+      z + 115 = w + 175
+    }\]
+  \end{webonly}
+
+  \column[c]{.5\textwidth}
+  \centering
+  \begin{tikzpicture}[scale=1, thick,
+      every node/.style={inner sep=3pt, label distance=1mm}]
+    \node at (0,2.4) {Traffic flow (cars/hr)};
+    \point[scale=1.5] (A) at (-1,1);
+    \point[scale=1.5] (B) at (1,1);
+    \point[scale=1.5] (C) at (1,-1);
+    \point[scale=1.5] (D) at (-1,-1);
+    \draw[mid arrow] (A.center) to["$x$"] (B.center);
+    \draw[mid arrow] (B.center) to["$y$"] (C.center);
+    \draw[mid arrow] (C.center) to["$z$"] (D.center);
+    \draw[mid arrow] (D.center) to["$w$"] (A.center);
+    \draw[rmid arrow=.3] (A.center) to["$120$"] +(-1,0);
+    \draw[mid arrow=.7] (A.center) to["$250$"] +(0,1);
+    \draw[mid arrow=.7] (B.center) to["$70$" swap] +(1,0);
+    \draw[rmid arrow=.3] (B.center) to["$120$" swap] +(0,1);
+    \draw[rmid arrow=.3] (C.center) to["$630$"] +(1,0);
+    \draw[mid arrow=.7] (C.center) to["$390$"] +(0,-1);
+    \draw[mid arrow=.7] (D.center) to["$175$" swap] +(-1,0);
+    \draw[rmid arrow=.3] (D.center) to["$115$" swap] +(0,-1);
+  \end{tikzpicture}
+\end{columns}
+\vfill
+
+\end{frame}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Applications of Linear Algebra}
+\alert{Chemistry:} Balancing reaction equations 
+\bigskip
+
+\begin{center}
+  \underline{\hbox to 5mm{\hss\uncover<2->{$x$}\hss}} C$_2$H$_6$ +
+  \underline{\hbox to 5mm{\hss\uncover<2->{$y$}\hss}} O$_2$ $\rightarrow$
+  \underline{\hbox to 5mm{\hss\uncover<2->{$z$}\hss}} CO$_2$ +
+  \underline{\hbox to 5mm{\hss\uncover<2->{$w$}\hss}} H$_2$O
+\end{center}
+\uncover<2->{$\longsquiggly$ system of linear equations, one equation for each
+  element.}
+
+\begin{webonly}
+  \[\begin{split}
+    2x &= z \\
+    6x &= 2w \\
+    2y &= 2z
+  \end{split}\]
+\end{webonly}
+
+\vfill
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Applications of Linear Algebra}
+\alert{Biology:} In a population of rabbits\ldots
+\begin{itemize}
+\item half of the new born rabbits survive their first year
+\item of those, half survive their second year
+\item the maximum life span is three years
+\item rabbits produce 0, 6, 8 rabbits in their first, second, and third years
+\end{itemize}
+
+\pause\medskip
+If I know the population in 2016 (in terms of the number of first, second, and
+third year rabbits), then what is the population in 2017?
+\pause\\[5mm]
+$\longsquiggly$ system of linear equations:
+
+\begin{webonly}
+  \[\syseq{
+    \. \+ 6y_{2016} + 8z_{2016} = x_{2017};
+    \frac 12x_{2016} \+ \. \+ \. = y_{2017};
+    \. \+ \frac 12y_{2016} \+ \. = z_{2017} 
+  }\]
+\end{webonly}
+
+\pause
+
+\begin{ques}
+  Does the rabbit population have an asymptotic behavior?  Is this even a linear
+  algebra question?
+  \pause
+  Yes, it is!
+\end{ques}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Applications of Linear Algebra}
+\alert{Geometry and Astronomy:} Find the equation of a circle passing through 3
+given points, say $(1,0)$, $(0,1)$, and $(1,1)$. 
+\pause
+The general form of a circle is
+$a(x^2+y^2)+bx+cy+d=0$.  
+\pause\\[5mm]
+$\longsquiggly$ system of linear equations: 
+
+\note{Say we're solving for $a,b,c,d$.}
+
+\begin{webonly}
+  \[\syseq{
+    a + b \+ \. + d = 0;
+    a \+ \. + c + d = 0;
+    2a + b + c + d = 0
+  }\]
+\end{webonly}
+
+\vfill \vfill
+
+\pause
+Very similar to: compute the orbit of a planet: 
+\[ ax^2+by^2+cxy+dx+ey+f=0 \]
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Applications of Linear Algebra}
+\alert{Google:} ``The 25 billion dollar eigenvector.'' Each web page has some
+importance, which it shares via outgoing links to other pages
+\pause\\[1mm]
+$\longsquiggly$ system of linear equations
+\pause
+(in gazillions of variables).
+
+\pause
+\vfill
+
+Larry Page flies around in a private 747 because he paid attention in his
+linear algebra class!
+
+\vfill
+\pause
+
+Stay tuned!
+
+\vfill
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Overview of the Course}
+
+\begin{itemize}
+\item<1-> Solve the matrix equation $Ax = b$
+  \begin{itemize}
+  \item<2-> \alert{Solve systems of linear equations} using matrices, row
+    reduction, and inverses.
+  \item<3-> \alert{Solve systems of linear equations with varying parameters}
+    using parametric forms for solutions, the geometry of linear transformations,
+    the characterizations of invertible matrices, and determinants.
+  \end{itemize}
+  \bigskip
+\item<4-> Solve the matrix equation $Ax = \lambda x$
+  \begin{itemize}
+  \item<5-> \alert{Solve eigenvalue problems} through the use of the
+    characteristic polynomial.
+  \item<6-> \alert{Understand the dynamics of a linear transformation} via the
+    computation of eigenvalues, eigenvectors, and diagonalization.
+  \end{itemize}
+  \bigskip
+\item<7-> Almost solve the equation $Ax = b$
+  \begin{itemize}
+  \item<8->
+    \alert{Find best-fit solutions to systems of linear equations that have no
+      actual solution} using least squares approximations.
+  \end{itemize}
+\end{itemize}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{What to Expect This Semester}
+
+Your previous math courses probably focused on how to do (sometimes rather
+involved) computations.
+\begin{webonly}
+  \begin{itemize}
+  \item Compute the derivative of $\sin(\log x)\cos(e^x)$.  
+  \item Compute $\int_0^1 (1-\cos(x))\,dx$.
+  \end{itemize}
+\end{webonly}
+\pause\medskip
+This is important, \textbf{but} Wolfram Alpha can do all these problems better
+than any of us can.
+\pause
+Nobody is going to hire you to do something a computer can do better.
+
+\pause
+\begin{bluebox}{.8\linewidth}
+  If a computer can do the problem better than you can, then it's just an
+  algorithm: this is not real problem solving.
+\end{bluebox}
+
+\pause
+So what are we going to do?
+\pause
+\begin{itemize}
+\item About half the material focuses on how to do linear algebra
+  computations---that is still important.
+\pause
+\item The other half is on \emph{conceptual} understanding of linear algebra.
+  \pause
+  This is much more subtle: it's about figuring out \emph{what question} to ask
+  the computer, or whether you actually need to do any computations at all.
+\end{itemize}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Resources}
+
+\begin{bluebox}{.8\textwidth}
+  \LARGE\centering Everything is on the course web page.
+\end{bluebox}
+
+\pause\smallskip
+Including these slides.
+\pause
+There's a link from T-Square.
+
+\pause\medskip
+On the webpage you'll find:
+\pause
+\begin{itemize}
+\item\alert{Course administration:} the names of your TAs, their office hours,
+  your recitation location, etc.
+\pause
+\item\alert{Course organization:} grading policies, details about homework and
+  exams, etc.
+\pause
+\item\alert{Help and advice:} how to succeed in this course, resources available
+  to you.
+\pause
+\item\alert{Calendar:} what will happen on which day, links to daily slides,
+  quizzes, practice exams, solutions, etc.
+\end{itemize}
+
+\pause\medskip
+\alert{T-Square:} your grades, link to WeBWorK.
+
+\pause\medskip
+\alert{Piazza:} this is where to ask questions, and where I'll post announcements.
+
+\end{frame}
+
+
+
+%%% Local Variables:
+%%% TeX-master: "../slides"
+%%% End:

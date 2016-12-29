@@ -1,0 +1,534 @@
+
+\usetikzlibrary{decorations.pathreplacing}
+
+\titleframe{Section 3.2}{Properties of Determinants}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Plan for Today}
+
+Last time, we gave a recursive formula for determinants in terms of cofactor
+expansions.
+
+\pause\bigskip
+\alert{Plan for today:}
+\begin{itemize}
+\item An abstract definition of the determinant in terms of its properties.
+\pause
+\item Computing determinants using row operations.
+\pause
+\item Determinants and products: $\det(AB) = \det(A)\det(B)$.
+\pause
+\item Determinants and volumes.
+\pause
+\item Determinants and linear transformations.
+\end{itemize}
+
+\pause\bigskip
+The determinant is one of the most amazing functions ever devised.  Today is
+about beginning to understand why.
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{The Determinant is a Function}
+
+We can think of the determinant as a function of the entries of a matrix:
+\[ \det\mat{a_{11} a_{12} a_{13}; a_{21} a_{22} a_{23}; a_{31} a_{32} a_{33}}
+= \begin{aligned}
+& a_{11}a_{22}a_{33} + a_{12}a_{23}a_{31} + a_{13}a_{21}a_{32} \\
+&\quad -a_{13}a_{22}a_{31} - a_{11}a_{23}a_{32} - a_{12}a_{21}a_{33}.
+\end{aligned} \]
+\pause
+The formula for the determinant of an $n\times n$ matrix has $n!$ terms.
+\pause
+So the determinant of a $10\times 10$ matrix has $3{,}628{,}800$ terms!
+
+\pause\bigskip
+When mathematicians encounter a function whose formula is too difficult to write
+down, we try to \emph{characterize} it in terms of its properties.
+
+\pause\bigskip
+The determinant function is characterized by how it is changed by row
+operations.
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Defining the Determinant in Terms of its Properties}
+
+\vskip-3mm
+\begin{defn}
+  The \textbf{determinant} is a function
+  \[ \det\colon \{\text{square matrices}\} \To \R \]
+  with the following \textbf{defining properties}:
+  \pause
+  \begin{enumerate}
+  \item $\det(I_n) = 1$
+    \pause
+  \item If we do a row replacement on a matrix, the determinant does not change.
+    \pause
+  \item If we swap two rows of a matrix, the determinant scales by $-1$.
+    \pause
+  \item If we scale a row of a matrix by $k$, the determinant scales by $k$.
+  \end{enumerate}
+\end{defn}
+
+\pause\medskip
+Why would we think of these properties?
+\pause
+This is how volumes work!
+\pause
+\begin{enumerate}
+\item The volume of the unit cube is $1$.
+\pause
+\item Volumes don't change under a shear.
+\pause
+\item Volume of a mirror image is negative of the volume?
+\pause
+\item If you scale one coordinate by $k$, the volume is multiplied by $k$.
+
+\end{enumerate}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Properties of the Determinant}
+\framesubtitle{$2\times 2$ matrix}
+
+\begin{webonly}
+\begin{minipage}[c]{0.6\linewidth}
+  \[ \det \mat{1 -2; 0 3 } = 3 \]
+\end{minipage}\hfill
+\begin{tikzpicture}[scale=.5, baseline=.75cm]
+  \draw[help lines, black!25] (-3,-1) grid (3,4);
+  \draw[vector] (0,0) -- (1,0);
+  \draw[vector] (0,0) -- (-2,3);
+  \filldraw[fill=seq-orange, fill opacity=.2, very thin]
+    (0,0) -- (1,0) -- (-1, 3) -- (-2, 3) -- cycle;
+  \node[anchor=south west, font=\small,
+    inner sep=1pt, fill=white] at (-.25,2.1) {volume $= 3$};
+  \point at (0,0);
+\end{tikzpicture}
+
+%\pause
+\begin{minipage}[c]{0.6\linewidth}
+  Scale: $R_2 = \frac 13 R_2$
+  \[ \det\mat{1 -2; 0 1 } = 1 \]
+\end{minipage}\hfill
+\begin{tikzpicture}[scale=.5, baseline=.75cm]
+  \draw[help lines, black!25] (-3,-1) grid (3,4);
+  \draw[vector] (0,0) -- (1,0);
+  \draw[vector] (0,0) -- (-2,1);
+  \filldraw[fill=seq-orange, fill opacity=.2, very thin]
+    (0,0) -- (1,0) -- (-1,1) -- (-2,1) -- cycle;
+  \node[anchor=south west, font=\small,
+    inner sep=1pt, fill=white] at (-.25,2.1) {volume $= 1$};
+  \point at (0,0);
+\end{tikzpicture}
+
+
+%\pause
+\begin{minipage}[c]{0.6\linewidth}
+  Row replacement: $R_1 = R_1 + 2R_2$
+  \[ \det\mat{1 -2; 0 1 } = 1 \]
+  (This is a shear by the elementary matrix $\begin{psmm} 1&2\\0&1 \end{psmm}$.)
+\end{minipage}\hfill
+\begin{tikzpicture}[scale=.5, baseline=.75cm]
+  \draw[help lines, black!25] (-3,-1) grid (3,4);
+  \draw[vector] (0,0) -- (1,0);
+  \draw[vector] (0,0) -- (0,1);
+  \filldraw[fill=seq-orange, fill opacity=.2, very thin]
+    (0,0) -- (1,0) -- (1,1) -- (0,1) -- cycle;
+  \node[anchor=south west, font=\small,
+    inner sep=1pt, fill=white] at (-1.25,2.1) {volume still $= 1$};
+  \point at (0,0);
+\end{tikzpicture}\\
+\end{webonly}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Properties of the Determinant}
+\framesubtitle{Elementary matrices}
+
+Since an elementary matrix differs from the identity matrix by one row
+operation, and since $\det(I_n) = 1$, it is easy to calulate the determinant of
+an elementary matrix:
+
+\pause\bigskip
+\[\begin{aligned}
+  \det\mat{1 0 8; 0 1 0; 0 0 1} &=
+  \webonlycmd{\hbox to 6cm{$\det(I_n) = 1$\hfil (properties 1 and 2)}} \\
+  \det\mat{0 0 1; 0 1 0; 1 0 0} &=
+  \webonlycmd{\hbox to 6cm{$-\det(I_n) = -1$\hfil (properties 1 and 3)}} \\
+  \det\mat{1 0 0; 0 17 0; 0 0 1} &=
+  \webonlycmd{\hbox to 6cm{$17\det(I_n) = 17$\hfil (properties 1 and 4)}}  
+\end{aligned}\]
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Computing the Determinant by Row Reduction}
+
+We can use the properties of the determinant and row reduction to compute the
+determinant of any matrix!  
+\pause
+This means that $\det$ is completely characterized by its defining
+properties.
+\pause
+\[\begin{aligned}
+  \qquad\det\mat{0 1 0; 1 0 1; 5 7 -4} &=
+  \webonlycmd{\hbox to 7cm{$-\det\mat{1 0 1; 0 1 0; 5 7 -4}$\hfil(property 3)}} \\
+  &\webonlycmd{=\hbox to 7cm{$-\det\mat{1 0 1; 0 1 0; 0 7 -9}$\hfil(property 2)}} \\
+  &\webonlycmd{=\hbox to 7cm{$-\,\namedbox{mat1}{\det
+        \mat{1 0 1; 0 1 0; 0 0 -9}}$\hfil(property 2)}} \\
+  &\webonlycmd{=\hbox to 7cm{$(-1)\cdot\namedbox{mat2}{(-9)\det
+        \mat{1 0 1; 0 1 0; 0 0 1}}$
+      \hfil(property 4)}} \\
+  &\webonlycmd{=\hbox to 7cm{$(-1)\cdot(-9)\det\mat{1 0 0; 0 1 0; 0 0 1}$
+      \hfil(property 2)}} \\
+  &\webonlycmd{=\hbox to 7cm{$9$ \hfil(property 1)}} \\
+\end{aligned}\]
+\begin{webonly}
+\begin{tikzpicture}[remember picture, overlay]
+  \node[draw, thick, rounded corners, seq-green, fit=(mat1),
+    inner ysep=2pt, inner xsep=1pt] (mat1box) {};
+  \node[draw, thick, rounded corners, seq-blue,  fit=(mat2),
+    inner ysep=2pt, inner xsep=1pt] (mat2box) {};
+  \path let \p1=($.5*(mat1box.center) + .5*(mat2box.center)$),
+            \p2=($(current page.west) + (5mm,0)$)
+    in (\p1 -| \p2) node[right, align=justify, text width=3.5cm] (expl) {%
+      The \textcolor{seq-blue}{second matrix} is obtained from the
+      \textcolor{seq-green}{first matrix} by scaling by $-1/9$.  So the
+      determinant of the \textcolor{seq-green}{first matrix} is $-9$ times the
+      determinant of the \textcolor{seq-blue}{second matrix}.%
+    };
+  \draw[->, shorten >=1pt, seq-green]
+    (expl.east) to[out=0,in=180] (mat1box.200);
+  \draw[->, shorten >=1pt, seq-blue]
+    (expl.east) to[out=0,in=180] (mat2box.170);
+\end{tikzpicture}
+\end{webonly}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Computing the Determinant by Row Reduction}
+\framesubtitle{Saving some work}
+
+The determinant of an upper (or lower)
+triangular matrix is the product of the diagonal entries,
+\pause
+so we can stop row reducing when we get to row echelon form.
+\pause\medskip
+\[\det\mat{0 1 0; 1 0 1; 5 7 -4} = \cdots
+= -\det\mat{1 0 1; 0 1 0; 0 0 -9} = 9.
+\]
+
+\vfill
+\pause
+\begin{bluebox}{.9\linewidth}
+  This is almost always the easiest way to compute the determinant of a large,
+  complicated matrix, either by hand or by computer.
+
+  \pause\medskip
+  (Cofactor expansion is $O(n!)\sim O(n^n\sqrt n)$, row reduction is $O(n^3)$.)
+\end{bluebox}
+\vfill
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{pollframe}
+
+\begin{bluebox}[Poll]{.8\linewidth}
+    Suppose that $A$ is a $4\times 4$ matrix satisfying
+    \[ Ae_1 = e_2 \quad Ae_2 = e_3 \quad Ae_3 = e_4 \quad Ae_4 = e_1. \]
+    What is $\det(A)$?
+    \[ \text{A. } {-1} \qquad \text{B. } 0 \qquad \text{C. } 1 \]
+\end{bluebox}
+
+\pause\bigskip
+These equations tell us the columns of $A$:
+\[ A = \mat{0 0 0 1; 1 0 0 0; 0 1 0 0; 0 0 1 0} \]
+\pause
+You need $3$ row swaps to transform this to the identity matrix.\\[1mm]
+\pause
+So $\det(A) = (-1)^3 = -1$.
+
+\end{pollframe}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{A Mathematical IOU}
+
+The characterization of the determinant function in terms of its properties is
+very useful.  It gives us a fast way to compute determinants, and prove other
+properties (later).  But\ldots
+
+\pause\bigskip
+The disadvantage of defining a function by its properties instead of a formula
+is:
+\pause
+how do you know such a function exists?
+\pause
+and if it exists, why is there only one function satisfying those properties?
+
+\pause\bigskip
+In our case, we can compute the determinant of a matrix from its defining
+properties, so if it exists, it is unique.
+\pause
+But how do we know that two different row reductions won't give
+two different answers for the determinant?
+
+\pause\bigskip
+Here is a summary of the magical properties of the determinant.  Prof.\
+Margalit's notes (on the website) have very understandable proofs.
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Magical Properties of the Determinant}
+
+\begin{enumerate}
+\item \namedbox{start}{There} is one and only one function
+  $\det\colon\{\text{square matrices}\}\to\R$ satisfying the defining
+  properties~(1)--(4).
+\pause\smallskip
+\item $A$ is invertible if and only if $\det(A) \neq 0$.
+\pause\smallskip
+\item If we row reduce $A$ without row scaling, then
+  \[ \det(A) = (-1)^{\text{\#swaps}}
+  \bigl( \text{product of diagonal entries in REF} \bigr). \]
+\pause\null\vskip -9mm\null
+\item The determinant can be computed using any of the $2n$ cofactor expansions.
+  (You get the same number every time!)
+\pause\smallskip
+\item $\color{seq-orange}\det(AB) = \det(A)\det(B)$ \quad and \quad
+  $\color{seq-orange}\det(A\inv) = \det(A)\inv$.
+\pause\smallskip
+\item $\color{seq-orange}\det(A) = \det(A^T)$.
+\pause\smallskip
+\item $|\det(A)|$ is the volume of the parallelepiped defined by the columns of
+  $A$.
+\pause\smallskip
+\item If $A$ is an $n\times n$ matrix with transformation $T(x)=Ax$, and $S$ is a
+  subset of $\R^n$, then the volume of $T(S)$ is $|\det(A)|$ times the volume of
+  $S$.  (Even for curvy shapes $S$.)
+\pause\smallskip
+\item The determinant is multi-linear (we'll talk about this in a few slides\namedbox{end}).
+\end{enumerate}
+\pause
+\begin{tikzpicture}[remember picture, overlay]
+  \draw[decorate,decoration={brace, mirror, amplitude=3mm}, thick, red]
+    let \p1=($(current page.west) + (1cm,0)$) in
+      (start.north -| \p1) -- (end.south -| \p1)
+      node[rotate=90, midway, anchor=south, yshift=.2cm]
+        {you really have to know these};
+\end{tikzpicture}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Multiplicativity of the Determinant}
+
+Why is \alert{Property 5} true?
+\pause
+In Lay, there's a proof using elementary matrices.
+\pause
+Here's a better one.
+\note{Need \emph{some} example of a proof using uniqueness.}
+
+\medskip
+\begin{webonly}
+Let $B$ be an $n\times n$ matrix.  There are two cases:
+\begin{enumerate}
+\item If $\det(B) = 0$, then $B$ is not inverible.
+  So for any matrix $A$, $BA$ is not invertible. (Otherwise $B\inv =
+  A(BA)\inv$.) So 
+  \[ \det(BA) = 0 = 0\cdot\det(A) =  \det(B)\det(A). \]
+
+\item If $A$ is invertible, define another function
+  \displayskips{3pt}
+  \[ f\colon\{\text{$n\times n$ matrices}\}\To\R
+  \sptxt{by} f(B) = \frac{\det(BA)}{\det(A)}. \]
+  Let's check the defining properties:\\[.5mm]
+  \begin{enumerate}
+  \item[1.] $f(I_n) = \det(I_nA)/\det(A) = 1$.
+    \vskip.5mm
+  \item[2--4.] Doing a row operation on $B$ and then multiplying by $A$, does
+    the \emph{same row operation} on $BA$.
+    This is because a row operation is left-multiplication by an elementary
+    matrix $E$, and $(EB)A = E(AB)$.
+    Hence $f$ scales like $\det$ with respect to row operations.
+  \end{enumerate}
+  By uniqueness, $f = \det$, i.e.,
+  \[ \det(B) = f(B) = \frac{\det(AB)}{\det(A)}
+  \sptxt{so}
+  \det(A)\det(B) = \det(AB).
+  \]
+
+\end{enumerate}
+\end{webonly}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\def\curvy{(-37.3333, 2.6667)
+     .. controls (-37.3333, -5.3333) and (-26.6667, -10.6667) .. (-16, -24)
+     .. controls (-5.3333, -37.3333) and (5.3333, -58.6667) .. (18.6667, -48)
+     .. controls (32, -37.3333) and (48, 5.3333) .. (45.3333, 18.6667)
+     .. controls (42.6667, 32) and (21.3333, 16) .. (8, 13.3333)
+     .. controls (-5.3333, 10.6667) and (-10.6667, 21.3333) .. (-18.6667, 21.3333)
+     .. controls (-26.6667, 21.3333) and (-37.3333, 10.6667) .. cycle}
+
+\begin{frame}
+\frametitle{Determinants and Linear Transformations}
+
+Why is \alert{Property 8} true?
+\pause
+For instance, if $S$ is the unit cube, then $T(S)$ is the parallelepiped defined
+by the columns of $A$, since the columns of $A$ are
+$T(e_1),T(e_2),\ldots,T(e_n)$.
+\pause
+In this case, Property~8 is the same as Property~7.
+\pause
+
+\begin{center}
+\begin{tikzpicture}[scale=.7, thin border nodes]
+  \draw[help lines, black!25] (-2,-2) grid (2,2);
+  \draw[vector] (0,0) to["$e_1$\strut"'] (1,0);
+  \draw[vector] (0,0) to["$e_2$"] (0,1);
+  \filldraw[fill=seq-orange, fill opacity=.2, very thin]
+    (0,0) -- (1,0) -- (1,1) -- (0,1) -- cycle;
+  \node at (.5,.5) {$S$};
+  \node[fill=white] at (0,-1) {$\vol(S)=1$};
+  \point at (0,0);
+
+  \draw[->, thick] (2.1,.5) to[bend left, "$T$" above=1mm]  
+     node[align=center, below=2mm] {$A = \mat{1 1; -1 1}$\\[1mm]$\det(A)=2$}
+     (10-2.1,.5);
+
+  \begin{scope}[xshift=10cm]
+    \draw[help lines, black!25] (-2,-2) grid (2,2);
+    \draw[vector] (0,0) to["$T(e_1)$"'] (1,-1);
+    \draw[vector] (0,0) to["$T(e_2)$"] (1,1);
+    \filldraw[fill=seq-orange, fill opacity=.2, very thin]
+      (0,0) -- (1,-1) -- (2,0) -- (1,1) -- cycle;
+    \node at (1,0) {$T(S)$};
+    \node[fill=white,anchor=center] at (0,-1.5) {$\vol(T(S)) = 2$};
+    \point at (0,0);
+  \end{scope}
+\end{tikzpicture}
+\end{center}
+
+\pause
+For curvy shapes, you break $S$ up into a bunch of tiny cubes.  Each one is
+scaled by $|\det(A)|$; then you use \emph{calculus} to reduce to the previous
+situation! 
+\begin{center}
+\begin{tikzpicture}[scale=.7, thin border nodes]
+  \draw[help lines, black!25] (-2,-2) rectangle (2,2);
+  \begin{scope}[ipe import, fill=seq-orange, fill opacity=.2, thin,
+      x=.7bp, y=.7bp]
+    \expandafter\filldraw\curvy;
+    \expandafter\clip\curvy;
+    \draw[very thin, step=4] (-60,-60) grid (60,60);
+  \end{scope}
+
+  \node at (0,.7) {$S$};
+  \point at (0,0);
+
+  \draw[->, thick] (2.1,0) to[bend left, "$T$" above=1mm] 
+    node[below=5mm] {$\vol(T(S)) = 2\vol(S)$}
+    (10-2.1,0);
+
+  \begin{scope}[xshift=10cm]
+    \draw[help lines, black!25] (-2,-2) rectangle (2,2);
+    \begin{scope}[ipe import, cm={1,-1,1,1,(0,0)}, x=.7bp, y=.7bp,
+        fill=seq-orange, fill opacity=.2, thin]
+      \expandafter\filldraw\curvy;
+      \expandafter\clip\curvy;
+      \draw[very thin, step=4] (-60,-60) grid (60,60);
+    \end{scope}
+
+    \node at (.8,.5) {$T(S)$};
+    \point at (0,0);
+  \end{scope}
+
+\end{tikzpicture}
+\end{center}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Multi-Linearity of the Determinant}
+
+We can also think of $\det$ as a function of the columns (or the rows) of an
+$n\times n$ matrix:
+\[ \det\colon\underbrace{\R^n\times\R^n\times\cdots\times\R^n}_{\text{$n$ times}}
+\To\R \]
+\[ \det(v_1,v_2,\ldots,v_n) = \det\mat{| | ,, |; v_1 v_2 \cdots, v_n; | | ,, |}. \]
+
+\pause
+\alert{Property 9} says that for any $i$ and any vectors $v_1,v_2,\ldots,v_n$
+and $v_i'$ and any scalar $c$,
+\[\begin{split} \det(v_1,\ldots,v_i+v_i',\ldots,v_n) &=
+\det(v_1,\ldots,v_i,\ldots,v_n) + \det(v_1,\ldots,v_i',\ldots,v_n) \\
+\det(v_1,\ldots,cv_i,\ldots,v_n) &= c\det(v_1,\ldots,v_i,\ldots,v_n).
+\end{split}\]
+\pause
+In other words, scaling one column (or row) by $c$ scales $\det$ by $c$ (which
+we already knew), 
+\pause
+and if column $i$ is a sum of two vectors $v_i,v_i'$, then the
+determinant is the sum of two determinants, one with $v_i$ in column $i$, and
+one with $v_i'$ in column $i$.  
+\pause
+\emph{\color{red}This only works one column at a time.}
+
+\pause\bigskip
+\alert{Proof:} just expand cofactors along column $i$.
+
+\end{frame}
+
+
+%%% Local Variables:
+%%% TeX-master: "../slides"
+%%% End:

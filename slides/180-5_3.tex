@@ -1,0 +1,712 @@
+
+\lecture{}{11-28}
+\titleframe{Section 5.3}{Diagonalization}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Motivation}
+\framesubtitle{Difference equations}
+
+Many real-word linear algebra problems have the form:
+\[ v_1 = Av_0, \quad v_2 = Av_1 = A^2 v_0, \quad
+v_3 = Av_2 = A^3v_0, \quad \ldots \quad v_n = A v_{n-1} = A^nv_0. \]
+This is called a \textbf{difference equation}.
+
+\pause\bigskip
+Our toy example about rabbit populations had this form.
+
+\pause\bigskip
+The question is, what happens to $v_n$ as $n\to\infty$?
+
+\pause\bigskip
+\begin{itemize}
+\item Taking powers of diagonal matrices is easy!
+  \pause
+\item Taking powers of \emph{diagonalizable} matrices is still easy!
+  \pause
+\item Diagonalizing a matrix is an eigenvalue problem.
+\end{itemize}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Powers of Diagonal Matrices}
+
+If $D$ is diagonal, then $D^n$ is also diagonal; its diagonal entries are the
+$n$th powers of the diagonal entries of $D$:
+
+\begin{webonly}
+\bigskip
+\[ \hss D = \mat{2 0 ; 0 3}, \quad
+D^2 = \mat{4 0; 0 9}, \quad
+D^3 = \mat{8 0; 0 27}, \quad \ldots \quad
+D^n = \mat{2^n 0; 0 3^n}. \hss \]
+\bigskip
+\[\begin{split}
+  D &= \mat{-1 0 0; 0 \frac 12 0; 0 0 \frac 13}, \quad
+  D^2 = \mat{1 0 0; 0 \frac 14 0; 0 0 \frac 19}, \quad
+  D^3 = \mat{-1 0 0; 0 \frac 18 0; 0 0 \frac 1{27}}, \\
+  \quad &\ldots\quad D^n = \mat{(-1)^n 0 0; 0 \frac 1{2^n} 0; 0 0 \frac 1{3^n}}
+\end{split}\]
+\end{webonly}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Powers of Matrices that are Similar to Diagonal Ones}
+
+What if $A$ is not diagonal?
+
+\pause
+\begin{eg}
+  Let $A =\mat{1 2; -1 4}$.  Compute $A^n$.
+\end{eg}
+
+\pause\smallskip
+In \S5.2 lecture we saw that $A$ is similar to a diagonal matrix:
+\[ A = PDP\inv \sptxt{where} P = \mat{2 1; 1 1} \sptxt{and} D = \mat{2 0; 0 3}. \]
+\pause
+Then
+\[\begin{split}
+  A^2 &= \webonlycmd{(PDP\inv)(PDP\inv) = PD(P\inv P)DP\inv = PDIDP\inv = PD^2P\inv}\\
+  A^3 &= \webonlycmd{(PDP\inv)(PD^2P\inv) = PD(P\inv P)D^2P\inv
+    = PDID^2P\inv = PD^3P\inv}\\
+  &\;\;\vdots \\
+  A^n &= \webonlycmd{PD^nP\inv}
+\end{split}\]
+\pause
+Therefore
+\[ A^n = \webonlycmd{\mat{2 1; 1 1}\mat{2^n 0; 0 3^n}\mat{1 -1; -1 2}
+= \namedbox{An}{\mat{2^{n+1}-3^n -2^{n+1}+2\cdot 3^n; 2^n-3^n -2^n+2\cdot 3^n}}.}  \]
+\begin{webonly}
+\begin{tikzpicture}[remember picture, overlay]
+  \path (An.north) ++(-8mm,5mm)
+    node[blue!50, anchor=south east, align=center] (expl) 
+      {Closed formula in terms of $n$:\\easy to compute};
+  \draw[->, shorten >=1pt, blue!50] (expl) to[out=0,in=90] (An);
+\end{tikzpicture}
+\end{webonly}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Diagonalizable Matrices}
+
+\vskip-3mm
+\begin{defn}
+  An $n\times n$ matrix $A$ is \textbf{diagonalizable} if it is similar to a
+  diagonal matrix:
+  \[ A = PDP\inv \sptxt{for $D$ diagonal.} \]
+\end{defn}
+
+\pause
+\begin{bluebox}[Important]{.7\linewidth}
+  If $A = PDP\inv$ for
+  $D = \mat{d_{11} 0 \cdots, 0;
+    0 d_{22} \cdots, 0;
+    \vdots, \vdots, \ddots, \vdots;
+    0 0 \cdots, d_{nn}}$
+  then
+  \[ A^k = PD^KP\inv = P\mat{d_{11}^k 0 \cdots, 0;
+    0 d_{22}^k \cdots, 0;
+    \vdots, \vdots, \ddots, \vdots;
+    0 0 \cdots, d_{nn}^k}P\inv. \]
+\end{bluebox}
+
+\pause
+So diagonalizable matrices are easy to raise to any power.
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Diagonalization}
+
+\vskip1mm
+\namedbox{bigthm}{\begin{minipage}{\linewidth}\vskip-2mm
+\begin{oneoffthm}{The Diagonalization Theorem}
+  An $n\times n$ matrix $A$ is diagonalizable if and only if $A$ has $n$
+  linearly independent eigenvectors.
+
+  \smallskip
+  \begin{uncoverenv}<2->
+  In this case, $A = PDP\inv$ for
+  \[ P = \mat{| |,, |; v_1 v_2 \cdots, v_n; | |,, |}
+  \qquad
+  D = \mat{\lambda_1 0 \cdots, 0; 0 \lambda_2 \cdots, 0;
+    \vdots, \vdots, \ddots, \vdots; 0 0 \cdots, \lambda_n},
+  \]
+  where $v_1,v_2,\ldots,v_n$ are linearly independent eigenvectors,
+  and $\lambda_1,\lambda_2,\ldots,\lambda_n$ are the corresponding eigenvalues
+  (in the same order).
+  \end{uncoverenv}
+\end{oneoffthm}\end{minipage}}
+\pause[3]%
+\tikz[remember picture, overlay] \node[redbox, fit=(bigthm)] {}; 
+
+\pause\medskip
+\begin{oneoffthm}{\namedbox{cor}{Corollary}}
+  An $n\times n$ matrix with $n$ distinct eigenvalues is diagonalizable.
+\begin{tikzpicture}[remember picture, overlay]
+  \path (cor.east) ++(1cm,1mm)
+    node[right, blue!50, font=\small] (expl)
+      {a theorem that follows easily from another theorem};
+  \draw[->, blue!50, shorten >=1mm] (expl.west) to[out=180,in=0] (cor.east);
+\end{tikzpicture}
+\end{oneoffthm}
+
+\pause\medskip
+The Corollary is true because eigenvectors with distinct eigenvalues are always
+linearly independent.
+\pause
+We will see later that a diagonalizable matrix need not have $n$ distinct
+eigenvalues though.
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Diagonalization}
+\framesubtitle{Example}
+
+\alert{Problem:} Diagonalize $A = \mat{1 2; -1 4}$.
+
+\medskip
+\begin{webonly}%
+The characteristic polynomial is
+\[ f(\lambda) = \lambda^2 - \Tr(A)\,\lambda + \det(A)
+= \lambda^2 - 5\lambda + 6 = (\lambda-2)(\lambda-3). \]
+Therefore the eigenvalues are
+$2$ and $3$.  Let's compute some eigenvectors:
+\[ (A-2I)x = 0 \iff
+  \mat{-1 2; -1 2}x = 0
+  \;\longsquiggly[rref]\;
+  \mat{1 -2; 0 0}x = 0
+  \]
+The parametric form is $x = 2y$, so $v_1 = {2\choose 1}$ is an eigenvector with
+eigenvalue $2$.
+\[ (A-3I)x = 0 \iff
+  \mat{-2 2; -1 1}x = 0
+  \;\longsquiggly[rref]\;
+  \mat{1 -1; 0 0}x = 0
+\]
+The parametric form is $x = y$, so $v_2 = {1\choose 1}$ is an eigenvector with
+eigenvalue $3$.
+
+\medskip
+The eigenvectors $v_1,v_2$ are linearly independent, so the Diagonalization
+Theorem says
+\[ A = PDP\inv \sptxt{for} P = \mat{2 1; 1 1} \qquad D = \mat{2 0; 0 3}. \]
+\end{webonly}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Diagonalization}
+\framesubtitle{Another example}
+
+\alert{Problem:} Diagonalize $A = \mat{4 -3 0; 2 -1 0; 1 -1 1}$.
+
+\medskip
+\begin{webonly}%
+\displayskips{3pt}
+The characteristic polynomial is
+\[ f(\lambda) = \det(A-\lambda I) = -\lambda^3+4\lambda^2-5\lambda+2
+= -(\lambda-1)^2(\lambda-2). \]
+Therefore the eigenvalues are $1$ and $2$, with respective multiplicities $2$
+and $1$.  Let's compute the $1$-eigenspace:
+\[ (A-I)x = 0 \iff
+\mat{3 -3 0; 2 -2 0; 1 -1 0}x = 0
+\;\longsquiggly[rref]\;
+\mat{1 -1 0; 0 0 0; 0 0 0}x = 0
+\]
+The parametric vector form is
+\[ \syseq{x = y; y = y; z = \. \+ z}
+\implies \vec{x y z} = y\vec{1 1 0} + z\vec{0 0 1}  \]
+Hence a basis for the $1$-eigenspace is
+\[ \cB_1 = \bigl\{ v_1,v_2 \bigr\} \sptxt{where}
+v_1 = \vec{1 1 0}, \quad v_2 = \vec{0 0 1}. \]
+
+\end{webonly}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Diagonalization}
+\framesubtitle{Another example, continued}
+
+\alert{Problem:} Diagonalize $A = \mat{4 -3 0; 2 -1 0; 1 -1 1}$.
+
+\begin{webonly}%
+\displayskips{3pt}
+Now let's compute the $2$-eigenspace:
+\[ (A-2I)x = 0 \iff
+\mat{2 -3 0; 2 -3 0; 1 -1 -1}x = 0
+\;\longsquiggly[rref]\;
+\mat{1 0 -3; 0 1 -2; 0 0 0}x = 0
+\]
+The parametric form is $x = 3z, y = 2z$, so an eigenvector with eigenvalue $2$ is
+\[ v_3 = \vec{3 2 1}. \]
+The eigenvectors $v_1,v_2,v_3$ are linearly independent: $v_1,v_2$ form a basis
+for the $1$-eigenspace, and $v_3$ is not contained in the $1$-eigenspace.
+Therefore the Diagonalization Theorem says
+\[ A = PDP\inv \sptxt{for}  
+P = \mat{1 0 3; 1 0 2; 0 1 1} \qquad D = \mat{1 0 0; 0 1 0; 0 0 2}. \]
+\end{webonly}%
+\pause
+\alert{Note:} In this case, there are three linearly independent eigenvectors, but
+only two distinct eigenvalues.
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Diagonalization}
+\framesubtitle{A non-diagonalizable matrix}
+
+\alert{Problem:} Show that $A = \mat{1 1; 0 1}$ is not diagonalizable.
+
+\medskip
+\begin{webonly}%
+This is an upper-triangular matrix, so the only eigenvalue is $1$.
+Let's compute the $1$-eigenspace:
+\[ (A-I)x = 0 \iff \mat{0 1; 0 0}x = 0. \]
+This is row reduced, but has only one free variable $x$; a basis for the
+$1$-eigenspace is $\{{1\choose 0}\}$.
+So \emph{all eigenvectors} of $A$ are multiples of ${1\choose 0}$.
+\end{webonly}
+
+\pause\bigskip
+\alert{Conclusion:}
+$A$ has only one linearly independent eigenvector, so by the ``only if'' part of
+the diagonalization theorem, $A$ is not diagonalizable.
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{pollframe}
+
+\begin{bluebox}[Poll]{.8\linewidth}
+  Which of the following matrices are diagonalizable, and why?
+  \[
+  \alert{\text{A. }} \mat{1 2; 0 1} \quad
+  \alert{\text{B. }} \mat{1 2; 0 2} \quad
+  \alert{\text{C. }} \mat{2 1; 0 2} \quad
+  \alert{\text{D. }} \mat{2 0; 0 2}
+  \]
+\end{bluebox}
+
+\pause\bigskip
+Matrix \alert{A} is not diagonalizable: its only eigenvalue is $1$, and its
+$1$-eigenspace is spanned by ${1\choose 0}$.
+
+\pause\bigskip
+Similarly, matrix~\alert{C} is not diagonalizable.
+
+\pause\bigskip
+Matrix~\alert{B} is diagonalizable because it is a $2\times 2$ matrix with
+distinct eigenvalues.
+
+\pause\bigskip
+Matrix~\alert{D} is already diagonal!
+
+\end{pollframe}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Diagonalization}
+\framesubtitle{Procedure}
+
+\alert{\large How to diagonalize a matrix $A$:}
+\begin{enumerate}
+  \pause
+\item Find the eigenvalues of $A$ using the characteristic polynomial. 
+  \pause
+\item For each eigenvalue $\lambda$ of $A$, compute a basis $\cB_\lambda$ for the
+  $\lambda$-eigenspace.
+  \pause
+\item If there are fewer than $n$ total vectors in the union of all of the
+  eigenspace bases $\cB_\lambda$, then the matrix is not diagonalizable.
+  \pause
+\item Otherwise, the $n$ vectors $v_1,v_2,\ldots,v_n$ in your eigenspace bases are
+  linearly independent, and $A = PDP\inv$ for
+  \[ P = \mat{| |,, |; v_1 v_2 \cdots, v_n; | | ,, |} \sptxt{and}
+  D = \mat{\lambda_1 0 \cdots, 0;
+    0 \lambda_2 \cdots, 0;
+    \vdots, \vdots, \ddots, \vdots;
+    0 0 \cdots, \lambda_n}, \]
+  where $\lambda_i$ is the eigenvalue for $v_i$.
+
+\end{enumerate}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Diagonalization}
+\framesubtitle{Proof}
+
+Why is the Diagonalization Theorem true?
+
+\medskip
+\begin{webonly}
+\alert{$A$ diagonalizable implies $A$ has $n$ linearly independent eigenvectors:}
+Suppose $A = PDP\inv$, where $D$ is diagonal with diagonal entries $\lambda_1,\lambda_2,\ldots,\lambda_n$.
+Let $v_1,v_2,\ldots,v_n$ be the columns of $P$.
+They are linearly independent because
+$P$ is invertible.
+So $Pe_i = v_i$, hence $P\inv v_i = e_i$.
+\[ Av_i = PDP\inv v_i = PDe_i = P(\lambda_i e_i) = \lambda_i Pe_i =
+\lambda_i v_i. \]
+Hence $v_i$ is an eigenvector of $A$ with eigenvalue $\lambda_i$.
+So the columns of $P$ form $n$ linearly independent eigenvectors of $A$, and the
+diagonal entries of $D$ are the eigenvalues.
+
+\medskip
+\alert{$A$ has $n$ linearly independent eigenvectors implies $A$ is diagonalizable:}
+Suppose $A$ has $n$ linearly independent eigenvectors $v_1,v_2,\ldots,v_n$, with
+eigenvalues $\lambda_1,\lambda_2,\ldots,\lambda_n$.
+Let $P$ be the invertible matrix with columns $v_1,v_2,\ldots,v_n$.
+Let $D = P\inv A P$.
+\[ De_i = P\inv A Pe_i = P\inv A v_i = P\inv(\lambda_i v_i)
+= \lambda_i P\inv v_i = \lambda_i e_i. \]
+Hence $D$ is diagonal, with diagonal entries
+$\lambda_1,\lambda_2,\ldots,\lambda_n$.
+Solving $D = P\inv A P$ for $A$ gives $A = PDP\inv$.
+\end{webonly}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Non-Distinct Eigenvalues}
+
+\vskip -3mm
+\begin{defn}
+  Let $\lambda$ be an eigenvalue of a square matrix $A$.  The 
+  \textbf{geometric multiplicity} of $\lambda$ is the dimension of the
+  $\lambda$-eigenspace. 
+\end{defn}
+
+\pause
+\begin{thm}
+  Let $\lambda$ be an eigenvalue of a square matrix $A$.  Then
+  \displayskips{3pt}
+  \[ 1 \leq \text{(the geometric multiplicity of $\lambda$)}
+  \leq \text{(the algebraic multiplicity of $\lambda$)}. \]
+\end{thm}
+
+\pause\vskip-1mm
+The proof is beyond the scope of this course.
+
+\pause\smallskip
+\begin{cor}
+  Let $\lambda$ be an eigenvalue of a square matrix $A$.  If the algebraic
+  multiplicity of $\lambda$ is $1$, then the geometric multiplicity is also $1$.
+\end{cor}
+
+\pause
+\begin{oneoffthm}{The Diagonalization Theorem (Alternate Form)}
+  Let $A$ be an $n\times n$ matrix.  The following are equivalent:
+  \begin{enumerate}
+    \pause
+  \item $A$ is diagonalizable.
+    \pause
+  \item The sum of the geometric multiplicities of the eigenvalues of $A$ equals
+    $n$.
+    \pause
+  \item The sum of the algebraic multiplicities of the eigenvalues of $A$ equals
+    $n$, and \emph{the geometric multiplicity equals the algebraic multiplicity} of
+    each eigenvalue.
+  \end{enumerate}
+\end{oneoffthm}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% JDR: I prefer to skip the following two slides in favor of the 
+%   subsequent application to difference equations.
+
+\begin{frame}
+\frametitle{Non-Distinct Eigenvalues}
+\framesubtitle{Examples}
+
+\vskip-3mm
+\begin{eg}
+  If $A$ has $n$ distinct eigenvalues, then the algebraic multiplicity of each
+  equals $1$, hence so does the geometric multiplicity, and therefore $A$ is
+  diagonalizable. 
+  
+  \pause\medskip
+  For example, $A = \mat{1 2; -1 4}$ has eigenvalues $2$ and $3$, so it is
+  diagonalizable.
+\end{eg}
+
+\pause\medskip
+\begin{eg}
+  The matrix $A = \mat{4 -3 0; 2 -1 0; 1 -1 1}$ has characteristic polynomial
+  \[ f(\lambda) = -(\lambda-1)^2(\lambda-2). \]  
+  \pause
+  The algebraic multiplicities of $1$ and $2$ are $2$ and $1$, respectively.
+  \pause
+  They sum to $3$.
+
+  \pause\smallskip
+  We showed before that the geometric multiplicity of $1$ is $2$ (the
+  $1$-eigenspace has dimension $2$).
+  \pause
+  The eigenvalue $2$ automatically has geometric multiplicity $1$.
+
+  \pause\smallskip
+  Hence the geometric multiplicities add up to $3$, so $A$ is diagonalizable.
+\end{eg}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Non-Distinct Eigenvalues}
+\framesubtitle{Another example}
+
+\vskip-3mm
+\begin{eg}
+  The matrix $A = \mat{1 1; 0 1}$ has characteristic polynomial
+  $f(\lambda) = (\lambda-1)^2$.
+
+  \pause\smallskip
+  It has one eigenvalue $1$ of algebraic multiplicity $2$.
+
+  \pause\smallskip
+  We showed before that the geometric multiplicity of $1$ is $1$ (the
+  $1$-eigenspace has dimension $1$).
+
+  \pause\smallskip
+  Since the geometric multiplicity is smaller than the algebraic multiplicity,
+  the matrix is \emph{not} diagonalizable.
+\end{eg}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% JDR: The following is a good transition into the stochastic matrix material
+
+\begin{frame}
+\frametitle{Applications to Difference Equations}
+
+Let $D = \mat{1 0; 0 1/2}$.\\[2mm]
+Fix a vector $v_0$, and let
+$v_1 = Dv_0,\, v_2=Dv_1$, etc., so
+$v_n = D^nv_0$.
+
+\pause\bigskip
+\alert{Question:} What happens to the $v_i$'s for different choices of $v_0$?
+
+\bigskip
+\begin{webonly}
+\alert{Answer:} Note that $D$ is diagonal, so
+\[ D^n\vec{a b} = \mat{1^n 0; 0 1/2^n}\vec{a b} = \vec{a b/2^n}. \]
+So the $x$-coordinate of $v_n$ equals the $x$-coordinate of $v_0$, and the
+$y$-coordinate gets halved every time.
+\end{webonly}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Applications to Difference Equations}
+\framesubtitle{Picture}
+
+\[ D\vec{a b} = \mat{1 0 ; 0 1/2}\vec{a b} = \vec{a b/2} \]
+
+\begin{center}
+\begin{tikzpicture}[scale=.5, thin border nodes]
+  \draw[grid lines] (-5,-5) grid (5,5);
+  \draw[thin] (-5,0) -- (5,0) (0,-5) -- (0,5);
+  \draw[<-] (4.5,0) to[out=-90,in=180] ++(1,-.8)
+    node[right, font=\scriptsize] {1-eigenspace};
+  \draw[<-] (0,-4.5) to[out=180,in=0] ++(-.8,-1)
+    node[left, font=\scriptsize] {$1/2$-eigenspace};
+
+  \draw[vector] (0,0) -- (1,0) node[below] {$e_1$};
+  \draw[vector] (0,0) -- (0,1) node[left] {$e_2$};
+
+  \point[seq1] (p1) at (.5, 3);
+  \point[seq1] (p2) at (2, -4);
+  \point[seq1] (p3) at (3.5, 3.5);
+  \point[seq1] (p4) at (3, -3);
+  \point[seq1] (p5) at (-1.5, -2);
+  \point[seq1] (p6) at (-3.33, 3);
+  \point[seq1] (p7) at (-4.5, 4.5);
+  \point[seq1] (p8) at (-3, -4);
+
+  \foreach \i in {1,...,8} 
+    \foreach \j in {2,...,5} {
+      \point<\j->[seq\j] at ($(-5,0)!(p\i)!(5,0)!{.5^(\j-1)}!(p\i)$);
+    }
+    
+  \node at (-6.5,0) {
+    \begin{minipage}{1cm}
+      \foreach \j in {1,...,5} {
+        \pgfmathtruncatemacro{\i}{\j-1}
+        \uncover<\j->{\color{seq\j}$v_{\i}$}\par
+      }
+    \end{minipage}
+  };
+  
+  \point at (0,0);
+
+\end{tikzpicture}
+\end{center}
+\pause[6]%
+So all vectors get ``sucked into the $x$-axis,'' which is the $1$-eigenspace.
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Applications to Difference Equations}
+\framesubtitle{More complicated example}
+
+Let $A = \mat{3/4 1/4; 1/4 3/4}$.\\[2mm]
+Fix a vector $v_0$, and let
+$v_1 = Av_0,\, v_2=Av_1$, etc., so
+$v_n = A^nv_0$.
+
+\pause\medskip
+\alert{Question:} What happens to the $v_i$'s for different choices of $v_0$?
+
+\medskip
+\begin{webonly}
+\alert{Answer:} We want to compute powers of $A$, so this is a diagonalization
+question.  The characteristic polynomial is
+\[ f(\lambda) = \lambda^2 - \Tr(A)\,\lambda + \det(A)
+= \lambda^2 - \frac 32\lambda + \frac 12
+= (\lambda-1)\Bigl(\lambda-\frac 12\Bigr). \]
+We compute eigenvectors with eigenvalues $1$ and $1/2$ to be, respectively,
+\[ w_1 = \vec{1 1} \qquad w_2 = \vec{1 -1}. \]
+\rlap{Therefore,}\hfill\qquad
+$A = PDP\inv \sptxt{for} P = \mat{1 1; 1 -1} \qquad D = \mat{1 0; 0 1/2}$.%
+\hfill\null\\[1mm]
+This is the same matrix $D$ from before.  Hence
+\[ v_n = A^nv_0 = PD^nP\inv v_0. \]
+\end{webonly}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Applications to Difference Equations}
+\framesubtitle{Picture of the more complicated example}
+
+\alert{Recall:} $A^n = PD^nP\inv$ acts on the usual coordinates of $v_0$ in the
+same way that $D^n$ acts on the $\cB$-coordinates, where $\cB=\{w_1,w_2\}$.
+\note{Show the previous picture on the other screen}
+\smallskip
+
+\begin{center}
+\begin{tikzpicture}[scale=.3, thin border nodes]
+  \begin{scope}
+    \clip (-9,-9) rectangle (9,9);
+    \draw[grid lines, cm={1,1,1,-1,(0,0)}] (-9,-9) grid (9,9);
+  \end{scope}
+  \begin{scope}[cm={1,1,1,-1,(0,0)}]
+    \draw[thin] (-9,0) -- (9,0) (0,-9) -- (0,9);
+    \draw[<-] (4.5,0) to[out=90,in=225] ++(.5,.8)
+      node[right, font=\scriptsize] {1-eigenspace};
+    \draw[<-] (0,-4.5) to[out=180,in=45] ++(-.8,-.5)
+      node[left, font=\scriptsize] {$1/2$-eigenspace};
+
+    \draw[vector] (0,0) -- (1,0) node[anchor=-30] {$w_1$};
+    \draw[vector] (0,0) -- (0,1) node[anchor=30] {$w_2$};
+
+    \point[seq1] (p1) at (.5, 3);
+    \point[seq1] (p2) at (2, -4);
+    \point[seq1] (p3) at (3.5, 3.5);
+    \point[seq1] (p4) at (3, -3);
+    \point[seq1] (p5) at (-1.5, -2);
+    \point[seq1] (p6) at (-3.33, 3);
+    \point[seq1] (p7) at (-4.5, 4.5);
+    \point[seq1] (p8) at (-3, -4);
+  
+    \foreach \i in {1,...,8} 
+      \foreach \j in {2,...,5} {
+        \point<\j->[seq\j] at ($(-5,0)!(p\i)!(5,0)!{.5^(\j-1)}!(p\i)$);
+      }
+      
+    \point at (0,0);
+  \end{scope}
+
+  \node at (-10,0) {
+    \begin{minipage}{1cm}
+      \foreach \j in {1,...,5} {
+        \pgfmathtruncatemacro{\i}{\j-1}
+        \uncover<\j->{\color{seq\j}$v_{\i}$}\par
+      }
+    \end{minipage}
+  };
+ 
+\end{tikzpicture}
+\end{center}
+\pause[6]
+So all vectors get ``sucked into the $1$-eigenspace.''
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Applications to Difference Equations}
+\framesubtitle{Remark}
+
+The matrix $A = \mat{3/4 1/4; 1/4 3/4}$ is called a \textbf{stochastic matrix}.
+
+\pause\bigskip
+We will study such matrices in detail next time.
+
+\end{frame}
+
+
+%%% Local Variables:
+%%% TeX-master: "../slides"
+%%% End:

@@ -1,0 +1,768 @@
+
+% JDR: At (my) normal speed, this takes less than 50 minutes.
+
+\titleframe{Section 1.7}{Linear Independence}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Motivation}
+
+Sometimes the span of a set of vectors is ``smaller'' than you expect from the
+number of vectors.
+
+\pause\vskip .5cm
+\hfill
+\begin{tikzpicture}[scale=0.5, thin border nodes]
+  \draw[grid lines, light gray] (-3,-3) grid (4, 4);
+  \path[clip] (-3,-3) rectangle (4, 4);
+  \node[seq4] at (.5,2.5) {$\Span\{v,w\}$};
+  \draw[thin, seq4] ($-2*(2,2)$) -- ($2*(2,2)$);
+  \draw[vector, seq1] (0,0)
+    -- node[midway,above left,text=seq1] {$v$} (2,2);
+  \draw[vector, seq2] (0,0)
+    -- node[pos=.4,above left,text=seq2] {$w$} (-1,-1);
+  \point at (0,0);
+\end{tikzpicture}
+\hfill\pause
+\begin{tikzpicture}[myxyz, scale=0.5, thin border nodes]
+  \path[clip, resetxy] (-4,-3) rectangle (4,3);
+
+  \def\v{(2,-1,1)}
+  \def\w{(2,1,.3)}
+  \def\u{(2,0,.65)}
+
+  \node[coordinate] (X) at \v {};
+  \node[coordinate] (Y) at \w {};
+
+  \begin{scope}[x=(X), y=(Y), transformxy]
+    \path[clip] (-1.5, 5) -- (1.5, -5) -- (1.5, -7) -- (-1.5, -7) -- cycle;
+    \fill[seq4!30, nearly opaque] (-1.5,-1) rectangle (1.5,2);
+    \draw[step=.5cm, seq4, very thin] (-1.5,-1) grid (1.5,2);
+  \end{scope}
+
+  \begin{scope}[transformxy]
+    \fill[white, nearly opaque] (-2, -2) rectangle (3, 3);
+    \draw[grid lines] (-2, -2) grid (3, 3);
+  \end{scope}
+
+  \begin{scope}[x=(X), y=(Y), transformxy]
+    \path[clip] (-1.5, 5) -- (1.5, -5) -- (1.5, 7) -- (-1.5, 7) -- cycle;
+    \fill[seq4!30, nearly opaque] (-1.5,-1) rectangle (1.5,2);
+    \draw[step=.5cm, seq4, very thin] (-1.5,-1) grid (1.5,2);
+  \end{scope}
+
+  \node[seq4] at (-1cm, 2cm) {$\Span\{u,v,w\}$};
+
+  \draw[vector, seq1] (0,0,0) -- 
+    node [midway, above] {$v$} \v;
+  \draw[thin, densely dotted] \v -- \projxy\v;
+  \draw[vector, seq2] (0,0,0) -- 
+    node [midway, below] {\strut$w$} \w;
+  \draw[thin, densely dotted] \w -- \projxy\w;
+  \draw[vector, seq3] (0,0,0) -- 
+    \u node [right] {$u$};
+  \draw[thin, densely dotted] \u -- \projxy\u;
+
+  \draw[thin, densely dotted] \v -- \w;
+
+  \point at (0,0,0);
+
+\end{tikzpicture}
+\hfill\null
+
+\pause\vskip .5cm
+This can mean many things.  For example, it can mean you're using too many
+vectors to write your solution set.
+
+\pause\medskip
+Notice in each case that one vector in the set is already in the span of the
+others---so it doesn't make the span bigger.
+
+\pause\medskip
+Today we will formalize this idea in the concept of \emph{linear (in)dependence}.
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Linear Independence}
+
+\vskip .14cm
+
+\namedbox{redbox}{
+\begin{minipage}{\textwidth}
+\vskip -.14cm
+\begin{defn}
+  A set of vectors $\{v_1,v_2,\ldots,v_p\}$ in $\R^n$ is
+  \textbf{linearly independent} if the vector equation
+  \[ x_1v_1 + x_2v_2 + \cdots + x_pv_p = 0 \]
+  has only the trivial solution $x_1=x_2=\cdots=x_p=0$.  
+  \pause
+  The set
+  $\{v_1,v_2,\ldots,v_p\}$ is \textbf{linearly dependent} otherwise.
+\end{defn}
+\end{minipage}
+}
+
+\bigskip
+\begin{uncoverenv}<3->
+In other words, $\{v_1,v_2,\ldots,v_p\}$ is linearly dependent if
+\pause[4]%
+there exist
+numbers $x_1,x_2,\ldots,x_p$, not all equal to zero, such that
+\[ x_1v_1 + x_2v_2 + \cdots + x_pv_p = 0. \]
+This is called a \textbf{linear dependence relation}.
+
+\pause\smallskip
+\begin{center}
+\begin{tikzpicture}[remember picture]
+  \node[bluebox, align=justify, text width=.9\textwidth]
+    (bluebox)
+    {
+      Like span, linear (in)dependence is another one of those big vocabulary words
+      that you absolutely need to learn.  Much of the rest of the course will be
+      built on these concepts, and you need to know exactly what they mean in order
+      to be able to answer questions on quizzes and exams (and solve real-world
+      problems later on).
+    };
+  \node[overlay, redbox, fit=(redbox)] (x) {};
+  \draw<5->[overlay, ->, very thick, black, rounded corners, shorten >=1pt] 
+    let \p1=($(bluebox.west -| current page.west)!.3cm!(bluebox.west)$) in
+    (bluebox.west)
+      -- (\p1)  { -- (\p1 |- x.west) }
+      -- (x.west);
+\end{tikzpicture}
+\end{center}
+\end{uncoverenv}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Linear Independence}
+
+\begin{minipage}{\textwidth}
+\begin{defn}
+  A set of vectors $\{v_1,v_2,\ldots,v_p\}$ in $\R^n$ is
+  \textbf{linearly independent} if the vector equation
+  \[ x_1v_1 + x_2v_2 + \cdots + x_pv_p = 0 \]
+  has only the trivial solution $x_1=x_2=\cdots=x_p=0$.  
+  The set
+  $\{v_1,v_2,\ldots,v_p\}$ is \textbf{linearly dependent} otherwise.
+\end{defn}
+\end{minipage}
+
+\bigskip
+\begin{bluebox}{.7\linewidth}
+  Note that linear (in)dependence is a notion that applies to a
+  \emph{collection of vectors}, not to a single vector, or to one vector in the
+  presence of some others.
+\end{bluebox}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Checking Linear Independence}
+
+\alert{Question: } 
+Is $\left\{ \vec{1 1 1},\, \vec{1 -1 2},\, \vec{3 1 4} \right\}$ linearly
+independent?
+
+\medskip
+\begin{webonly}
+Equivalently, does the (homogeneous) the vector equation
+\[ x\vec{1 1 1} + y\vec{1 -1 2} + z\vec{3 1 4} = \vec{0 0 0} \]
+have a nontrivial solution?
+How do we solve this kind of vector equation?
+\[ \mat{1 1 3; 1 -1 1; 1 2 4} 
+\quad\longsquiggly[row reduce]\quad
+\mat{1 0 2; 0 1 1; 0 0 0}
+\]
+So $x = -2z$ and $y = -z$.  So the vectors are
+linearly \textit{de}pendent, and an equation of linear dependence is
+(taking $z=1$)
+\[ -2\vec{1 1 1} - \vec{1 -1 2} + \vec{3 1 4} = \vec{0 0 0}. \]
+\end{webonly}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Checking Linear Independence}
+
+\alert{Question: } 
+Is $\left\{ \vec{1 1 0},\, \vec{1 -1 2},\, \vec{3 1 4} \right\}$ linearly
+independent?
+
+\medskip
+\begin{webonly}
+Equivalently, does the (homogeneous) the vector equation
+\[ x\vec{1 1 0} + y\vec{1 -1 2} + z\vec{3 1 4} = \vec{0 0 0} \]
+have a nontrivial solution?
+\[ \mat{1 1 3; 1 -1 1; 0 2 4} 
+\quad\longsquiggly[row reduce]\quad
+\mat{1 0 0; 0 1 0; 0 0 1}
+\]
+The trivial solution $\vec{x y z} = \vec{0 0 0}$ is the unique solution. 
+So the vectors are linearly \textit{in}dependent.
+\end{webonly}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Linear Independence and Matrix Columns}
+
+In general, $\{v_1,v_2,\ldots,v_p\}$ is linearly independent 
+\pause
+if and only if the
+vector equation
+\[ x_1v_1 + x_2v_2 + \cdots + x_pv_p = 0 \]
+has only the trivial solution, 
+\pause
+if and only if the matrix equation
+\[ Ax = 0 \]
+has only the trivial solution, where $A$ is the matrix
+\pause
+with columns $v_1,v_2,\ldots,v_p$:
+\[ A = \mat{| |, , |; v_1 v_2 \cdots, v_p; | |, , |}. \]
+\pause
+This is true if and only if the matrix $A$ has a pivot
+in each \blankuntil{6}{column}.
+
+\pause[7]\smallskip
+
+\begin{bluebox}[Important]{.9\textwidth}
+  \begin{itemize}
+  \item The vectors $v_1,v_2,\ldots,v_p$ are linearly independent if and only if
+    the matrix with columns $v_1,v_2,\ldots,v_p$ has a pivot in each column.
+    \pause
+  \item Solving the matrix equation $Ax=0$ will either verify that the columns
+    $v_1,v_2,\ldots,v_p$ of $A$ are linearly independent, or will produce
+    a linear dependence relation.
+  \end{itemize}
+\end{bluebox}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Linear Independence}
+\framesubtitle{Criterion}
+
+Suppose that one of the vectors $\{v_1,v_2,\ldots,v_p\}$ is a linear combination
+of the other ones (that is, it is in the span of the other ones):
+\pause
+\[ v_3 = 2v_1 - \frac 12v_2 + 6v_4 \]
+Then the vectors are linearly \textit{de}pendent:
+\webonlycmd{
+\[ 2v_1 - \frac 12v_2 - v_3 + 6v_4 = 0. \]}
+
+\pause
+Conversely, if the vectors are linearly dependent
+\[ 2v_1 - \frac 12v_2 + 6v_4 = 0. \]
+\pause
+then one vector is a linear combination of (in the span of) the other ones:
+\webonlycmd{\[ v_2 = 4v_1 + 12v_4. \]}
+\pause
+\vskip -.75cm
+
+\begin{thm}
+  A set of vectors $\{v_1,v_2,\ldots,v_p\}$ is linearly \textit{de}pendent if and only if
+  one of the vectors is in the span of the other ones.
+\end{thm}
+
+% \pause
+% (In fact, we can find $j$ such that $v_j$ is in
+% $\Span\{v_1,v_2,\ldots,v_{j-1}\}$: later.)
+
+% \note{Ask: how to do this with the above example?}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}<handout:2,4,7>
+\frametitle{Linear Independence}
+\framesubtitle{Pictures in $\R^2$}
+
+\vfill
+
+\begin{tikzpicture}[scale=1, baseline, thin border nodes]
+  \path[clip] (-3,-3) rectangle (3,3);
+  \fill<all:5->[seq4!10] (-3,-3) rectangle (3,3);
+  \draw[seq4!30] (-4,-2) -- (4,2);
+  \draw<all:3->[seq4!30] (-3,3) -- (3,-3);
+  \path (-2,-1) node[below right, seq4] {$\Span\{v\}$};
+  \path<all:3-> (-2,2) node[above right, seq4] {$\Span\{w\}$};
+  \node<all:5->[seq4] at (1,2) {$\Span\{v,w\}$};
+  \draw[vector, seq1] (0,0) --
+    node[midway,above left]{$v$} (2,1);
+  \draw<all:3->[vector, seq2] (0,0) --
+    node[midway,below left]{$w$} (-1,1);
+  \draw<all:5->[vector, seq3] (0,0) --
+    node[midway,right]{$u$} (0,-1.5);
+  \point at (0,0);
+  \draw[thin] (-3,-3) rectangle (3,3);
+\end{tikzpicture}
+\hfill
+\begin{minipage}[c]{.4\textwidth}\raggedright
+  \alert{In this picture}\\
+  \hrulefill\medskip
+
+  \alert{One vector $\{\textcolor{seq1}v\}$:}\\
+  \uncover<all:2->
+  {Linearly independent if $v\neq 0$.}
+  \note{What if $v=0$?}
+
+  \medskip
+  \uncover<all:3->{
+  \alert{Two vectors
+    $\{\textcolor{seq1}v,\textcolor{seq2}w\}$:}}\\
+  \uncover<all:4->{
+  Linearly independent: neither is in the span of the other.}
+
+  \medskip
+  \uncover<all:5->{
+  \alert{Three vectors
+    $\{\textcolor{seq1}v,\textcolor{seq2}w, \textcolor{seq3}u\}$:}}\\
+  \uncover<all:6->{
+  Linearly dependent: $u$ is in $\Span\{v,w\}$.}
+
+  \medskip
+  \uncover<all:7->{
+  Also $v$ is in $\Span\{u,w\}$ and $w$ is in $\Span\{u,v\}$.}
+\end{minipage}
+
+\vfill
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}<handout:2,7>
+\frametitle{Linear Independence}
+\framesubtitle{Pictures in $\R^2$}
+
+\vfill
+
+\begin{tikzpicture}[scale=1, thin border nodes, baseline]
+  \path[clip] (-3,-3) rectangle (3,3);
+  \draw[seq4!30] (-4,-2) -- (4,2);
+  \path (-2,-1) node[below right, seq4] {$\Span\{v\}$};
+  \draw[vector, seq1] (0,0) --
+    node[midway,above left]{$v$} (2,1);
+  \draw[vector, seq2] (0,0) --
+    node[pos=.4,above left]{$w$} (-1,-.5);
+  \draw<all:5->[vector, seq3] (0,0) --
+    node[midway,right]{$u$} (0,-1.5);
+  \point at (0,0);
+  \draw[thin] (-3,-3) rectangle (3,3);
+\end{tikzpicture}
+\hfill
+\begin{minipage}[c]{.4\textwidth}\raggedright
+  \uncover<all:1->{
+  \alert{Two collinear vectors
+    $\{\textcolor{seq1}v,\textcolor{seq2}w\}$:}}\\
+  \uncover<all:2->{
+  Linearly dependent: $w$ is in $\Span\{v\}$ (and vice-versa).}
+
+  \medskip
+  \uncover<all:3->{
+  \alert{Observe:} \emph{Two} vectors are linearly \textit{de}pendent if and only if}
+  \uncover<all:4->{they are \emph{collinear}.}
+
+  \medskip
+  \uncover<all:5->{
+  \alert{Three vectors
+    $\{\textcolor{seq1}v,\textcolor{seq2}w, \textcolor{seq3}u\}$:}}\\
+  \uncover<all:6->{
+  Linearly dependent: $w$ is in $\Span\{v\}$ (and vice-versa).}
+
+  \medskip
+  \uncover<all:7->{
+  \alert{Observe:} If a set of vectors is linearly dependent, then so is any
+  larger set of vectors!
+  }
+  
+\end{minipage}
+
+\vfill
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}<handout:2,4,6>
+\frametitle{Linear Independence}
+\framesubtitle{Pictures in $\R^3$}
+
+\vfill
+
+\begin{tikzpicture}[myxyz, scale=.75, baseline, thin border nodes]
+  \path[clip, resetxy] (-4,-4) rectangle (4,4);
+
+  \def\v{(2,-1,1)}
+  \def\w{(1,0,-1)}
+  \def\u{(.5,-.5,1)}
+  \def\uu{(0,2,2)}
+
+  \node[coordinate] (X) at \v {};
+  \node[coordinate] (Y) at \w {};
+
+  \begin{uncoverenv}<all:3->
+  \begin{scope}[x=(X), y=(Y), transformxy]
+    \path[clip] (-5, -5) -- (5, 5) -- (5, 10) -- (-5, 10) -- cycle;
+    \fill[seq4!10, nearly opaque] (-1.5,-1) rectangle (1.5,2);
+    \draw[step=.5cm, seq4!30, very thin] (-1.5,-1) grid (1.5,2);
+  \end{scope}
+  \end{uncoverenv}
+
+  \draw[seq4!30] ($-3*(2,-1,1)$) -- (0,0,0);
+  \draw[seq4!30] ($5*(1,0,-1)$) -- (0,0,0);
+
+  \begin{scope}[transformxy]
+    \fill[white, semitransparent] (-2, -2) rectangle (3, 3);
+    \draw[help lines, light gray] (-2, -2) grid (3, 3);
+  \end{scope}
+
+  \draw[seq4!30] ($3*(2,-1,1)$) -- (0,0,0);
+  \draw[seq4!30] ($-5*(1,0,-1)$) -- (0,0,0);
+
+  \begin{uncoverenv}<all:3->
+  \begin{scope}[x=(X), y=(Y), transformxy]
+    \path[clip] (-5, -5) -- (5, 5) -- (5, -10) -- (-5, -10) -- cycle;
+    \fill[seq4!10, nearly opaque] (-1.5,-1) rectangle (1.5,2);
+    \draw[step=.5cm, seq4!30, very thin] (-1.5,-1) grid (1.5,2);
+  \end{scope}
+  \end{uncoverenv}
+
+  \draw[vector, seq1] (0,0,0) -- 
+    node [midway, below right] {$v$} \v;
+  \draw[thin, densely dotted] \v -- \projxy\v;
+
+  \draw[vector, seq2!50!white] (0,0,0) -- 
+    node [midway, below left] {$w$} \w;
+  \draw[thin, densely dotted, black!50!white] \w -- \projxy\w;
+
+  \draw<all:3-4>[vector, seq3] (0,0,0) -- 
+    node [midway, below left] {$u$} \uu;
+  \draw<all:3-4>[thin, densely dotted] \uu -- \projxy\uu;
+
+  \draw<all:5->[vector, seq5] (0,0,0) -- 
+    node [midway, above left] {$x$} \u;
+  \draw<all:5->[thin, densely dotted] \u -- \projxy\u;
+
+  \path[seq4] ($.9*(-3,1.5,-1.5)$) node[below right] {$\Span\{v\}$};
+  \path[seq4] (-2,0,2) node[below left] {$\Span\{w\}$};
+  \node<all:3->[seq4] at (.8cm, 2.8cm) {$\Span\{v,w\}$};
+
+  \point at (0,0);
+  \draw[thin,resetxy] (-4,-4) rectangle (4,4);
+
+\end{tikzpicture}
+\hfill
+\begin{minipage}[c]{.4\textwidth}\raggedright
+  \alert{In this picture}\\
+  \hrulefill\medskip
+
+  \uncover<all:1->{
+  \alert{Two vectors
+    $\{\textcolor{seq1}v,\textcolor{seq2}w\}$:}}\\
+  \uncover<all:2->{
+    Linearly independent: neither is in the span of the other.}
+
+  \begin{overlayarea}{\textwidth}{3cm}
+    \medskip
+  \only<all:3-4>{
+  \alert{Three vectors
+    $\{\textcolor{seq1}v,\textcolor{seq2}w, \textcolor{seq3}u\}$:\\}}
+  \only<all:4>{
+  Linearly independent: no one is in the span of the other two.}
+
+  \only<all:5->{
+  \alert{Three vectors
+    $\{\textcolor{seq1}v,\textcolor{seq2}w, \textcolor{seq5}{x}\}$:\\}}
+  \only<all:6->{
+    Linearly dependent: $x$ is in $\Span\{v,w\}$.
+  }
+  \end{overlayarea}
+  
+\end{minipage}
+
+\vfill
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{pollframe}
+
+\vskip 0pt plus .5fill
+
+\begin{bluebox}[Poll]{.8\textwidth}
+  Are there four vectors $u,v,w,x$ in $\R^3$ which are linearly dependent, but
+  such that $u$ is \emph{not} a linear combination of $v,w,x$?  If so, draw a
+  picture; if not, give an argument.
+\end{bluebox}
+
+\vfill\pause
+\alert{Yes:} actually the pictures on the previous slides provide such an example.
+
+\vfill\pause
+Linear dependence of $\{v_1,\ldots,v_p\}$ means \emph{some} $v_i$ is a linear
+combination of the others, not \emph{any}.
+
+\vfill
+
+\end{pollframe}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Linear Independence}
+\framesubtitle{Stronger criterion}
+
+\vskip-3mm
+\begin{thm}
+  A set of vectors $\{v_1,v_2,\ldots,v_p\}$ is linearly \textit{de}pendent if and only if
+  one of the vectors is in the span of the other ones.
+\end{thm}
+
+\pause\medskip
+Take the largest $j$ such that $v_j$ is in the span of the others.
+\pause
+Then $v_j$ is in the span of $v_1,v_2,\ldots,v_{j-1}$.  Why?
+\pause
+If not ($j=3$):
+\[ v_3 = 2v_1 - \frac 12v_2 + 6v_4 \]
+\pause
+Rearrange:
+\webonlycmd{
+\[ v_4 = -\frac 16\biggl( 2v_1 - \frac 12v_2 - v_3 \biggr) \]}%
+\pause
+so $v_4$ works as well, but $v_3$ was supposed to be the last one that was in
+the span of the others.
+
+\pause\medskip
+
+\begin{oneoffthm}[definition]{Better Theorem}
+  A set of vectors $\{v_1,v_2,\ldots,v_p\}$ is linearly dependent if and only if
+  there is some $j$ such that $v_j$ is in $\Span\{v_1,v_2,\ldots,v_{j-1}\}$.
+\end{oneoffthm}
+
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Linear Independence}
+\framesubtitle{Increasing span criterion}
+
+\vskip-3mm
+\begin{thm}
+  A set of vectors $\{v_1,v_2,\ldots,v_p\}$ is linearly dependent if and only if
+  there is some $j$ such that $v_j$ is in $\Span\{v_1,v_2,\ldots,v_{j-1}\}$.
+\end{thm}
+
+\pause\bigskip
+Equivalently, $\{v_1,v_2,\ldots,v_p\}$ is linearly \textit{in}dependent if for every $j$,
+the vector $v_j$ is not in $\Span\{v_1,v_2,\ldots,v_{j-1}\}$.
+
+\pause\medskip
+This means $\Span\{v_1,v_2,\ldots,v_j\}$ is \emph{bigger} than
+$\Span\{v_1,v_2,\ldots,v_{j-1}\}$.
+
+\pause\bigskip
+\begin{thm}
+  A set of vectors $\{v_1,v_2,\ldots,v_p\}$ is linearly independent if
+  and only if, for every $j$, the span of $v_1,v_2,\ldots,v_{j}$ is strictly
+  larger than the span of $v_1,v_2,\ldots,v_{j-1}$.
+\end{thm}
+
+\pause\medskip
+\begin{bluebox}[Translation]{.7\linewidth}
+  A set of vectors is linearly independent if and only if, every time you add
+  another vector to the set, the span gets bigger.
+\end{bluebox}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}<handout:1->
+\frametitle{Linear Independence}
+\framesubtitle{Increasing span criterion: pictures}
+
+\vskip-3mm
+\begin{thm}
+  A set of vectors $\{v_1,v_2,\ldots,v_p\}$ is linearly independent if
+  and only if, for every $j$, the span of $v_1,v_2,\ldots,v_{j}$ is strictly
+  larger than the span of $v_1,v_2,\ldots,v_{j-1}$.
+\end{thm}
+
+\vfill
+
+\quad
+\begin{tikzpicture}[myxyz, scale=.65, baseline, thin border nodes]
+  \path[clip, resetxy] (-4,-4) rectangle (4,4);
+
+  \def\v{(2,-1,1)}
+  \def\w{(1,0,-1)}
+  \def\u{(0,2,2)}
+  \def\x{(.5,-.5,1)}
+
+  \node[coordinate] (X) at \v {};
+  \node[coordinate] (Y) at \w {};
+
+  \fill<all:3>[seq4!10, resetxy] (-4,-4) rectangle (4,4);
+
+  \begin{uncoverenv}<all:2->
+  \begin{scope}[x=(X), y=(Y), transformxy]
+    \path[clip] (-5, -5) -- (5, 5) -- (5, 10) -- (-5, 10) -- cycle;
+    \fill[seq4!10, nearly opaque] (-1.5,-1) rectangle (1.5,2);
+    \draw[step=.5cm, seq4!30, very thin] (-1.5,-1) grid (1.5,2);
+  \end{scope}
+  \end{uncoverenv}
+
+  \draw[seq4!30] ($-3*(2,-1,1)$) -- (0,0,0);
+
+  \begin{scope}[transformxy]
+    \fill[white, semitransparent] (-2, -2) rectangle (3, 3);
+    \draw[help lines, light gray] (-2, -2) grid (3, 3);
+  \end{scope}
+
+  \draw[seq4!30] ($3*(2,-1,1)$) -- (0,0,0);
+
+  \begin{uncoverenv}<all:2->
+  \begin{scope}[x=(X), y=(Y), transformxy]
+    \path[clip] (-5, -5) -- (5, 5) -- (5, -10) -- (-5, -10) -- cycle;
+    \fill[seq4!10, nearly opaque] (-1.5,-1) rectangle (1.5,2);
+    \draw[step=.5cm, seq4!30, very thin] (-1.5,-1) grid (1.5,2);
+  \end{scope}
+  \end{uncoverenv}
+
+  \draw[vector, seq1] (0,0,0) -- 
+    node [midway, below right] {$v$} \v;
+  \draw[thin, densely dotted] \v -- \projxy\v;
+
+  \draw<all:2->[vector, seq2!50!white] (0,0,0) -- 
+    node [midway, below left] {$w$} \w;
+  \draw<all:2->[thin, densely dotted, black!50!white] \w -- \projxy\w;
+
+  \draw<all:3>[vector, seq3] (0,0,0) -- 
+    node [midway, below left] {$u$} \u;
+  \draw<all:3>[thin, densely dotted] \u -- \projxy\u;
+
+  \draw<all:4>[vector, seq5] (0,0,0) -- 
+    node [midway, above left] {$x$} \x;
+  \draw<all:4>[thin, densely dotted] \x -- \projxy\x;
+
+  \path[seq4] ($.9*(-3,1.5,-1.5)$) node[below right] {$\Span\{v\}$};
+  \node<all:2-3>[seq4] at (.8cm, 2.8cm) {$\Span\{v,w\}$};
+  \node<all:3>[seq4] at (-2cm,2cm) {$\Span\{v,w,u\}$};
+  \node<all:4>[seq4] at (.5cm, 2.8cm) {$\Span\{v,w,x\}$};
+
+  \point at (0,0,0);
+  \draw[thin,resetxy] (-4,-4) rectangle (4,4);
+
+\end{tikzpicture}
+\hfill
+\begin{minipage}[c]{.4\textwidth}
+  \alert{One vector $\{\textcolor{seq1}v\}$:}\\
+  Linearly independent: span got bigger (than $\{0\}$).
+
+  \medskip
+  \begin{overlayarea}{\textwidth}{3cm}
+  \uncover<all:2->{
+    \alert{Two vectors $\{\textcolor{seq1}v, \textcolor{seq2}w\}$:}\\
+    Linearly independent: span got bigger.}
+
+  \medskip
+  \only<all:3>{
+    \alert{Three vectors $\{\textcolor{seq1}v, \textcolor{seq2}w,
+      \textcolor{seq3}u\}$:}\\
+    Linearly independent: span got bigger.}
+
+  \only<all:4>{
+    \alert{Three vectors $\{\textcolor{seq1}v, \textcolor{seq2}w,
+      \textcolor{seq5}x\}$:}\\
+    Linearly dependent: span didn't get bigger.}
+  \end{overlayarea}
+
+\end{minipage}
+\quad\null
+
+\vfill
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Linear Independence}
+\framesubtitle{Two more facts}
+
+\displayskips{3pt}
+\alert{Fact 1:} Say $v_1,v_2,\ldots,v_n$ are in $\R^m$.  If $n > m$ then
+$\{v_1,v_2,\ldots,v_n\}$ is linearly
+\pause
+\textit{de}pendent: the matrix
+\[ A = \mat{| |, , |; v_1 v_2 \cdots, v_n; | |, , |}. \]
+cannot have a pivot in each column
+\pause
+(it is too wide).
+
+\pause\medskip
+This says you can't have $4$ linearly independent vectors in $\R^3$, for
+instance.
+
+\pause
+\begin{bluebox}{.8\linewidth}
+  A wide matrix can't have linearly independent columns.
+\end{bluebox}
+
+\pause\medskip
+\alert{Fact 2:} If one of $v_1,v_2,\ldots,v_n$ is zero, then 
+$\{v_1,v_2,\ldots,v_n\}$ is linearly
+\pause
+\textit{de}pendent.  For instance, if $v_1 = 0$, then
+\pause
+\[ 1\cdot v_1 + 0\cdot v_2 + 0\cdot v_3 + \cdots + 0\cdot v_n = 0 \]
+is a linear dependence relation.
+
+\pause
+\begin{bluebox}{.8\linewidth}
+  A set containing the zero vector is linearly dependent.
+\end{bluebox}
+
+\end{frame}
+
+
+%%% Local Variables:
+%%% TeX-master: "../slides"
+%%% End:
