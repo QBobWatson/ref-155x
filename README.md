@@ -38,6 +38,12 @@ This is a description of the included files.
 * `style/*`: Style files used for compiling the materials.
 * `reference.tex`: Reference sheet for definitions, theorems, etc.  Students love this.
 
+### Feedback
+
+If you find any typos or simple changes you think I should make, submit an [issue](https://github.com/QBobWatson/ref-155x/issues), or better yet, a pull request (for github experts).  You can always email me code fragments too.
+
+For more complicated changes, pedagogical issues, etc., it's better to email me.
+
 ## Slides
 
 The slides are written to be presented on a projector, but with most examples, proofs, etc. worked out on a blackboard.  (Really it's best if you have *two* projectors, so you can present the current slide while referring to a previous slide.)
