@@ -51,15 +51,19 @@ parser.add_argument('-c', '--class', action='append', dest='klass', metavar='NNN
                     help='compile this section, class mode')
 parser.add_argument('-C', '--all-class', action='store_true',
                     help='compile all sections, class mode')
-parser.add_argument('-b', '--big-file', action='store_true',
+parser.add_argument('-b', '--big-web-file', action='store_true',
                     help='compile web mode slides into one big file')
+parser.add_argument('-B', '--big-blank-file', action='store_true',
+                    help='compile blank mode slides into one big file')
 args = parser.parse_args(sys.argv[1:])
 
 if len(sys.argv) < 2:
     parser.error("Nothing to do!")
     sys.exit(1)
 
+# Review files have the form NN5; main ones have the form NN0
 all_files = [x[:-4] for x in os.listdir('slides') if x.lower()[-4:] == '.tex']
+main_files = [x for x in all_files if x[2] == '0']
 
 web_files = []
 if args.all_web:
@@ -84,8 +88,10 @@ for fname in class_files:
     print("\n\nCompiling {} in class mode\n\n".format(fname))
     latex('slides-class', os.path.join(PDF_DIR, fname + '-class.pdf'), fname)
 
-if args.big_file:
+if args.big_web_file:
     print("\n\nCompiling all material into a big file in web mode\n\n")
-    # Review files have the form NN5; main ones have the form NN0
-    main_files = [x for x in all_files if x[2] == '0']
-    latex('slides-web', os.path.join(PDF_DIR, 'all_sections.pdf'), *main_files)
+    latex('slides-web', os.path.join(PDF_DIR, 'all_web.pdf'), *main_files)
+
+if args.big_blank_file:
+    print("\n\nCompiling all material into a big file in blank mode\n\n")
+    latex('slides-blank', os.path.join(PDF_DIR, 'all_blank.pdf'), *main_files)
