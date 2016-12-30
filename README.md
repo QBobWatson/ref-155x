@@ -42,7 +42,7 @@ This is a description of the included files.
 
 If you find any typos or simple changes you think I should make, submit an [issue](https://github.com/QBobWatson/ref-155x/issues), or better yet, a pull request (for github experts).  You can always email me code fragments too.
 
-For more complicated changes, pedagogical issues, etc., it's better to email me, or talk in person.
+For more complicated changes, pedagogical issues, etc., it's better to email me, or talk in person.  These slides will be revised regularly following substantive feedback, at least until they stabilize.
 
 ## Slides
 
