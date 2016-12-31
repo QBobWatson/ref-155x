@@ -30,7 +30,7 @@ Most of the macros specific to the slides are defined in `slides.tex`.  The code
 This is a description of the included files.
 * `slides*.tex`: Base files for compiling slides.
 * `slides/*`: Slides content.
-* `announcements.tex`: Announcements get compiled into certain slides.
+* `announcements.tex`: Announcements get prepended to the slides.
 * `compile.sh` (also `autogen.py`): Automation for compiling slides.
 * `daily/`: The `compile.sh` script puts its output here.
 * `slides-pdf/*`: Compiled versions of the current reference slides (`class` and `web` modes).
@@ -67,9 +67,11 @@ The slides are contained the following files:
 Slides can be compiled in one of five modes:
 * `texing`: This is what you get when you compile `slides.tex`.  It compiles in `presentation` mode, with `webonly` material rendered semi-transparent.  This is useful when you're actively working on the slides.
 * `class`: This is what you get when you compile `slides-class.tex`.  It compiles in `presentation` mode, with `webonly` material blanked out.  This is meant for in-class slides.
-* `web`: This is what you get when you compile `slides-web.tex`.  It compiles in `handout` mode, with `webonly` material visible.  That day's announcements appear on the first slide.  This is meant to be put on the web after class.
-* `blank`: This is what you get when you compile `slides-blank.tex`.  It compiles in `handout` mode, with `webonly` material blanked out, and the polls deleted.  That day's announcements appear on the first slide.  This is meant to be put on the web *before* class; students like to print these out and take notes in the blank spots.
+* `web`: This is what you get when you compile `slides-web.tex`.  It compiles in `handout` mode, with `webonly` material visible.  This is meant to be put on the web after class.
+* `blank`: This is what you get when you compile `slides-blank.tex`.  It compiles in `handout` mode, with `webonly` material blanked out, and the polls deleted.  This is meant to be put on the web *before* class; students like to print these out and take notes in the blank spots.
 * `mine`: This is what you get when you compile `slides-mine.tex`.  It compiles in `handout` mode, with `webonly` material rendered semi-transparent, and instructor notes (from the `\note{}` command) in a separate page to the right.  This is meant for the instructor to use during class.
+
+In all modes, the day's announcements are prepended to the output.
 
 ### Preparing a Lecture
 

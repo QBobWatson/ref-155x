@@ -349,22 +349,10 @@
 
 \begin{document}
 
-% Compile in the announcements
-\def\doannouncements{
-  \ifx\lecturedate\empty\else
-    \expandafter\includeonlylecture\expandafter{\lecturedate}
-    \input{announcements}
-  \fi
-  }
-
-\ifx\slidesmode\webmode
-  \doannouncements
-\else\ifx\slidesmode\blankmode
-  \doannouncements
-\fi\fi
-
 \ifx\lecturedate\empty\else
   \expandafter\includeonlylecture\expandafter{\lecturedate}
+  % Compile in the announcements
+  \input{announcements}
 \fi
 
 % Only input the sections that will appear on the current lecture
@@ -401,6 +389,6 @@
 % \input{slides/255-review_final}
 
 % For autogen.py
-\input{autogen}
+% \input{autogen}
 
 \end{document}
