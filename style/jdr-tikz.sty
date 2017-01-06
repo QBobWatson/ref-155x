@@ -12,17 +12,61 @@
 \usetikzlibrary{calc,arrows.meta,quotes}
 
 
-% TODO:
-%  * Put a point beyond the end of a line
-
-
 %----------------------------------------------------------------------
-%-- Misc keys
+%-- Put nodes before and after to-paths
 %----------------------------------------------------------------------
 
+% This facility lets you place a node before or after a to-path.  This is
+% useful, for example, for placing a label of a vector *after* the end of the
+% vector.  Placement is always with respect to a *straight* line from the source
+% to the target coordinates; tangent vectors of curvy lines are not taken into
+% account.
+
+% Usage:
+
+% This places the node text $x$ 1mm after the line from (1,1) to (b):
+%    \path (1,1) to node[after line] {$x$} (b);
+
+% This places the node text $x$ 3pt before the line from (1,1) to (b):
+%    \path (1,1) to node[before line=3pt] {$x$} (b);
+
+% This places the node text $x$ after the line from (1,1) to (b), at a
+% distance of 0.1 times the line length.
+%    \path (1,1) to node[after line=.1] {$x$} (b);
+
+\makeatletter
 \tikzset{
-    shorten/.style={shorten >=#1, shorten <=#1},
+  % Figure out the angle of the line; use this to place the node's anchor.
+  calc to line angle/.code={%
+    \bgroup%
+    % This is just to convert the TikZ coordinates \tikztostart and \tikztoend
+    % (the latter of which might be a node name or something) to PGF points.
+    \def\savea##1{\def\pgf@tempa{##1}}%
+    \def\saveb##1{\def\pgf@tempb{##1}}%
+    \tikz@scan@one@point\savea(\tikztostart)\relax%
+    \tikz@scan@one@point\saveb(\tikztotarget)\relax%
+    \pgfmathanglebetweenpoints{\pgf@tempb}{\pgf@tempa}%
+    \pgfmathtruncatemacro{\to@lineangle}{\pgfmathresult}%
+    \xdef\to@lineangle{\to@lineangle}%
+    \egroup%
+  },
+  after line/.style={
+    pos=, % disable automatically setting pos
+    at={($(\tikztostart)!#1!(\tikztotarget)+(\tikztotarget)-(\tikztostart)$)},
+    calc to line angle,
+    anchor=\to@lineangle
+  },
+  after line/.default=1mm,
+  before line/.style={
+    pos=, % disable automatically setting pos
+    at={($(\tikztotarget)!#1!(\tikztostart)+(\tikztostart)-(\tikztotarget)$)},
+    calc to line angle,
+    anchor=\to@lineangle+180
+  },
+  before line/.default=1mm,
 }
+\makeatother
+
 
 %----------------------------------------------------------------------
 %-- 3D coordinate transforms
@@ -155,13 +199,16 @@
 %-- Misc
 %----------------------------------------------------------------------
 
-% Set styles for all kinds of nodes at once
 \tikzset{
+  % Set styles for all kinds of nodes at once
   all nodes/.style={
     every node/.style={#1},
     every label/.style={every node},
     every pin/.style={every node}
-  }
+  },
+  %
+  shorten/.style={shorten >=#1, shorten <=#1},
+  grid lines/.style={help lines, black!30},
 }
 
 %----------------------------------------------------------------------
