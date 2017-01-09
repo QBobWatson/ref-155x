@@ -12,7 +12,7 @@
 \RequirePackage{tikz}
 \RequirePackage{fancyhdr}
 
-\RequirePackage{jdr-macros}
+\RequirePackage{\styledir jdr-macros}
 
 \usetikzlibrary{positioning}
 
@@ -67,8 +67,7 @@
 \renewcommand\title[1]{\global\def\thetitle{#1}}
 
 \AtBeginDocument{%
-  \ifthenelse{\equal{\thetitle}{}}%
-    {\title{{\theclass} Homework \thehwno}}{}%
+  \if\relax\detokenize{#1}\relax\title{{\theclass} Homework \thehwno}\fi%
   \ifanswers\if@homework%
   \pagestyle{fancy}%
   \fancyfoot{}
@@ -90,10 +89,11 @@
     \ifanswers\thename\else\theduedate\fi%
   \end{center}%
   \ifanswers\begingroup%
-  \renewcommand\thefootnote{}%
-  \ifthenelse{\equal{\thecollaborators}{}}{}%
-  {\footnote{\textit{Collaborators:} \thecollaborators}%
-    \addtocounter{footnote}{-1}}%
+    \renewcommand\thefootnote{}%
+    \ifx\thecollaborators\empty\else%
+      \footnote{\textit{Collaborators:} \thecollaborators}%
+        \addtocounter{footnote}{-1}%
+    \fi%
   \endgroup\fi%
   \vskip\baselineskip}
 
@@ -122,7 +122,7 @@
       \setlength{\listparindent}{\parindent}%
       \let\problem\item%
     }%
-    \ifthenelse{\equal{#1}{}}{}{\item[] #1}}{%
+    \if\relax\detokenize{#1}\relax\else\item[] #1\fi}{%
   \end{list}}
 
 \newenvironment{subproblems}{%
@@ -256,7 +256,7 @@
 % Optional argument: number of points, e.g.
 \newenvironment{problem}[1][]{%
   \noindent\textbf{\Large Problem \refstepcounter{problem}\arabic{problem}.}%
-  \ifthenelse{\equal{#1}{}}{}{\hfill[#1]}%
+  \if\relax\detokenize{#1}\relax\else\hfill[#1]\fi%
   \begin{framed}\noindent\ignorespaces}{%
   \end{framed}}
 
